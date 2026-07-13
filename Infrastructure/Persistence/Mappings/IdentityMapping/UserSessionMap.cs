@@ -25,6 +25,9 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
                 .WithMany()
                 .HasForeignKey(x => x.RefreshTokenId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasQueryFilter(p => !p.IsDeleted);
+
         }
     }
 }
