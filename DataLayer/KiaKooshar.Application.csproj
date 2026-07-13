@@ -8,7 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Construct\Facad\" />
-    <Folder Include="Services\Admin\" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Services\Admins\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -24,6 +24,12 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
                 .WithMany(x => x.UserRole)
                 .HasForeignKey(x => x.RoleId);
 
+            builder
+                .HasKey(x => new
+                {
+                     x.UserId,
+                     x.RoleId
+                });
         }
     }
 }
