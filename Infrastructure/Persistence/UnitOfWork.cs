@@ -1,6 +1,7 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Domain.Entities.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,28 +12,70 @@ namespace KiaKooshar.Infrastructure.Persistence
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public IRepository<Permission> Permission => throw new NotImplementedException();
+        private readonly DatabaseContext _context;
+        public IRepository<Permission> Permission { get; private set; }
 
-        public IRepository<Role> Role => throw new NotImplementedException();
+        public IRepository<Role> Role { get; private set; }
 
-        public IRepository<User> User => throw new NotImplementedException();
+        public IRepository<User> User { get; private set; }
 
-        public IRepository<UserRole> UserRoles => throw new NotImplementedException();
+        public IRepository<UserRole> UserRoles { get; private set; }
 
-        public IRepository<UserSession> UserSession => throw new NotImplementedException();
+        public IRepository<UserSession> UserSession { get; private set; }
 
-        public IRepository<RolePermission> RolePermissions => throw new NotImplementedException();
+        public IRepository<RolePermission> RolePermissions { get; private set; }
 
-        public IRepository<RefreshToken> RefreshToken => throw new NotImplementedException();
-
-        public Task<ResultDTO> CommitAsync()
+        public IRepository<RefreshToken> RefreshToken { get; private set; }
+        private bool _disposed = false;
+        public UnitOfWork(DatabaseContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+            Permission = new GenericRepository<Permission>(_context);
+            Role = new GenericRepository<Role>(_context);
+            User = new GenericRepository<User>(_context);
+            RolePermissions = new GenericRepository<RolePermission>(_context);
+            UserRoles = new GenericRepository<UserRole>(_context);
+            UserSession = new GenericRepository<UserSession>(_context);
+            RefreshToken = new GenericRepository<RefreshToken>(_context);
+        }
+
+        public async Task<ResultDTO> CommitAsync()
+        {
+            try
+            {
+                await _context.SaveChangesAsync();
+                return new ResultDTO
+                {
+                    IsSuccess = true,
+                    Message = "عملیات با موفقیت انجام شد"
+                };
+            }
+            catch (Exception e)
+            {
+                return new ResultDTO
+                {
+                    IsSuccess = false,
+                    Message = e.Message
+                };
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _context?.Dispose();
+                }
+                _disposed = true;
+            }
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

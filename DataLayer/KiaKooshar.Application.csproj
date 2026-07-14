@@ -9,8 +9,9 @@
   <ItemGroup>
     <Folder Include="Construct\Facad\" />
     <Folder Include="Contracts\" />
-    <Folder Include="Handlers\" />
-    <Folder Include="Requests\" />
+    <Folder Include="Handlers\Identities\Command\" />
+    <Folder Include="Handlers\Identities\Query\" />
+    <Folder Include="Requests\Identities\" />
     <Folder Include="Services\Admins\" />
   </ItemGroup>
 
