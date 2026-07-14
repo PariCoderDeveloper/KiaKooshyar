@@ -9,10 +9,14 @@
   <ItemGroup>
     <Folder Include="Construct\Facad\" />
     <Folder Include="Contracts\" />
+    <Folder Include="Handlers\" />
+    <Folder Include="Requests\" />
     <Folder Include="Services\Admins\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.17" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.17" />
   </ItemGroup>

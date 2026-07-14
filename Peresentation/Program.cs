@@ -1,5 +1,7 @@
 using KiaKooshar.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using KiaKooshar.Application;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +14,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+
+#region DataBaseCofig
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+
+#endregion
+
+#region Configration
+
+builder.Services.ConfigureApplicationServices(builder.Configuration);
+
+#endregion
 
 var app = builder.Build();
 

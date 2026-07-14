@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataLayer\KiaKooshar.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\KiaKooshar.Infrastructure.csproj" />
   </ItemGroup>
 
