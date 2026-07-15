@@ -8,11 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Construct\Facad\" />
-    <Folder Include="Contracts\" />
-    <Folder Include="Handlers\Identities\Command\" />
-    <Folder Include="Handlers\Identities\Query\" />
-    <Folder Include="Requests\Identities\" />
-    <Folder Include="Services\Admins\" />
+    <Folder Include="Handlers\Identities\Commands\" />
+    <Folder Include="Handlers\Identities\Queries\" />
+    <Folder Include="Requests\Identities\Commands\" />
+    <Folder Include="Requests\Identities\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

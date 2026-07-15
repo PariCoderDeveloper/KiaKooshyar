@@ -22,15 +22,22 @@ namespace KiaKooshar.Infrastructure.Persistence
 
         public void AddAsync(T entity) => _dbSet.AddAsync(entity);
 
-        public async Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector)
+        public async Task<List<TResult>> GetAllAsync<TResult>(
+            Expression<Func<T, TResult>> selector
+            )
             => await _dbSet.Select(selector).ToListAsync();
 
-        public async Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<TResult, bool>> wherePeredict,
-            Expression<Func<T, TResult>> selectExperssion) => await _dbSet.Select(selectExperssion).Where(wherePeredict).ToListAsync();
+        public async Task<List<TResult>> GetAllAsync<TResult>(
+            Expression<Func<TResult, bool>> wherePeredict,
+            Expression<Func<T, TResult>> selectExperssion
+            ) => await _dbSet.Select(selectExperssion).Where(wherePeredict).ToListAsync();
 
         public async Task<T?> GetByIdAsync(long id) => await _dbSet.FindAsync(id);
 
-        public async Task<TResult?> GetByIdAsync<TResult>(Expression<Func<T, TResult?>> selector, long id) => await _dbSet.Select(selector).FirstOrDefaultAsync();
+        public async Task<TResult?> GetByIdAsync<TResult>(
+            Expression<Func<T, TResult?>> selector,
+            long id
+            ) => await _dbSet.Select(selector).FirstOrDefaultAsync();
 
         public void Delete<T>(T entity) where T : BaseEntity
         {

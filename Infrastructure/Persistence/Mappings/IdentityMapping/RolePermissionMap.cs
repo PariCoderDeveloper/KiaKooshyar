@@ -23,9 +23,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
                 .HasOne(x => x.Permission)
                 .WithMany(x => x.RolePermissions)
                 .HasForeignKey(x => x.PermissionId);
-
-            builder.HasQueryFilter(p => !p.IsDeleted);
-
         }
     }
 }

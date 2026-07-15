@@ -1,9 +1,12 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
+using KiaKooshar.Domain.Entities.BaseEntities;
 using KiaKooshar.Domain.Entities.Identity;
+using KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping.GenericMapping;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +41,8 @@ namespace KiaKooshar.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
+
+            SoftDeleteFilter.ApplySoftDeleteQueryFilter(modelBuilder);
         }
     }
 }

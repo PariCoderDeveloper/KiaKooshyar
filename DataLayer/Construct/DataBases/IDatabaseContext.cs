@@ -17,7 +17,8 @@ namespace KiaKooshar.Application.Construct.DataBases
         public DbSet<UserRole> UserRoles { get; }
         public DbSet<RefreshToken> RefreshTokens { get; }
         public DbSet<UserSession> UserSessions { get; }
-        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken());
+        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, 
+            CancellationToken cancellationToken = new CancellationToken());
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
     }
 }

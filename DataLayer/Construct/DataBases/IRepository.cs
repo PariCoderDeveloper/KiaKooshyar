@@ -11,10 +11,15 @@ namespace KiaKooshar.Application.Construct.DataBases
     public interface IRepository<T> where T : class
     {
         Task<T?> GetByIdAsync(long id);
-        Task<TResult> GetByIdAsync<TResult>(Expression<Func<T, TResult>> selector,long id);
+        Task<TResult> GetByIdAsync<TResult>(
+            Expression<Func<T, TResult>> selector,
+            long id
+            );
         Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector);
-        Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<TResult, bool>> wherePeredict,
-            Expression<Func<T, TResult>> selectExperssion);
+        Task<List<TResult>> GetAllAsync<TResult>(
+            Expression<Func<TResult, bool>> wherePeredict,
+            Expression<Func<T, TResult>> selectExperssion
+            );
         void AddAsync(T entity);
         void Delete<T>(T entity) where T : BaseEntity;
 

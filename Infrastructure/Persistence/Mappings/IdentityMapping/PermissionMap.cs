@@ -19,8 +19,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
                 .WithOne(x => x.Permission)
                 .HasForeignKey(x => x.PermissionId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasQueryFilter(p => !p.IsDeleted);
-        }
+                }
     }
 }

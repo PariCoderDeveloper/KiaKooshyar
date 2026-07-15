@@ -32,8 +32,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasQueryFilter(p => !p.IsDeleted);
-
         }
     }
 }
