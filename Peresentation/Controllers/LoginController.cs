@@ -18,17 +18,14 @@ namespace KiaKooshar.Peresentation.Controllers
         }
         [HttpPost]
 
-        public async Task<IActionResult<bool>> LoginUser(InsertUserCommand loginViewModel)
+        public async Task<IActionResult> LoginUser(InsertUserCommand loginViewModel)
         {
             var resuult = await _mediator.Send(loginViewModel);
             if (resuult.IsSuccess)
             {
-                return true;
+                return Ok(true);
             }
-            else
-            {
-                return false;
-            }
+            return BadRequest(false);
         }
     }
 }

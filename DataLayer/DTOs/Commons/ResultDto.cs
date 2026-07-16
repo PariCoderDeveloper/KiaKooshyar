@@ -10,22 +10,38 @@ namespace KiaKooshar.Application.DTOs.Common
     {
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
-    }
-
-    public record ResultDTO<T>
-    {
-        public bool IsSuccess { get; set; } 
-        public string? Message { get; set; }
-        public T? Data { get; set; }
-
-
-        public  static void Success(bool IsSuccess = true, string Message)
+        protected ResultDTO(bool isSuccess, string? message)
         {
-
+            IsSuccess = isSuccess;
+            Message = message;
         }
 
+        public static ResultDTO Success(string message = "")
+        => new ResultDTO(true, message);
+
+        public static ResultDTO Failure(string message = "")
+        => new ResultDTO(false, message);
     }
 
+    public record ResultDTO<T> : ResultDTO
+    {
+        public T? Data { get; }
+        private ResultDTO(
+            bool isSuccess,
+            string? message,
+            T? data)
+            : base(isSuccess, message)
+        {
+            Data = data;
+        }
 
+        public static ResultDTO<T> Success(
+            T data,
+            string message = ""
+            ) => new ResultDTO<T>(true, message, data);
 
+        public static ResultDTO<T> failure(
+            string message = ""
+            ) => new ResultDTO<T>(false, message, default);
+    }
 }

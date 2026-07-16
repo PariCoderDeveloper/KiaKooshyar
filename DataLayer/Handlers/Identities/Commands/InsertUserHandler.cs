@@ -31,7 +31,8 @@ namespace KiaKooshar.Application.Handlers.Identities.Commands
         }
         public async Task<ResultDTO> Handle(
             InsertUserCommand request, 
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken
+            )
         {   
             var result = new ResultDTO();
 
