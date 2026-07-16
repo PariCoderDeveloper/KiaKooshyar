@@ -4,8 +4,8 @@ namespace KiaKooshar.Domain.Entities.Identity
 {
     public class Permission : BaseEntity
     {
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+        public string Name { get; set; } = null!;
+        public string Code { get; set; } = null!;
+        public virtual ICollection<RolePermission> RolePermissions { get; set; } = null!;
     }
 }

@@ -15,7 +15,9 @@ namespace KiaKooshar.Infrastructure.Persistence
     public class DatabaseContext : DbContext, IDatabaseContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
+     
         public DbSet<Permission> Permissions { get; }
+      
         public DbSet<User> Users { get; }
 
         public DbSet<Role> Roles { get; }
@@ -29,14 +31,12 @@ namespace KiaKooshar.Infrastructure.Persistence
         public DbSet<UserSession> UserSessions { get; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
-        {
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
+            => base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            return base.SaveChangesAsync(cancellationToken);
-        }
+             => base.SaveChangesAsync(cancellationToken);
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

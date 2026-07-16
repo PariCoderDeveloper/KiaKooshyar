@@ -6,16 +6,26 @@ using System.Threading.Tasks;
 
 namespace KiaKooshar.Application.DTOs.Common
 {
-    public class ResultDTO
+    public record ResultDTO
     {
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
     }
 
-    public class ResultDTO<T>
+    public record ResultDTO<T>
     {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
-        public T Data { get; set; }
+        public bool IsSuccess { get; set; } 
+        public string? Message { get; set; }
+        public T? Data { get; set; }
+
+
+        public  static void Success(bool IsSuccess = true, string Message)
+        {
+
+        }
+
     }
+
+
+
 }

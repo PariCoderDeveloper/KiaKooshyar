@@ -1,6 +1,6 @@
+using KiaKooshar.Application;
 using KiaKooshar.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using KiaKooshar.Application;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +31,11 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.ConfigureApplicationServices(builder.Configuration);
 
+#endregion
+
+#region AutoMapper
+
+builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyReference).Assembly);
 #endregion
 
 var app = builder.Build();

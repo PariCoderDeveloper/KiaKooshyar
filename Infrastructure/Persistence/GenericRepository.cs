@@ -1,12 +1,7 @@
-﻿using KiaKooshar.Domain.Entities.BaseEntities;
+﻿using KiaKooshar.Application.Construct.DataBases;
+using KiaKooshar.Domain.Entities.BaseEntities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
-using KiaKooshar.Application.Construct.DataBases;
 
 namespace KiaKooshar.Infrastructure.Persistence
 {
@@ -25,12 +20,12 @@ namespace KiaKooshar.Infrastructure.Persistence
         public async Task<List<TResult>> GetAllAsync<TResult>(
             Expression<Func<T, TResult>> selector
             )
-            => await _dbSet.Select(selector).ToListAsync();
+            => await _dbSet.AsNoTracking().Select(selector).ToListAsync();
 
         public async Task<List<TResult>> GetAllAsync<TResult>(
             Expression<Func<TResult, bool>> wherePeredict,
             Expression<Func<T, TResult>> selectExperssion
-            ) => await _dbSet.Select(selectExperssion).Where(wherePeredict).ToListAsync();
+            ) => await _dbSet.AsNoTracking().Select(selectExperssion).Where(wherePeredict).ToListAsync();
 
         public async Task<T?> GetByIdAsync(long id) => await _dbSet.FindAsync(id);
 

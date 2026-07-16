@@ -1,12 +1,6 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Domain.Entities.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KiaKooshar.Infrastructure.Persistence
 {
@@ -26,6 +20,7 @@ namespace KiaKooshar.Infrastructure.Persistence
         public IRepository<RolePermission> RolePermissions { get; private set; }
 
         public IRepository<RefreshToken> RefreshToken { get; private set; }
+      
         private bool _disposed = false;
         public UnitOfWork(DatabaseContext context)
         {
@@ -65,9 +60,7 @@ namespace KiaKooshar.Infrastructure.Persistence
             if (!_disposed)
             {
                 if (disposing)
-                {
                     _context?.Dispose();
-                }
                 _disposed = true;
             }
         }
