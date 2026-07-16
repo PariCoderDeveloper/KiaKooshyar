@@ -21,6 +21,9 @@ namespace KiaKooshar.Application.DTOs.Common
 
         public static ResultDTO Failure(string message = "")
         => new ResultDTO(false, message);
+        public static ResultDTO Forbid(
+            string message = ""
+            ) => new ResultDTO(false, message);
     }
 
     public record ResultDTO<T> : ResultDTO
@@ -34,13 +37,16 @@ namespace KiaKooshar.Application.DTOs.Common
         {
             Data = data;
         }
-
         public static ResultDTO<T> Success(
             T data,
             string message = ""
             ) => new ResultDTO<T>(true, message, data);
 
-        public static ResultDTO<T> failure(
+        public static ResultDTO<T> Failure(
+            string message = ""
+            ) => new ResultDTO<T>(false, message, default);
+
+        public static ResultDTO<T> Forbid(
             string message = ""
             ) => new ResultDTO<T>(false, message, default);
     }

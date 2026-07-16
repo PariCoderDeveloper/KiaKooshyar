@@ -14,6 +14,7 @@ namespace KiaKooshar.Application.Mppings
         public UserProfile()
         {
             CreateMap<InsertUserCommand, User>();
+            CreateMap<User, InsertUserCommand>();
         }
     }
 }

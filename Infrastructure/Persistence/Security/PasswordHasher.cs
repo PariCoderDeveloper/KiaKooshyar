@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
-namespace Bugeto_Store.Common
+namespace KiaKooshar.Infrastructure.Persistence.Security
 {
     public class PasswordHasher : IPasswordHasher//احراز هویت لایه
     {

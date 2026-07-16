@@ -34,25 +34,9 @@ namespace KiaKooshar.Infrastructure.Persistence
             RefreshToken = new GenericRepository<RefreshToken>(_context);
         }
 
-        public async Task<ResultDTO> CommitAsync()
+        public async Task CommitAsync()
         {
-            try
-            {
-                await _context.SaveChangesAsync();
-                return new ResultDTO
-                {
-                    IsSuccess = true,
-                    Message = "عملیات با موفقیت انجام شد"
-                };
-            }
-            catch (Exception e)
-            {
-                return new ResultDTO
-                {
-                    IsSuccess = false,
-                    Message = e.Message
-                };
-            }
+             await _context.SaveChangesAsync();
         }
 
         protected virtual void Dispose(bool disposing)

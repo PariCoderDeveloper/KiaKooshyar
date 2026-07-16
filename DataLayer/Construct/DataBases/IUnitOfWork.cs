@@ -18,6 +18,6 @@ namespace KiaKooshar.Application.Construct.DataBases
         IRepository<UserSession> UserSession { get; }
         IRepository<RolePermission> RolePermissions { get; }
         IRepository<RefreshToken> RefreshToken { get; }
-        Task<ResultDTO> CommitAsync();
+        public Task CommitAsync();
     }
 }

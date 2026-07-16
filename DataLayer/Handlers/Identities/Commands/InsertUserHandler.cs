@@ -20,8 +20,8 @@ namespace KiaKooshar.Application.Handlers.Identities.Commands
         private readonly IUnitOfWork _unit;
         private readonly IPasswordHasher _passwordHasher;
         public InsertUserHandler(
-            IUnitOfWork unit, 
-            IPasswordHasher passwordHasher, 
+            IUnitOfWork unit,
+            IPasswordHasher passwordHasher,
             IMapper mapper
             )
         {
@@ -29,20 +29,18 @@ namespace KiaKooshar.Application.Handlers.Identities.Commands
             _unit = unit;
             _passwordHasher = passwordHasher;
         }
-        public async Task<ResultDTO> Handle(
-            InsertUserCommand request, 
+        public async Task<ResultDTO> Handle
+            (
+            InsertUserCommand request,
             CancellationToken cancellationToken
             )
-        {   
-            var result = new ResultDTO();
-
+        {
             var user = _mapper.Map<User>(request);
-           
+
             _unit.User.AddAsync(user);
             await _unit.CommitAsync();
 
-
-            return result;
+            return ResultDTO.Success("User added successfully");
         }
     }
 }
