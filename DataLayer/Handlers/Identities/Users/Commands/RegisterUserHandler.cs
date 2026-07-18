@@ -2,24 +2,18 @@
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
-using KiaKooshar.Application.Requests.Identities.Commands;
-using KiaKooshar.Domain.Entities.Identity;
+using KiaKooshar.Application.Requests.Identities.User.Commands;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace KiaKooshar.Application.Handlers.Identities.Commands
+namespace KiaKooshar.Application.Handlers.Identities.Users.Commands
 {
-    public class InsertUserHandler
-        : IRequestHandler<InsertUserCommand, ResultDTO>
+    public class RegisterUserHandler
+        : IRequestHandler<RegisterUserCommand, ResultDTO>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unit;
         private readonly IPasswordHasher _passwordHasher;
-        public InsertUserHandler(
+        public RegisterUserHandler (
             IUnitOfWork unit,
             IPasswordHasher passwordHasher,
             IMapper mapper
@@ -31,16 +25,18 @@ namespace KiaKooshar.Application.Handlers.Identities.Commands
         }
         public async Task<ResultDTO> Handle
             (
-            InsertUserCommand request,
+            RegisterUserCommand request,
             CancellationToken cancellationToken
             )
         {
-            var user = _mapper.Map<User>(request);
+            var user = _mapper.Map<Domain.Entities.Identity.User> (request);
 
-            _unit.User.AddAsync(user);
-            await _unit.CommitAsync();
+            user.PasswordHash = _passwordHasher.HashPassword (request.PasswordHash);
 
-            return ResultDTO.Success("User added successfully");
+            _unit.User.AddAsync (user);
+            await _unit.CommitAsync ();
+
+            return ResultDTO.Success ("User added successfully");
         }
     }
 }

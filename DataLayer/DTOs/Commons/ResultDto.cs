@@ -1,10 +1,4 @@
 ﻿using KiaKooshar.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KiaKooshar.Application.DTOs.Common
 {
@@ -73,6 +67,12 @@ namespace KiaKooshar.Application.DTOs.Common
             List<string> error = null
             )
             => new ResultDTO (false, message, error, ErrorType.BadRequest);
+
+        public static ResultDTO ServerError (
+            string message = "",
+            List<string> error = null
+            )
+            => new ResultDTO (false, message, error, ErrorType.ServerError);
     }
 
     public record ResultDTO<T> : ResultDTO
@@ -129,5 +129,11 @@ namespace KiaKooshar.Application.DTOs.Common
             string message = "",
             List<string> error = null
             ) => new ResultDTO<T> (false, message, default, error, ErrorType.BadRequest);
+
+        public static ResultDTO<T> ServerError (
+        string message = "",
+        List<string> error = null
+        )
+        => new ResultDTO<T> (false, message, default, error, ErrorType.ServerError);
     }
 }

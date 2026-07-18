@@ -3,50 +3,52 @@ using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Security;
+using KiaKooshar.Peresentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder (args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers ();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer ();
+builder.Services.AddSwaggerGen ();
 
 #region DataBaseCofig
 
-builder.Services.AddDbContext<DatabaseContext>(options =>
+builder.Services.AddDbContext<DatabaseContext> (options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer (builder.Configuration.GetConnectionString ("DefaultConnection"));
 });
 
 #endregion
 
 #region Configration
 
-builder.Services.ConfigureApplicationServices(builder.Configuration);
+builder.Services.ConfigureApplicationServices (builder.Configuration);
 
 #endregion
 
 #region AutoMapper
 
-builder.Services.AddAutoMapper(cfg => { }, typeof(AssemblyReference).Assembly);
+builder.Services.AddAutoMapper (cfg => { }, typeof (AssemblyReference).Assembly);
 
 #endregion
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork> ();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher> ();
+
 
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    .AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer (options =>
     {
         options.TokenValidationParameters =
             new TokenValidationParameters
@@ -61,31 +63,32 @@ builder.Services
                 ValidAudience = builder.Configuration["Jwt:Audience"],
 
                 IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(
+                    new SymmetricSecurityKey (
+                        Encoding.UTF8.GetBytes (
                             builder.Configuration["Jwt:Key"]!
                         ))
             };
     });
-builder.Services.AddAuthorization();
-var app = builder.Build();
+builder.Services.AddAuthorization ();
+var app = builder.Build ();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if ( app.Environment.IsDevelopment () )
 {
-  //  app.MapOpenApi();
+    //  app.MapOpenApi();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication ();
+app.UseAuthorization ();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseMiddleware<GlobalExceptionHandler> ();
+app.UseSwagger ();
+app.UseSwaggerUI ();
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection ();
+app.UseExceptionHandler ("/error");
+app.UseAuthorization ();
 
-app.UseAuthorization();
+app.MapControllers ();
 
-app.MapControllers();
-
-app.Run();
+app.Run ();

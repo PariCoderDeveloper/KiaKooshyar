@@ -1,15 +1,10 @@
 ﻿using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Domain.Enums;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace KiaKooshar.Application.Requests.Identities.Commands
+namespace KiaKooshar.Application.Requests.Identities.User.Commands
 {
-    public class InsertUserCommand : IRequest<ResultDTO>
+    public class RegisterUserCommand : IRequest<ResultDTO>
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
@@ -21,6 +16,5 @@ namespace KiaKooshar.Application.Requests.Identities.Commands
         public UserStatus Status { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public bool IsPhoneConfirmed { get; set; }
-
     }
 }

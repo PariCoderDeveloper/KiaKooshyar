@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KiaKooshar.Domain.Enums;
+﻿namespace KiaKooshar.Domain.Enums;
 
 public enum ErrorType
 {
@@ -15,5 +9,6 @@ public enum ErrorType
     Forbid,
     ValidationError,
     Conflict,
-    BadRequest
+    BadRequest,
+    ServerError
 }

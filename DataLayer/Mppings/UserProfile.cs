@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
-using KiaKooshar.Application.Requests.Identities.Commands;
+using KiaKooshar.Application.Requests.Identities.User.Commands;
 using KiaKooshar.Domain.Entities.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KiaKooshar.Application.Mppings
 {
-    public class UserProfile:Profile
+    public class UserProfile : Profile
     {
-        public UserProfile()
+        public UserProfile ()
         {
-            CreateMap<InsertUserCommand, User>();
-            CreateMap<User, InsertUserCommand>();
+            CreateMap<RegisterUserCommand, User> ();
+            CreateMap<User, RegisterUserCommand> ();
+
+            CreateMap<UpdateUserCommand, User> ();
+            CreateMap<User, UpdateUserCommand> ();
         }
     }
 }

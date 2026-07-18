@@ -8,13 +8,15 @@
 
   <ItemGroup>
     <Folder Include="Construct\Facad\" />
-    <Folder Include="DTOs\Identities\" />
-    <Folder Include="Handlers\Identities\Queries\" />
-    <Folder Include="Requests\Identities\Queries\" />
+    <Folder Include="Handlers\Identities\Users\Queries\" />
+    <Folder Include="Validation\FacadValidation\" />
+    <Folder Include="Validation\User\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="10.0.10" />
