@@ -8,9 +8,12 @@
 
   <ItemGroup>
     <Folder Include="Construct\Facad\" />
-    <Folder Include="Handlers\Identities\Users\Queries\" />
+    <Folder Include="DTOs\Identities\Users\Request\Quueries\" />
+    <Folder Include="DTOs\Identities\Users\Response\Commands\" />
+    <Folder Include="DTOs\Identities\Users\Response\Queries\" />
+    <Folder Include="Features\Identities\Users\Handlers\Queries\" />
+    <Folder Include="Logging\" />
     <Folder Include="Validation\FacadValidation\" />
-    <Folder Include="Validation\User\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +25,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="10.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.17" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.17" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="9.0.3" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="9.1.0" />
   </ItemGroup>
 
   <ItemGroup>

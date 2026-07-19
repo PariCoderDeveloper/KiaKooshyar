@@ -1,9 +1,8 @@
-﻿using KiaKooshar.Domain.Entities.BaseEntities;
-using KiaKooshar.Domain.Enums;
+﻿using KiaKooshar.Domain.Enums;
 
-namespace KiaKooshar.Domain.Entities.Identity
+namespace KiaKooshar.Application.DTOs.Identities.Users.Request.Commands
 {
-    public class User : BaseEntity
+    public class RegisterUserDTO
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
@@ -18,8 +17,5 @@ namespace KiaKooshar.Domain.Entities.Identity
         public string? PhoneNumber { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public bool IsPhoneConfirmed { get; set; }
-        public virtual ICollection<UserRole> UserRole { get; set; } = null!;
-        public virtual ICollection<RefreshToken> RefreshToken { get; set; } = null!;
-        public virtual ICollection<UserSession> UserSession { get; set; } = null!;
     }
 }

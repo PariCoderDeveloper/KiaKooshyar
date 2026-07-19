@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using KiaKooshar.Application.Requests.Identities.User.Commands;
+using KiaKooshar.Application.DTOs.Identities.Users.Request.Commands;
 using KiaKooshar.Domain.Entities.Identity;
 
 namespace KiaKooshar.Application.Mppings
@@ -8,11 +8,11 @@ namespace KiaKooshar.Application.Mppings
     {
         public UserProfile ()
         {
-            CreateMap<RegisterUserCommand, User> ();
-            CreateMap<User, RegisterUserCommand> ();
 
-            CreateMap<UpdateUserCommand, User> ();
-            CreateMap<User, UpdateUserCommand> ();
+            CreateMap<RegisterUserDTO, User> ().ReverseMap ();
+
+            CreateMap<RegisterUserDTO, User> ().ReverseMap ();
+
         }
     }
 }

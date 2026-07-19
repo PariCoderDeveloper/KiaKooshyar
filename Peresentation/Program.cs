@@ -7,6 +7,7 @@ using KiaKooshar.Peresentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 
@@ -45,6 +46,7 @@ builder.Services.AddAutoMapper (cfg => { }, typeof (AssemblyReference).Assembly)
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork> ();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher> ();
 
+builder.Host.UseSerilog ();
 
 builder.Services
     .AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
@@ -86,7 +88,7 @@ app.UseSwagger ();
 app.UseSwaggerUI ();
 
 app.UseHttpsRedirection ();
-app.UseExceptionHandler ("/error");
+//app.UseExceptionHandler ("/error");
 app.UseAuthorization ();
 
 app.MapControllers ();
