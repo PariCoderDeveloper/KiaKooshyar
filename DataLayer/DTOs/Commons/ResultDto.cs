@@ -6,8 +6,8 @@ namespace KiaKooshar.Application.DTOs.Common
     public record ResultDTO
     {
         public bool IsSuccess { get; set; }
-        public string Message { get; set; }
-        public List<string> Error { get; set; }
+        public string? Message { get; set; }
+        public List<string>? Error { get; set; }
         public ErrorType ErrorType { get; set; }
         protected ResultDTO (
             ReturnResultDTO returnResultDTO
@@ -15,14 +15,13 @@ namespace KiaKooshar.Application.DTOs.Common
         {
             IsSuccess = returnResultDTO.IsSuccess;
             Message = returnResultDTO.Message;
-            Error = returnResultDTO.Error;
+            Error = returnResultDTO.Error ?? new List<string> ();
             ErrorType = returnResultDTO.ErrorType;
         }
 
         public static ResultDTO Success (
             string message = ""
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Message = message,
                 IsSuccess = true
@@ -31,8 +30,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO Failure (
             string message = "",
             List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -42,8 +40,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO NotFound (
              string message = "",
              List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -53,8 +50,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO Unauthorized (
             string message = "",
             List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -64,8 +60,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO Forbid (
             string message = "",
             List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -75,8 +70,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO ValidationError (
             string message = "",
             List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -86,8 +80,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO Conflict (
             string message = "",
             List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -97,8 +90,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO BadRequest (
             string message = "",
             List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -108,8 +100,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public static ResultDTO ServerError (
             string message = "",
             List<string> error = null
-            )
-            => new ResultDTO (new ReturnResultDTO
+            ) => new ResultDTO (new ReturnResultDTO
             {
                 Error = error,
                 Message = message,
@@ -139,10 +130,20 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Message = message,
                 IsSuccess = true,
-                data = data
+                Data = data
             });
 
-        public static ResultDTO<T> Failure (
+        public new static ResultDTO<T> Failure (
+            string message = "",
+            List<string> error = null
+            ) => new ResultDTO<T> (new ReturnResultDTO<T>
+            {
+                Error = error ?? new List<string> (),
+                Message = message,
+                IsSuccess = false,
+            });
+
+        public new static ResultDTO<T> NotFound (
             string message = "",
             List<string> error = null
             ) => new ResultDTO<T> (new ReturnResultDTO<T>
@@ -152,7 +153,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 IsSuccess = false,
             });
 
-        public static ResultDTO<T> NotFound (
+        public new static ResultDTO<T> Unauthorized (
             string message = "",
             List<string> error = null
             ) => new ResultDTO<T> (new ReturnResultDTO<T>
@@ -162,7 +163,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 IsSuccess = false,
             });
 
-        public static ResultDTO<T> Unauthorized (
+        public new static ResultDTO<T> Forbid (
             string message = "",
             List<string> error = null
             ) => new ResultDTO<T> (new ReturnResultDTO<T>
@@ -172,7 +173,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 IsSuccess = false,
             });
 
-        public static ResultDTO<T> Forbid (
+        public new static ResultDTO<T> ValidationError (
             string message = "",
             List<string> error = null
             ) => new ResultDTO<T> (new ReturnResultDTO<T>
@@ -182,7 +183,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 IsSuccess = false,
             });
 
-        public static ResultDTO<T> ValidationError (
+        public new static ResultDTO<T> Conflict (
             string message = "",
             List<string> error = null
             ) => new ResultDTO<T> (new ReturnResultDTO<T>
@@ -192,7 +193,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 IsSuccess = false,
             });
 
-        public static ResultDTO<T> Conflict (
+        public new static ResultDTO<T> BadRequest (
             string message = "",
             List<string> error = null
             ) => new ResultDTO<T> (new ReturnResultDTO<T>
@@ -202,19 +203,9 @@ namespace KiaKooshar.Application.DTOs.Common
                 IsSuccess = false,
             });
 
-        public static ResultDTO<T> BadRequest (
+        public new static ResultDTO<T> ServerError (
             string message = "",
             List<string> error = null
-            ) => new ResultDTO<T> (new ReturnResultDTO<T>
-            {
-                Error = error,
-                Message = message,
-                IsSuccess = false,
-            });
-
-        public static ResultDTO<T> ServerError (
-        string message = "",
-        List<string> error = null
             ) => new ResultDTO<T> (new ReturnResultDTO<T>
             {
                 Error = error,

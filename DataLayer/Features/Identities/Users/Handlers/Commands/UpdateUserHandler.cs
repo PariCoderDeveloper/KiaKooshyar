@@ -3,6 +3,7 @@ using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Users.Commands;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
+using KiaKooshar.Application.Specifications.Users;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
@@ -25,8 +26,10 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             CancellationToken cancellationToken
             )
         {
-            var user = await _unit.User.GetByIdAsync (request.UpdateUserDTO.Id);
-            if ( user == null )
+            var specification = new UserByIdSpecification (request.UpdateUserDTO.Id);
+
+            var user = await _unit.User.FirstOrDefaultAsync (specification);
+            if ( user != null )
                 return ResultDTO<UpdateUserDTO>.NotFound ("User not found");
 
             user.UpdatedAt = DateTime.UtcNow;

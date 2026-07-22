@@ -14,10 +14,12 @@ namespace KiaKooshar.Peresentation.Controllers
             )
         {
             _mediator = mediator;
-
         }
+
         [HttpPost ("/user")]
-        public async Task<IActionResult> LoginUser ( RegisterUserCommand registerUserCommand )
+        public async Task<IActionResult> LoginUser (
+            RegisterUserCommand registerUserCommand
+            )
         {
             var resuult = await _mediator.Send (registerUserCommand);
             if ( resuult.IsSuccess )
@@ -28,7 +30,9 @@ namespace KiaKooshar.Peresentation.Controllers
         }
 
         [HttpPut ("update/user")]
-        public async Task<IActionResult> UpdateUser ( UpdateUserCommand updateUserCommand )
+        public async Task<IActionResult> UpdateUser (
+            UpdateUserCommand updateUserCommand
+            )
         {
             var result = await _mediator.Send (updateUserCommand);
             if ( result.IsSuccess )
@@ -38,7 +42,9 @@ namespace KiaKooshar.Peresentation.Controllers
             return BadRequest (result);
         }
         [HttpPatch ("update/changestatus")]
-        public async Task<IActionResult> ChangeStatus ( ChangeStatusUserCommand changeStatusUserCommand )
+        public async Task<IActionResult> ChangeStatus (
+            ChangeStatusUserCommand changeStatusUserCommand
+            )
         {
             var result = await _mediator.Send (changeStatusUserCommand);
             if ( result.IsSuccess )
@@ -48,7 +54,9 @@ namespace KiaKooshar.Peresentation.Controllers
             return BadRequest (result);
         }
         [HttpPost ("delete/user")]
-        public async Task<IActionResult> DeleteUser ( DeleteUserCommand deleteUserCommand )
+        public async Task<IActionResult> DeleteUser (
+            DeleteUserCommand deleteUserCommand
+            )
         {
             var result = await _mediator.Send (deleteUserCommand);
             if ( result.IsSuccess )
@@ -59,7 +67,9 @@ namespace KiaKooshar.Peresentation.Controllers
         }
 
         [HttpPatch ("update/changephone")]
-        public async Task<IActionResult> ChangePhoneNumber ( ChangePhoneNumberCommand changePhoneNumberCommand )
+        public async Task<IActionResult> ChangePhoneNumber (
+            ChangePhoneNumberCommand changePhoneNumberCommand
+            )
         {
             var result = await _mediator.Send (changePhoneNumberCommand);
             if ( result.IsSuccess )
@@ -69,7 +79,9 @@ namespace KiaKooshar.Peresentation.Controllers
             return BadRequest (result);
         }
         [HttpPatch ("update/changepassword")]
-        public async Task<IActionResult> ChangePassword ( ChangePasswordCommand changePasswordCommand )
+        public async Task<IActionResult> ChangePassword (
+            ChangePasswordCommand changePasswordCommand
+            )
         {
             var result = await _mediator.Send (changePasswordCommand);
             if ( result.IsSuccess )
@@ -79,7 +91,9 @@ namespace KiaKooshar.Peresentation.Controllers
             return BadRequest (result);
         }
         [HttpPatch ("update/changeemail")]
-        public async Task<IActionResult> ChangeEmail ( ChangeEmailCommand changeEmailCommand )
+        public async Task<IActionResult> ChangeEmail (
+            ChangeEmailCommand changeEmailCommand
+            )
         {
             var result = await _mediator.Send (changeEmailCommand);
             if ( result.IsSuccess )

@@ -14,14 +14,14 @@ namespace KiaKooshar.Infrastructure.Persistence.Logger
             {
                 case LogLevel.Verbose:
                     Log.ForContext ("IP", logOptionsDTO.IP)
-                        .Information (
+                        .Verbose (
                             logOptionsDTO.Message!,
                             logOptionsDTO.Args);
                     break;
 
                 case LogLevel.Debug:
                     Log.ForContext ("IP", logOptionsDTO.IP)
-                       .Information (
+                       .Debug (
                            logOptionsDTO.Message!,
                            logOptionsDTO.Args);
                     break;
@@ -35,21 +35,21 @@ namespace KiaKooshar.Infrastructure.Persistence.Logger
 
                 case LogLevel.Warning:
                     Log.ForContext ("IP", logOptionsDTO.IP)
-                        .Information (
+                        .Warning (
                             logOptionsDTO.Message!,
                             logOptionsDTO.Args);
                     break;
 
                 case LogLevel.Error:
                     Log.ForContext ("IP", logOptionsDTO.IP)
-                        .Information (
+                        .Error (
                             logOptionsDTO.Message!,
                             logOptionsDTO.Args);
                     break;
 
                 case LogLevel.Fatal:
                     Log.ForContext ("IP", logOptionsDTO.IP)
-                        .Information (
+                        .Fatal (
                             logOptionsDTO.Message!,
                             logOptionsDTO.Args);
                     break;

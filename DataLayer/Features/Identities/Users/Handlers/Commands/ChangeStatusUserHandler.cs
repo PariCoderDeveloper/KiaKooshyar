@@ -2,6 +2,7 @@
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
+using KiaKooshar.Application.Specifications.Users;
 using KiaKooshar.Domain.Enums;
 using MediatR;
 
@@ -25,9 +26,10 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             CancellationToken cancellationToken
             )
         {
-            var user = await _unit.User.GetByIdAsync (request.Id);
-            if ( user == null )
-            {
+            var specification = new UserByIdSpecification (request.Id);
+
+            var user = await _unit.User.FirstOrDefaultAsync (specification);
+            if ( user != null )
                 return ResultDTO<UserStatus>.NotFound ("User not found");
             switch ( request.Status )
             {

@@ -11,6 +11,5 @@ namespace KiaKooshar.Application.Specifications.Base
         int Skip { get; }
         int Take { get; }
         bool IsPagingEnabled { get; }
-
     }
 }

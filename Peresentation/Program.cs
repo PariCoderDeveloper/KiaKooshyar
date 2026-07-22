@@ -10,13 +10,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Diagnostics;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder (args);
-
-// Add services to the container.
-
 builder.Services.AddControllers ();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
@@ -75,26 +72,30 @@ builder.Services
             };
     });
 builder.Services.AddAuthorization ();
+
+var stopwatch = Stopwatch.StartNew ();
+
 var app = builder.Build ();
 
-// Configure the HTTP request pipeline.
-if ( app.Environment.IsDevelopment () )
-{
-    //  app.MapOpenApi();
-}
+Log.Information (
+    "Application started at {Time}",
+    DateTime.UtcNow);
 
+
+app.Lifetime.ApplicationStopping.Register (() =>
+{
+    stopwatch.Stop ();
+
+    Log.Information (
+        "Application stopped. Lifetime: {Elapsed} ms",
+        stopwatch.ElapsedMilliseconds);
+});
 
 app.UseAuthentication ();
 app.UseAuthorization ();
-
 app.UseMiddleware<GlobalExceptionHandler> ();
 app.UseSwagger ();
 app.UseSwaggerUI ();
-
-//app.UseHttpsRedirection ();
-//app.UseExceptionHandler ("/error");
-//app.UseAuthorization ();
-
 app.MapControllers ();
 
 app.Run ();
