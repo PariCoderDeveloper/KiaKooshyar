@@ -48,7 +48,6 @@ namespace KiaKooshar.Peresentation.Middleware
             await context.Response.WriteAsync (
                 JsonSerializer.Serialize (result)
             );
-
         }
     }
 }

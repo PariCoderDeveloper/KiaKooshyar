@@ -1,4 +1,5 @@
 ﻿using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
+using KiaKooshar.Peresentation.Extentions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,64 +7,50 @@ namespace KiaKooshar.Peresentation.Controllers
 {
     [Route ("api/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public LoginController (
+        public UserController (
             IMediator mediator
             )
         {
             _mediator = mediator;
         }
 
-        [HttpPost ("/user")]
+        [HttpPost ("/register")]
         public async Task<IActionResult> LoginUser (
             RegisterUserCommand registerUserCommand
             )
         {
             var resuult = await _mediator.Send (registerUserCommand);
-            if ( resuult.IsSuccess )
-            {
-                return Ok (true);
-            }
-            return BadRequest (false);
+            return ResultExtensions.ToActionResult (resuult);
         }
 
-        [HttpPut ("update/user")]
+        [HttpPut ("/update")]
         public async Task<IActionResult> UpdateUser (
             UpdateUserCommand updateUserCommand
             )
         {
             var result = await _mediator.Send (updateUserCommand);
-            if ( result.IsSuccess )
-            {
-                return Ok (result);
-            }
-            return BadRequest (result);
+            return ResultExtensions.ToActionResult (result);
         }
-        [HttpPatch ("update/changestatus")]
+
+        [HttpPatch ("/update/changestatus")]
         public async Task<IActionResult> ChangeStatus (
             ChangeStatusUserCommand changeStatusUserCommand
             )
         {
             var result = await _mediator.Send (changeStatusUserCommand);
-            if ( result.IsSuccess )
-            {
-                return Ok (result);
-            }
-            return BadRequest (result);
+            return ResultExtensions.ToActionResult (result);
         }
-        [HttpPost ("delete/user")]
+
+        [HttpPost ("/delete")]
         public async Task<IActionResult> DeleteUser (
             DeleteUserCommand deleteUserCommand
             )
         {
             var result = await _mediator.Send (deleteUserCommand);
-            if ( result.IsSuccess )
-            {
-                return Ok (result);
-            }
-            return BadRequest (result);
+            return ResultExtensions.ToActionResult (result);
         }
 
         [HttpPatch ("update/changephone")]
@@ -72,35 +59,25 @@ namespace KiaKooshar.Peresentation.Controllers
             )
         {
             var result = await _mediator.Send (changePhoneNumberCommand);
-            if ( result.IsSuccess )
-            {
-                return Ok (result);
-            }
-            return BadRequest (result);
+            return ResultExtensions.ToActionResult (result);
         }
+
         [HttpPatch ("update/changepassword")]
         public async Task<IActionResult> ChangePassword (
             ChangePasswordCommand changePasswordCommand
             )
         {
             var result = await _mediator.Send (changePasswordCommand);
-            if ( result.IsSuccess )
-            {
-                return Ok (result);
-            }
-            return BadRequest (result);
+            return ResultExtensions.ToActionResult (result);
         }
+
         [HttpPatch ("update/changeemail")]
         public async Task<IActionResult> ChangeEmail (
             ChangeEmailCommand changeEmailCommand
             )
         {
             var result = await _mediator.Send (changeEmailCommand);
-            if ( result.IsSuccess )
-            {
-                return Ok (result);
-            }
-            return BadRequest (result);
+            return ResultExtensions.ToActionResult (result);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace KiaKooshar.Application.DTOs.Common
         public bool IsSuccess { get; set; }
         public string? Message { get; set; }
         public List<string>? Error { get; set; }
-        public ErrorType ErrorType { get; set; }
+        public ResultStatus ResultStatus { get; set; }
         protected ResultDTO (
             ReturnResultDTO returnResultDTO
             )
@@ -16,7 +16,7 @@ namespace KiaKooshar.Application.DTOs.Common
             IsSuccess = returnResultDTO.IsSuccess;
             Message = returnResultDTO.Message;
             Error = returnResultDTO.Error ?? new List<string> ();
-            ErrorType = returnResultDTO.ErrorType;
+            ResultStatus = returnResultDTO.ResultStatus;
         }
 
         public static ResultDTO Success (
@@ -24,7 +24,8 @@ namespace KiaKooshar.Application.DTOs.Common
             ) => new ResultDTO (new ReturnResultDTO
             {
                 Message = message,
-                IsSuccess = true
+                IsSuccess = true,
+                ResultStatus = ResultStatus.Success
             });
 
         public static ResultDTO Failure (
@@ -34,7 +35,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.Failure
             });
 
         public static ResultDTO NotFound (
@@ -44,7 +46,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.NotFound
             });
 
         public static ResultDTO Unauthorized (
@@ -54,7 +57,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.Unauthorized
             });
 
         public static ResultDTO Forbid (
@@ -64,7 +68,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.Forbid
             });
 
         public static ResultDTO ValidationError (
@@ -74,7 +79,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.ValidationError
             });
 
         public static ResultDTO Conflict (
@@ -84,7 +90,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.Conflict
             });
 
         public static ResultDTO BadRequest (
@@ -94,7 +101,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.BadRequest
             });
 
         public static ResultDTO ServerError (
@@ -104,7 +112,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = error,
                 Message = message,
-                IsSuccess = false
+                IsSuccess = false,
+                ResultStatus = ResultStatus.ServerError
             });
     }
 
@@ -120,7 +129,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 IsSuccess = returnResultDTO.IsSuccess
             })
         {
-            Data = Data;
+            Data = returnResultDTO.Data;
         }
 
         public static ResultDTO<T> Success (
@@ -130,7 +139,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Message = message,
                 IsSuccess = true,
-                Data = data
+                Data = data,
+                ResultStatus = ResultStatus.Success
             });
 
         public new static ResultDTO<T> Failure (
@@ -141,6 +151,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error ?? new List<string> (),
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.ServerError
             });
 
         public new static ResultDTO<T> NotFound (
@@ -151,6 +162,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error,
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.NotFound
             });
 
         public new static ResultDTO<T> Unauthorized (
@@ -161,6 +173,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error,
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.Unauthorized
             });
 
         public new static ResultDTO<T> Forbid (
@@ -171,6 +184,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error,
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.Forbid
             });
 
         public new static ResultDTO<T> ValidationError (
@@ -181,6 +195,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error,
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.ValidationError
             });
 
         public new static ResultDTO<T> Conflict (
@@ -191,6 +206,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error,
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.Conflict
             });
 
         public new static ResultDTO<T> BadRequest (
@@ -201,6 +217,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error,
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.BadRequest
             });
 
         public new static ResultDTO<T> ServerError (
@@ -211,6 +228,7 @@ namespace KiaKooshar.Application.DTOs.Common
                 Error = error,
                 Message = message,
                 IsSuccess = false,
+                ResultStatus = ResultStatus.ServerError
             });
     }
 }

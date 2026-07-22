@@ -1,6 +1,6 @@
 ﻿namespace KiaKooshar.Domain.Enums;
 
-public enum ErrorType
+public enum ResultStatus
 {
     Success,
     Failure,
