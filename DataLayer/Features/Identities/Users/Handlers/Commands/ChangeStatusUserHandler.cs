@@ -29,8 +29,6 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             if ( user == null )
             {
                 return ResultDTO<UserStatus>.NotFound ("User not found");
-            }
-
             switch ( request.Status )
             {
                 case UserStatus.Pending:
