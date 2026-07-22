@@ -1,7 +1,9 @@
 using KiaKooshar.Application;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
+using KiaKooshar.Application.Features.Construct.Logging;
 using KiaKooshar.Infrastructure.Persistence;
+using KiaKooshar.Infrastructure.Persistence.Logger;
 using KiaKooshar.Infrastructure.Persistence.Security;
 using KiaKooshar.Peresentation.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,6 +47,7 @@ builder.Services.AddAutoMapper (cfg => { }, typeof (AssemblyReference).Assembly)
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork> ();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher> ();
+builder.Services.AddScoped<IBaseLogger, BaseLogger> ();
 
 builder.Host.UseSerilog ();
 
@@ -80,6 +83,7 @@ if ( app.Environment.IsDevelopment () )
     //  app.MapOpenApi();
 }
 
+
 app.UseAuthentication ();
 app.UseAuthorization ();
 
@@ -87,9 +91,9 @@ app.UseMiddleware<GlobalExceptionHandler> ();
 app.UseSwagger ();
 app.UseSwaggerUI ();
 
-app.UseHttpsRedirection ();
+//app.UseHttpsRedirection ();
 //app.UseExceptionHandler ("/error");
-app.UseAuthorization ();
+//app.UseAuthorization ();
 
 app.MapControllers ();
 

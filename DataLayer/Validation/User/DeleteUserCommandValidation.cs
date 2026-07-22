@@ -4,7 +4,7 @@ using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
 namespace KiaKooshar.Application.Validation.User
 {
     public class DeleteUserCommandValidation :
-        AbstractValidator<ChangeStatusUserCommand>
+        AbstractValidator<DeleteUserCommand>
     {
         public DeleteUserCommandValidation ()
         {

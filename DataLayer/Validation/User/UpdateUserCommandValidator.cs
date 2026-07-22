@@ -8,17 +8,18 @@ namespace KiaKooshar.Application.Validation.User
         public UpdateUserCommandValidator ()
         {
             RuleFor (x => x.UpdateUserDTO.FirstName)
-      .NotEmpty ().WithMessage ("First name is required.")
-      .MaximumLength (50).WithMessage ("First name cannot exceed 50 characters.");
+                .NotEmpty ().WithMessage ("First name is required.")
+                .MaximumLength (50).WithMessage ("First name cannot exceed 50 characters.");
 
             RuleFor (x => x.UpdateUserDTO.LastName)
                 .NotEmpty ().WithMessage ("Last name is required.")
                 .MaximumLength (50).WithMessage ("Last name cannot exceed 50 characters.");
 
             RuleFor (x => x.UpdateUserDTO.BirthDate)
-                .NotEmpty ().WithMessage ("Birth date is required.")
+                .NotEmpty ()
+                .WithMessage ("Birth date is required.")
                 .Must (BeValidDate)
-                .WithMessage ("Birth date is not in a valid format.");
+                .WithMessage ("Birth date is not valid.");
 
             RuleFor (x => x.UpdateUserDTO.Gender)
                 .NotEmpty ().WithMessage ("Gender is required.")
@@ -36,11 +37,10 @@ namespace KiaKooshar.Application.Validation.User
                 .WithMessage ("Phone number is not valid.");
         }
 
-        private bool BeValidDate ( string birthDate )
+        private bool BeValidDate ( DateOnly birthDate )
         {
-            return DateTime.TryParse (birthDate, out _);
+            return birthDate <= DateOnly.FromDateTime (DateTime.Today);
         }
-
     }
 }
 

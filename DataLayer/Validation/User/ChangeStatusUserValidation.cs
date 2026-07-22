@@ -3,7 +3,8 @@ using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
 
 namespace KiaKooshar.Application.Validation.User
 {
-    public class ChangeStatusUserValidation : AbstractValidator<ChangeStatusUserCommand>
+    public class ChangeStatusUserValidation :
+        AbstractValidator<ChangeStatusUserCommand>
     {
         public ChangeStatusUserValidation ()
         {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using KiaKooshar.Application.DTOs.Identities.Users.Request.Commands;
+using KiaKooshar.Application.DTOs.Identities.Users.Commands;
 using KiaKooshar.Domain.Entities.Identity;
 
 namespace KiaKooshar.Application.Mppings
@@ -11,7 +11,7 @@ namespace KiaKooshar.Application.Mppings
 
             CreateMap<RegisterUserDTO, User> ().ReverseMap ();
 
-            CreateMap<RegisterUserDTO, User> ().ReverseMap ();
+            CreateMap<UpdateUserDTO, User> ().ReverseMap ();
 
         }
     }

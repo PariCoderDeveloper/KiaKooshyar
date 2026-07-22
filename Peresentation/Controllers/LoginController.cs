@@ -9,14 +9,17 @@ namespace KiaKooshar.Peresentation.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public LoginController ( IMediator mediator )
+        public LoginController (
+            IMediator mediator
+            )
         {
             _mediator = mediator;
+
         }
         [HttpPost ("/user")]
-        public async Task<IActionResult> LoginUser ( RegisterUserCommand loginViewModel )
+        public async Task<IActionResult> LoginUser ( RegisterUserCommand registerUserCommand )
         {
-            var resuult = await _mediator.Send (loginViewModel);
+            var resuult = await _mediator.Send (registerUserCommand);
             if ( resuult.IsSuccess )
             {
                 return Ok (true);

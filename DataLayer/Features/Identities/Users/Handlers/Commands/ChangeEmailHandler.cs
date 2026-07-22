@@ -17,7 +17,7 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
         }
         public async Task<ResultDTO> Handle ( ChangeEmailCommand request, CancellationToken cancellationToken )
         {
-            var user = await _unit.User.GetByIdAsync (request.Id);
+            var user = await _unit.User.FirstOrDefaultAsync (request.Id);
             if ( user is null )
                 return ResultDTO.NotFound ("User not found");
 

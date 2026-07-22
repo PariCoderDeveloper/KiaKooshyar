@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using KiaKooshar.Application.Behaviors;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Reflection;
 
@@ -35,6 +37,11 @@ namespace KiaKooshar.Application
             });
             //services.AddAutoMapper (AppDomain.CurrentDomain.GetAssemblies ());
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (LoggingBehavior<,>));
+            services.AddTransient (typeof (IPipelineBehavior<,>), typeof (ValidationBehavior<,>));
+            services.AddValidatorsFromAssembly (typeof (ApplicationServicesRegistration).Assembly);
+
+            services.AddHttpContextAccessor ();
+            // services.serilo
 
             ConfigureSerilog (configuration);
         }
@@ -49,6 +56,16 @@ namespace KiaKooshar.Application
 
             columnOptions.Properties.ColumnName = "Properties";
             columnOptions.Properties.DataType = SqlDbType.NVarChar;
+
+            columnOptions.AdditionalColumns = new Collection<SqlColumn>
+            {
+                new SqlColumn
+                {
+                    ColumnName = "IP",
+                    DataLength = 15,
+                    PropertyName = "IP",
+                }
+            };
 
             Log.Logger = new LoggerConfiguration ()
                 .MinimumLevel.Debug ()

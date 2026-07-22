@@ -1,12 +1,11 @@
 ﻿using KiaKooshar.Application.DTOs.Common;
-using KiaKooshar.Application.DTOs.Identities.User;
-using KiaKooshar.Application.DTOs.Identities.Users;
+using KiaKooshar.Application.DTOs.Identities.Users.Commands;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Requests.Commands
 {
-    public class UpdateUserCommand : IRequest<ResultDTO<ResponseUpdateUserDTO>>
+    public class UpdateUserCommand : IRequest<ResultDTO<UpdateUserDTO>>
     {
-        public RequestUpdateUserDTO UpdateUserDTO { get; set; } = null!;
+        public UpdateUserDTO UpdateUserDTO { get; set; } = null!;
     }
 }

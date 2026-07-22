@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
-using KiaKooshar.Application.DTOs.Identities.Users;
+using KiaKooshar.Application.DTOs.Identities.Users.Commands;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
 {
     public class UpdateUserHandler :
-        IRequestHandler<UpdateUserCommand, ResultDTO<ResponseUpdateUserDTO>>
+        IRequestHandler<UpdateUserCommand, ResultDTO<UpdateUserDTO>>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unit;
@@ -20,28 +20,24 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             _mapper = mapper;
             _unit = unit;
         }
-        public async Task<ResultDTO<ResponseUpdateUserDTO>> Handle (
+        public async Task<ResultDTO<UpdateUserDTO>> Handle (
             UpdateUserCommand request,
             CancellationToken cancellationToken
             )
         {
             var user = await _unit.User.GetByIdAsync (request.UpdateUserDTO.Id);
             if ( user == null )
-            {
-                return ResultDTO<ResponseUpdateUserDTO>.NotFound ("User not found");
-            }
+                return ResultDTO<UpdateUserDTO>.NotFound ("User not found");
 
-            _mapper.Map (request, user);
             user.UpdatedAt = DateTime.UtcNow;
+            _mapper.Map (request.UpdateUserDTO, user);
 
             await _unit.CommitAsync ();
 
-            var result = _mapper.Map<ResponseUpdateUserDTO> (user);
-
-            return ResultDTO<ResponseUpdateUserDTO>.Success (
-                result,
+            return ResultDTO<UpdateUserDTO>.Success (
+                null,
                 "User updated successfully"
-            );
+                );
         }
     }
 }

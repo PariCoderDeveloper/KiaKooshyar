@@ -1,5 +1,4 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
-using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Domain.Entities.Identity;
 
 namespace KiaKooshar.Infrastructure.Persistence
@@ -20,39 +19,40 @@ namespace KiaKooshar.Infrastructure.Persistence
         public IRepository<RolePermission> RolePermissions { get; private set; }
 
         public IRepository<RefreshToken> RefreshToken { get; private set; }
-      
+
         private bool _disposed = false;
-        public UnitOfWork(DatabaseContext context)
+        public UnitOfWork ( DatabaseContext context )
         {
             _context = context;
-            Permission = new GenericRepository<Permission>(_context);
-            Role = new GenericRepository<Role>(_context);
-            User = new GenericRepository<User>(_context);
-            RolePermissions = new GenericRepository<RolePermission>(_context);
-            UserRoles = new GenericRepository<UserRole>(_context);
-            UserSession = new GenericRepository<UserSession>(_context);
-            RefreshToken = new GenericRepository<RefreshToken>(_context);
+            Permission = new GenericRepository<Permission> (_context);
+            Role = new GenericRepository<Role> (_context);
+            User = new GenericRepository<User> (_context);
+            RolePermissions = new GenericRepository<RolePermission> (_context);
+            UserRoles = new GenericRepository<UserRole> (_context);
+            UserSession = new GenericRepository<UserSession> (_context);
+            RefreshToken = new GenericRepository<RefreshToken> (_context);
         }
 
-        public async Task CommitAsync()
+        public async Task<int> CommitAsync ()
         {
-             await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync ();
+            return result;
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose ( bool disposing )
         {
-            if (!_disposed)
+            if ( !_disposed )
             {
-                if (disposing)
-                    _context?.Dispose();
+                if ( disposing )
+                    _context?.Dispose ();
                 _disposed = true;
             }
         }
 
-        public void Dispose()
+        public void Dispose ()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Dispose (true);
+            GC.SuppressFinalize (this);
         }
     }
 }

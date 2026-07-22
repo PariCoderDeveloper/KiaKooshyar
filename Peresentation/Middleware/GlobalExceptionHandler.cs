@@ -37,7 +37,6 @@ namespace KiaKooshar.Peresentation.Middleware
         {
             var errorId = Guid.NewGuid ().ToString ("N");
 
-
             var result = ResultDTO.ServerError (
                  "An unexpected server error occurred.",
                  new List<string>

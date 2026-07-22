@@ -1,11 +1,12 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
+using KiaKooshar.Application.Specifications.Base;
 using KiaKooshar.Domain.Entities.BaseEntities;
+using KiaKooshar.Infrastructure.Persistence.Specification;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace KiaKooshar.Infrastructure.Persistence
 {
-    public class GenericRepository<T> : IRepository<T> where T : class
+    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly DatabaseContext _context;
         private readonly DbSet<T> _dbSet;
@@ -15,25 +16,49 @@ namespace KiaKooshar.Infrastructure.Persistence
             _dbSet = context.Set<T> ();
         }
 
-        public void AddAsync ( T entity ) => _dbSet.AddAsync (entity);
+        public void AddAsync ( T entity )
+        {
+            _dbSet.AddAsync (entity);
+        }
+        public async Task<List<T>> ListAsync (
+            ISpecifications<T> specifications
+            )
+        {
+            var query = SpecificationEvaluator.GetQuery (
+                    _dbSet.AsNoTracking (),
+                    specifications
+                );
+            return await query.ToListAsync ();
+        }
 
-        public async Task<List<TResult>> GetAllAsync<TResult> (
-            Expression<Func<T, TResult>> selector
-            ) => await _dbSet.AsNoTracking ().Select (selector).ToListAsync ();
+        public async Task<T?> FirstOrDefaultAsync (
+            ISpecifications<T> specifications
+            )
+        {
+            var query = SpecificationEvaluator.GetQuery (
+                _dbSet.AsQueryable (),
+                specifications);
+            return await query.FirstOrDefaultAsync ();
+        }
+        public async Task<int> CountAsync (
+                ISpecifications<T> specifications
+            )
+        {
+            var query = SpecificationEvaluator.GetQuery (
+                _dbSet.AsQueryable (),
+                specifications);
+            return await query.CountAsync ();
+        }
 
-        public async Task<List<TResult>> GetAllAsync<TResult> (
-            Expression<Func<TResult, bool>> wherePeredict,
-            Expression<Func<T, TResult>> selectExperssion
-            ) => await _dbSet.AsNoTracking ().Select (selectExperssion).Where (wherePeredict).ToListAsync ();
-
-        public async Task<T?> GetByIdAsync ( long id ) => await _dbSet.FindAsync (id);
-
-        public async Task<TResult?> GetByIdAsync<TResult> (
-            Expression<Func<T, TResult?>> selector,
-            long id
-            ) => await _dbSet.Select (selector).FirstOrDefaultAsync ();
-
-        public void Delete<T> ( T entity ) where T : BaseEntity
+        public async Task<bool> AnyAsync (
+            ISpecifications<T> specifications )
+        {
+            var query = SpecificationEvaluator.GetQuery (
+                _dbSet.AsQueryable (),
+                specifications);
+            return await query.AnyAsync ();
+        }
+        public void Delete ( T entity )
         {
             entity.IsDeleted = true;
         }

@@ -29,7 +29,7 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             {
                 return ResultDTO.NotFound ("User not found");
             }
-            user.PasswordHash = _passwordHasher.HashPassword (request.PasswordHash);
+            user.PasswordHash = _passwordHasher.HashPassword (request.Password);
             user.UpdatedAt = DateTime.UtcNow;
             await _unit.CommitAsync ();
             return ResultDTO.Success (

@@ -2,13 +2,14 @@
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
+using KiaKooshar.Application.DTOs.Commons;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
 {
     public class RegisterUserHandler
-        : IRequestHandler<RegisterUserCommand, ResultDTO>
+        : IRequestHandler<RegisterUserCommand, ResultDTO<ReturnUserDTO>>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unit;
@@ -23,7 +24,7 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             _unit = unit;
             _passwordHasher = passwordHasher;
         }
-        public async Task<ResultDTO> Handle
+        public async Task<ResultDTO<ReturnUserDTO>> Handle
             (
             RegisterUserCommand request,
             CancellationToken cancellationToken
@@ -35,9 +36,18 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             user.PasswordHash = _passwordHasher.HashPassword (request.RegisterUserDTO.PasswordHash);
 
             _unit.User.AddAsync (user);
-            await _unit.CommitAsync ();
+            var result = await _unit.CommitAsync ();
 
-            return ResultDTO.Success ("User added successfully");
+            return ResultDTO<ReturnUserDTO>.Success (
+
+                new ReturnUserDTO
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Gender = user.Gender,
+                    Status = user.Status,
+                });
         }
     }
 }

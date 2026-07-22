@@ -1,11 +1,4 @@
-﻿using KiaKooshar.Application.DTOs.Common;
-using KiaKooshar.Domain.Entities.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KiaKooshar.Domain.Entities.Identity;
 
 namespace KiaKooshar.Application.Construct.DataBases
 {
@@ -18,6 +11,6 @@ namespace KiaKooshar.Application.Construct.DataBases
         IRepository<UserSession> UserSession { get; }
         IRepository<RolePermission> RolePermissions { get; }
         IRepository<RefreshToken> RefreshToken { get; }
-        public Task CommitAsync();
+        public Task<int> CommitAsync ();
     }
 }
