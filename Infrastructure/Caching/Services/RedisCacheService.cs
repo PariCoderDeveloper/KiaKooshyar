@@ -1,7 +1,9 @@
-﻿using KiaKooshar.Application.Cachings;
+﻿using KiaKooshar.Application.Caching.Contracts;
+using KiaKooshar.Application.Caching.Policies;
 using StackExchange.Redis;
+using System.Text.Json;
 
-namespace KiaKooshar.Infrastructure.Caching
+namespace KiaKooshar.Infrastructure.Caching.Services
 {
     public class RedisCacheService : ICacheService
     {
@@ -14,28 +16,34 @@ namespace KiaKooshar.Infrastructure.Caching
             _connection = connection;
             _database = connection.GetDatabase ();
         }
-        public Task ClearAsync ()
+        public async Task ClearAsync ()
         {
-            throw new NotImplementedException ();
+            foreach ( var endpoint in _connection.GetEndPoints () )
+            {
+                var server = _connection.GetServer (endpoint);
+                await server.FlushAllDatabasesAsync ();
+            }
         }
 
-        public Task<bool> ExistAsync (
+        public async Task<bool> ExistAsync (
             string key,
             CancellationToken cancellationToken = default
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
-            bool exist = _database.KeyExists (key);
-            return exist;
+            return await _database.KeyExistsAsync (key);
         }
 
-        public Task<T?> GetAsync<T> (
+        public async Task<T?> GetAsync<T> (
             string key,
             CancellationToken cancellationToken = default
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
-            throw new NotImplementedException ();
+            RedisValue value = await _database.StringGetAsync (key);
+            if ( value.IsNullOrEmpty )
+                return default;
+            return JsonSerializer.Deserialize<T> (value!);
         }
 
         public Task RemoveAasyc (
@@ -44,16 +52,24 @@ namespace KiaKooshar.Infrastructure.Caching
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
-            throw new NotImplementedException ();
+            _database.KeyDeleteAsync (key);
+            return Task.CompletedTask;
         }
 
-        public Task RemoveByPrefixAsync (
+        public async Task RemoveByPrefixAsync (
             string prefix,
             CancellationToken cancellationToken = default
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
-            throw new NotImplementedException ();
+            foreach ( var endpoint in _connection.GetEndPoints () )
+            {
+                var server = _connection.GetServer (endpoint);
+                foreach ( var key in server.Keys (pattern: $"{prefix}") )
+                {
+                    await _database.KeyDeleteAsync (key);
+                }
+            }
         }
 
         public Task RemoveGroupAsync (
@@ -65,14 +81,20 @@ namespace KiaKooshar.Infrastructure.Caching
             throw new NotImplementedException ();
         }
 
-        public Task<T> SetAsync<T> (
+        public async Task SetAsync<T> (
             string key,
             T value,
-            TimeSpan expiration,
+            CacheExpiration expiration,
             CancellationToken cancellationToken = default
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
+            var json = JsonSerializer.Serialize (value);
+            await _database.StringSetAsync (
+                key,
+                json,
+                expiration.AbsoluteExpiration
+                );
         }
     }
 }

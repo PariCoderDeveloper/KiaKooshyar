@@ -1,7 +1,8 @@
-﻿using KiaKooshar.Application.Cachings;
+﻿using KiaKooshar.Application.Caching.Contracts;
+using KiaKooshar.Application.Caching.Policies;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace KiaKooshar.Infrastructure.Caching
+namespace KiaKooshar.Infrastructure.Caching.Services
 {
     public class MemoryCacheService : ICacheService
     {
@@ -15,7 +16,7 @@ namespace KiaKooshar.Infrastructure.Caching
 
         public Task ClearAsync ()
         {
-            throw new NotImplementedException ();
+            _memoryCache.
         }
 
         public Task ExistAsync (
@@ -48,13 +49,21 @@ namespace KiaKooshar.Infrastructure.Caching
             return Task.CompletedTask;
         }
 
-        public Task RemoveByPrefixAsync (
-            string prefix,
-            CancellationToken cancellationToken = default
-            )
-        {
-            throw new NotImplementedException ();
-        }
+        //public Task RemoveByPrefixAsync (
+        //    string prefix,
+        //    CancellationToken cancellationToken = default
+        //    )
+        //{
+        //    cancellationToken.ThrowIfCancellationRequested ();
+        //    foreach ( var endpoint in _memoryCache.GetEndPoints () )
+        //    {
+        //        var server = _memoryCache.GetServer (endpoint);
+        //        foreach ( var key in server.Keys (pattern: $"{prefix}") )
+        //        {
+        //            await _memoryCache.KeyDeleteAsync (key);
+        //        }
+        //    }
+        //}
 
         public Task RemoveGroupAsync (
             string key,
@@ -64,17 +73,21 @@ namespace KiaKooshar.Infrastructure.Caching
             throw new NotImplementedException ();
         }
 
-        public Task<T> SetAsync<T> (
+        public Task SetAsync<T> (
             string key,
             T value,
-            TimeSpan expiration,
+            CacheExpiration expiration,
             CancellationToken cancellationToken = default
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
 
-            _memoryCache.Set (key, value, expiration);
-            return Task.FromResult (value);
+            _memoryCache.Set (
+                key,
+                value,
+                expiration.AbsoluteExpiration
+                );
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using KiaKooshar.Application.Cachings;
-using KiaKooshar.Infrastructure.Caching;
+﻿using KiaKooshar.Application.Caching.Contracts;
+using KiaKooshar.Infrastructure.Caching.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;

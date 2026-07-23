@@ -1,4 +1,6 @@
-﻿namespace KiaKooshar.Application.Cachings
+﻿using KiaKooshar.Application.Caching.Policies;
+
+namespace KiaKooshar.Application.Caching.Contracts
 {
     public interface ICacheService
     {
@@ -6,10 +8,10 @@
             string key,
             CancellationToken cancellationToken = default
             );
-        Task<T> SetAsync<T> (
+        Task SetAsync<T> (
             string key,
             T value,
-            TimeSpan expiration,
+            CacheExpiration expiration,
             CancellationToken cancellationToken = default
             );
         Task RemoveAasyc (
