@@ -2,6 +2,7 @@ using KiaKooshar.Application;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.Features.Construct.Logging;
+using KiaKooshar.Infrastructure;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Logger;
 using KiaKooshar.Infrastructure.Persistence.Security;
@@ -33,6 +34,7 @@ builder.Services.AddDbContext<DatabaseContext> (options =>
 #region Configration
 
 builder.Services.ConfigureApplicationServices (builder.Configuration);
+builder.Services.AddInfrastructureServices (builder.Configuration);
 
 #endregion
 
