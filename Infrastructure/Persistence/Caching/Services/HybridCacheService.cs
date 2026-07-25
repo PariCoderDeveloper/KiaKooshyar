@@ -1,7 +1,7 @@
 ﻿using KiaKooshar.Application.Caching.Contracts;
 using KiaKooshar.Application.Caching.Policies;
 
-namespace KiaKooshar.Infrastructure.Caching.Services
+namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
 {
     public class HybridCacheService : ICacheService
     {
@@ -37,7 +37,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
                 );
             if ( redisValue is null )
                 return default;
-            _memoryCache.Set<T> (
+            _memoryCache.Set (
                 key,
                 redisValue,
                 CachePolicy.Medium

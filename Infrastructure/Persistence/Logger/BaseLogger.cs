@@ -9,7 +9,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Logger
     {
         public void Logging ( LogOptionsDTO logOptionsDTO )
         {
-            var result = new BaseLogger ();
             switch ( logOptionsDTO.Level )
             {
                 case LogLevel.Verbose:

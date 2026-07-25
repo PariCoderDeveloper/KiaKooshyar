@@ -3,7 +3,7 @@ using KiaKooshar.Application.Caching.Policies;
 using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Concurrent;
 
-namespace KiaKooshar.Infrastructure.Caching.Services
+namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
 {
     public class MemoryCacheService : ILocalCacheService
     {

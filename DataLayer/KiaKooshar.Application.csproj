@@ -28,4 +28,11 @@
     <ProjectReference Include="..\Domain\KiaKooshar.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Identities\Users\Handlers\Commands\Login\" />
+    <Folder Include="Features\Identities\Users\Handlers\Commands\Logout\" />
+    <Folder Include="Features\Identities\Users\Handlers\Commands\RevokeToken\" />
+    <Folder Include="Features\Identities\Users\Handlers\Commands\RefreshToken\" />
+  </ItemGroup>
+
 </Project>

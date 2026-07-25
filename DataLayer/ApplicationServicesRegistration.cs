@@ -35,14 +35,13 @@ namespace KiaKooshar.Application
 
                 return config.CreateMapper ();
             });
-            //services.AddAutoMapper (AppDomain.CurrentDomain.GetAssemblies ());
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (LoggingBehavior<,>));
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (ValidationBehavior<,>));
+            services.AddTransient (typeof (IPipelineBehavior<,>), typeof (CachingBehavior<,>));
+            services.AddTransient (typeof (IPipelineBehavior<,>), typeof (CacheInvalidationBehavior<,>));
             services.AddValidatorsFromAssembly (typeof (ApplicationServicesRegistration).Assembly);
 
             services.AddHttpContextAccessor ();
-            // services.serilo
-
             ConfigureSerilog (configuration);
         }
         private static void ConfigureSerilog ( IConfiguration configuration )

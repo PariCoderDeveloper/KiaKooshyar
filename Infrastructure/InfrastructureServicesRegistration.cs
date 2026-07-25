@@ -1,5 +1,5 @@
 ﻿using KiaKooshar.Application.Caching.Contracts;
-using KiaKooshar.Infrastructure.Caching.Services;
+using KiaKooshar.Infrastructure.Persistence.Caching.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -23,6 +23,8 @@ namespace KiaKooshar.Infrastructure
             });
 
             services.AddScoped<ICacheService, HybridCacheService> ();
+            services.AddScoped<ILocalCacheService, MemoryCacheService> ();
+            services.AddScoped<IDistributedCacheService, RedisCacheService> ();
 
             return services;
         }

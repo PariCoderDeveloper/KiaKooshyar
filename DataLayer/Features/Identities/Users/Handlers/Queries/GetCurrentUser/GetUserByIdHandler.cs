@@ -6,7 +6,7 @@ using KiaKooshar.Application.Features.Identities.Users.Requests.Queries;
 using KiaKooshar.Application.Specifications.Users;
 using MediatR;
 
-namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Queries
+namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Queries.GetCurrentUser
 {
     public class GetUserByIdHandler :
         IRequestHandler<GetUserByIdQuery, ResultDTO<GetUserByIdDTO>>

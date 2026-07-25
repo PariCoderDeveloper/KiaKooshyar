@@ -1,23 +1,30 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
+using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Users.Quueries;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
 using KiaKooshar.Application.Specifications.Users;
 using MediatR;
 
-namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
+namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands.ChangePassword
 {
-    public class ChangeEmailHandler :
-        IRequestHandler<ChangeEmailCommand, ResultDTO>
+    public class ChangePasswordHandler :
+        IRequestHandler<ChangePasswordCommand, ResultDTO>
     {
         private readonly IUnitOfWork _unit;
-        public ChangeEmailHandler (
-            IUnitOfWork unit
+        private readonly IPasswordHasher _passwordHasher;
+        public ChangePasswordHandler (
+            IUnitOfWork unit,
+            IPasswordHasher passwordHasher
             )
         {
             _unit = unit;
+            _passwordHasher = passwordHasher;
         }
-        public async Task<ResultDTO> Handle ( ChangeEmailCommand request, CancellationToken cancellationToken )
+        public async Task<ResultDTO> Handle (
+            ChangePasswordCommand request,
+            CancellationToken cancellationToken
+            )
         {
             var specification = new UserByIdSpecification (request.Id);
 
@@ -25,13 +32,11 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             if ( user != null )
                 return ResultDTO<GetUserByIdDTO>.NotFound ("User not found");
 
-            user.Email = request.Email;
+            user.PasswordHash = _passwordHasher.HashPassword (request.Password);
             user.UpdatedAt = DateTime.UtcNow;
-
             await _unit.CommitAsync ();
-
             return ResultDTO.Success (
-                "The email of user changed successfully"
+                "The password of user changed successfully"
               );
         }
     }

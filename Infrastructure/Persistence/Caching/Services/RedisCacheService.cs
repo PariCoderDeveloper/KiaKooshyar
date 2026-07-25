@@ -3,7 +3,7 @@ using KiaKooshar.Application.Caching.Policies;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace KiaKooshar.Infrastructure.Caching.Services
+namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
 {
     public class RedisCacheService : IDistributedCacheService
     {
