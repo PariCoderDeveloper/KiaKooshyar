@@ -2,11 +2,11 @@
 
 namespace KiaKooshar.Application.Caching.Contracts
 {
-    public interface ICachable
+    public interface ICacheableRequest
     {
         bool BypassCache { get; }
         string CacheKey { get; }
-        string? CacheGroup { get; set; }
-        CacheExpiration Expiration { get; set; }
+        string? CacheGroup { get; }
+        CacheExpiration Expiration { get; }
     }
 }

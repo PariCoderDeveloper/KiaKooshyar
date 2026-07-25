@@ -27,6 +27,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             var memoryValue = _memoryCache.Get<T> (key);
             if ( memoryValue is not null )
                 return memoryValue;
@@ -49,6 +50,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             _memoryCache.Remove (key);
             await _redisCache.RemoveAsync (
                 key,
@@ -61,6 +63,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             _memoryCache.RemoveByPrefix (prefix);
             await _redisCache.RemoveByPrefixAsync (
                 prefix,
@@ -74,6 +77,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             _memoryCache.Set (
                 key,
                 value,
