@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace KiaKooshar.Infrastructure.Caching.Services
 {
-    public class RedisCacheService : ICacheService
+    public class RedisCacheService : IDistributedCacheService
     {
         private readonly IConnectionMultiplexer _connection;
         private readonly IDatabase _database;
@@ -25,15 +25,6 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             }
         }
 
-        public async Task<bool> ExistAsync (
-            string key,
-            CancellationToken cancellationToken = default
-            )
-        {
-            cancellationToken.ThrowIfCancellationRequested ();
-            return await _database.KeyExistsAsync (key);
-        }
-
         public async Task<T?> GetAsync<T> (
             string key,
             CancellationToken cancellationToken = default
@@ -46,14 +37,13 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             return JsonSerializer.Deserialize<T> (value!);
         }
 
-        public Task RemoveAsync (
+        public async Task RemoveAsync (
             string key,
             CancellationToken cancellationToken = default
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
-            _database.KeyDeleteAsync (key);
-            return Task.CompletedTask;
+            await _database.KeyDeleteAsync (key);
         }
 
         public async Task RemoveByPrefixAsync (

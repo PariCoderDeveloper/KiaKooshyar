@@ -5,11 +5,11 @@ namespace KiaKooshar.Infrastructure.Caching.Services
 {
     public class HybridCacheService : ICacheService
     {
-        private readonly MemoryCacheService _memoryCache;
-        private readonly RedisCacheService _redisCache;
+        private readonly ILocalCacheService _memoryCache;
+        private readonly IDistributedCacheService _redisCache;
         public HybridCacheService (
-            MemoryCacheService memoryCache,
-            RedisCacheService redisCache
+            ILocalCacheService memoryCache,
+            IDistributedCacheService redisCache
             )
         {
             _memoryCache = memoryCache;
@@ -18,13 +18,8 @@ namespace KiaKooshar.Infrastructure.Caching.Services
 
         public async Task ClearAsync ()
         {
-            await _memoryCache.ClearAsync ();
+            _memoryCache.Clear ();
             await _redisCache.ClearAsync ();
-        }
-
-        public Task<bool> ExistAsync ( string key, CancellationToken cancellationToken = default )
-        {
-            throw new NotImplementedException ();
         }
 
         public async Task<T?> GetAsync<T> (
@@ -32,10 +27,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
-            var memoryValue = await _memoryCache.GetAsync<T> (
-                key,
-                cancellationToken
-                );
+            var memoryValue = _memoryCache.Get<T> (key);
             if ( memoryValue is not null )
                 return memoryValue;
             var redisValue = await _redisCache.GetAsync<T> (
@@ -44,7 +36,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
                 );
             if ( redisValue is null )
                 return default;
-            await _memoryCache.SetAsync (
+            _memoryCache.Set<T> (
                 key,
                 redisValue,
                 CachePolicy.Medium
@@ -57,10 +49,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
-            await _memoryCache.RemoveAsync (
-                key,
-                cancellationToken
-            );
+            _memoryCache.Remove (key);
             await _redisCache.RemoveAsync (
                 key,
                 cancellationToken
@@ -72,10 +61,6 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
-            await _memoryCache.RemoveByPrefixAsync (
-                prefix,
-                cancellationToken
-            );
             await _redisCache.RemoveByPrefixAsync (
                 prefix,
                 cancellationToken
@@ -88,11 +73,10 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
-            await _memoryCache.SetAsync (
+            _memoryCache.Set (
                 key,
                 value,
-                expiration,
-                cancellationToken
+                expiration
             );
             await _redisCache.SetAsync (
                 key,

@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 
 namespace KiaKooshar.Infrastructure.Caching.Services
 {
-    public class MemoryCacheService : ICacheService
+    public class MemoryCacheService : ILocalCacheService
     {
         private readonly IMemoryCache _memoryCache;
         private readonly ConcurrentDictionary<string, byte> _keys = new ();
@@ -16,69 +16,43 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             _memoryCache = memoryCache;
         }
 
-        public Task ClearAsync ()
+        public void Clear ()
         {
             foreach ( var key in _keys.Keys )
-            {
                 _memoryCache.Remove (key);
-            }
             _keys.Clear ();
-            return Task.CompletedTask;
         }
 
-        public Task<bool> ExistAsync (
-            string key,
-            CancellationToken cancellationToken = default
+        public bool Exist (
+            string key
             )
         {
-            cancellationToken.ThrowIfCancellationRequested ();
             bool exist = _memoryCache.TryGetValue (key, out _);
-            return Task.FromResult (exist);
+            return exist;
         }
 
-        public Task<T?> GetAsync<T> (
-            string key,
-            CancellationToken cancellationToken = default
-            )
+        public T? Get<T> ( string key )
         {
-            cancellationToken.ThrowIfCancellationRequested ();
-
             _memoryCache.TryGetValue (key, out T? value);
-            return Task.FromResult (value);
+            return value;
         }
-
-        public Task RemoveAsync (
-            string key,
-            CancellationToken cancellationToken = default
-            )
+        public void Remove ( string key )
         {
-            cancellationToken.ThrowIfCancellationRequested ();
-
             _memoryCache?.Remove (key);
             _keys.TryRemove (key, out _);
-            return Task.CompletedTask;
         }
-
-        public Task RemoveByPrefixAsync ( string prefix, CancellationToken cancellationToken = default )
-        {
-            throw new NotImplementedException ();
-        }
-        public Task SetAsync<T> (
+        public void Set<T> (
             string key,
             T value,
-            CacheExpiration expiration,
-            CancellationToken cancellationToken = default
+            CacheExpiration expiration
             )
         {
-            cancellationToken.ThrowIfCancellationRequested ();
-
             _memoryCache.Set (
                 key,
                 value,
                 expiration.AbsoluteExpiration
                 );
             _keys.TryAdd (key, 0);
-            return Task.CompletedTask;
         }
     }
 }

@@ -2,26 +2,25 @@
 
 namespace KiaKooshar.Application.Caching.Contracts
 {
-    public interface ICacheService
+    public interface IDistributedCacheService
     {
         Task<T?> GetAsync<T> (
             string key,
-            CancellationToken cancellationToken = default
-            );
+            CancellationToken cancellationToken = default );
         Task SetAsync<T> (
             string key,
             T value,
             CacheExpiration expiration,
-            CancellationToken cancellationToken = default
-            );
+            CancellationToken cancellationToken = default );
+
         Task RemoveAsync (
             string key,
-            CancellationToken cancellationToken = default
-            );
+            CancellationToken cancellationToken = default );
+
         Task RemoveByPrefixAsync (
             string prefix,
-            CancellationToken cancellationToken = default
-            );
+            CancellationToken cancellationToken = default );
+
         Task ClearAsync ();
     }
 }
