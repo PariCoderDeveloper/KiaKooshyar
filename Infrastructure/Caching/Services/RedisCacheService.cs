@@ -46,7 +46,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             return JsonSerializer.Deserialize<T> (value!);
         }
 
-        public Task RemoveAasyc (
+        public Task RemoveAsync (
             string key,
             CancellationToken cancellationToken = default
             )
@@ -71,16 +71,6 @@ namespace KiaKooshar.Infrastructure.Caching.Services
                 }
             }
         }
-
-        public Task RemoveGroupAsync (
-            string key,
-            CancellationToken cancellationToken = default
-            )
-        {
-            cancellationToken.ThrowIfCancellationRequested ();
-            throw new NotImplementedException ();
-        }
-
         public async Task SetAsync<T> (
             string key,
             T value,

@@ -2,6 +2,6 @@
 {
     public class PaginationRequestDTO
     {
-        public QueryOptions QueryOptions { get; set; }
+        public QueryOptions QueryOptions { get; set; } = new QueryOptions ();
     }
 }

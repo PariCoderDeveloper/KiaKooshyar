@@ -14,11 +14,7 @@ namespace KiaKooshar.Application.Caching.Contracts
             CacheExpiration expiration,
             CancellationToken cancellationToken = default
             );
-        Task RemoveAasyc (
-            string key,
-            CancellationToken cancellationToken = default
-            );
-        Task RemoveGroupAsync (
+        Task RemoveAsync (
             string key,
             CancellationToken cancellationToken = default
             );

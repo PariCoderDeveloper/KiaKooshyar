@@ -31,13 +31,14 @@ namespace KiaKooshar.Infrastructure.Persistence
             return await query.ToListAsync ();
         }
 
-        public async Task<T?> FirstOrDefaultAsync (
+        public async Task<T> FirstOrDefaultAsync (
             ISpecifications<T> specifications
             )
         {
             var query = SpecificationEvaluator.GetQuery (
                 _dbSet.AsQueryable (),
                 specifications);
+
             return await query.FirstOrDefaultAsync ();
         }
         public async Task<int> CountAsync (
