@@ -61,6 +61,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             CancellationToken cancellationToken = default
             )
         {
+            _memoryCache.RemoveByPrefix (prefix);
             await _redisCache.RemoveByPrefixAsync (
                 prefix,
                 cancellationToken

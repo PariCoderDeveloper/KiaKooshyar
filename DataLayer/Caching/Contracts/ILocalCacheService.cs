@@ -11,6 +11,7 @@ namespace KiaKooshar.Application.Caching.Contracts
             CacheExpiration expiration
         );
         void Remove ( string key );
+        void RemoveByPrefix ( string prefix );
         bool Exist ( string key );
         void Clear ();
     }

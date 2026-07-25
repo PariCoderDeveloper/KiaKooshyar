@@ -41,6 +41,14 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             _memoryCache?.Remove (key);
             _keys.TryRemove (key, out _);
         }
+
+        public void RemoveByPrefix ( string prefix )
+        {
+            foreach ( var key in _keys.Keys )
+                if ( key.StartsWith (prefix) )
+                    _memoryCache.Remove (key);
+        }
+
         public void Set<T> (
             string key,
             T value,
