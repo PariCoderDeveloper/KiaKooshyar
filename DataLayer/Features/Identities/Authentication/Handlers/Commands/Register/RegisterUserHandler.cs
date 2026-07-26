@@ -3,10 +3,10 @@ using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Commons;
-using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
 using MediatR;
 
-namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands.Register
+namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.Register
 {
     public class RegisterUserHandler
         : IRequestHandler<RegisterUserCommand, ResultDTO<ReturnUserDTO>>

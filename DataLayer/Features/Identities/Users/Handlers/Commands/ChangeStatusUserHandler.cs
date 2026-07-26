@@ -2,7 +2,7 @@
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
-using KiaKooshar.Application.Specifications.Users;
+using KiaKooshar.Application.Specifications.Identities.Users;
 using KiaKooshar.Domain.Enums;
 using MediatR;
 

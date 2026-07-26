@@ -8,11 +8,8 @@ namespace KiaKooshar.Application.Mppings
     {
         public UserProfile ()
         {
-
             CreateMap<RegisterUserDTO, User> ().ReverseMap ();
-
             CreateMap<UpdateUserDTO, User> ().ReverseMap ();
-
         }
     }
 }

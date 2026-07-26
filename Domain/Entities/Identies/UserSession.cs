@@ -9,7 +9,7 @@ namespace KiaKooshar.Domain.Entities.Identity
         public string Browser { get; set; } = null!;
         public string OS { get; set; } = null!;
         public DateTime LoginTime { get; set; }
-        public DateTime LogoutTime { get; set; }
+        public DateTime? LogoutTime { get; set; }
         public string LastActivity { get; set; } = null!;
         public long RefreshTokenId { get; set; }
         public virtual RefreshToken RefreshToken { get; set; } = null!;

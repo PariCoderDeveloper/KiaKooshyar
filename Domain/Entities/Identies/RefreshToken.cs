@@ -12,6 +12,6 @@ namespace KiaKooshar.Domain.Entities.Identity
         public long UserId { get; set; }
         public virtual User User { get; set; } = null!;
         public bool IsRevoked => Revoked != null;
-        public bool IsExpired => DateTime.Now >= ExpireDate;
+        public bool IsExpired => DateTime.UtcNow >= ExpireDate;
     }
 }

@@ -3,7 +3,7 @@ using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Users.Commands;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
-using KiaKooshar.Application.Specifications.Users;
+using KiaKooshar.Application.Specifications.Identities.Users;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands

@@ -1,6 +1,6 @@
 ﻿using KiaKooshar.Domain.Enums;
 
-namespace KiaKooshar.Application.DTOs.Identities.Users.Quueries
+namespace KiaKooshar.Application.DTOs.Identities.Users.Queries
 {
     public class GetUserByIdDTO
     {

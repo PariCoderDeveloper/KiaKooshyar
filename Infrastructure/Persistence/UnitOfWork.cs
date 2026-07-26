@@ -32,13 +32,11 @@ namespace KiaKooshar.Infrastructure.Persistence
             UserSession = new GenericRepository<UserSession> (_context);
             RefreshToken = new GenericRepository<RefreshToken> (_context);
         }
-
         public async Task<int> CommitAsync ()
         {
             var result = await _context.SaveChangesAsync ();
             return result;
         }
-
         protected virtual void Dispose ( bool disposing )
         {
             if ( !_disposed )
@@ -48,7 +46,6 @@ namespace KiaKooshar.Infrastructure.Persistence
                 _disposed = true;
             }
         }
-
         public void Dispose ()
         {
             Dispose (true);

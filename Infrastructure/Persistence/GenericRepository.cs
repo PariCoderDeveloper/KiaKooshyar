@@ -16,14 +16,18 @@ namespace KiaKooshar.Infrastructure.Persistence
             _dbSet = context.Set<T> ();
         }
 
-        public void AddAsync ( T entity )
+        public void AddAsync (
+            T entity
+            )
         {
             _dbSet.AddAsync (entity);
         }
         public async Task<List<T>> ListAsync (
-            ISpecifications<T> specifications
+            ISpecifications<T> specifications,
+            CancellationToken cancellationToken
             )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             var query = SpecificationEvaluator.GetQuery (
                     _dbSet.AsNoTracking (),
                     specifications
@@ -32,9 +36,11 @@ namespace KiaKooshar.Infrastructure.Persistence
         }
 
         public async Task<T> FirstOrDefaultAsync (
-            ISpecifications<T> specifications
+            ISpecifications<T> specifications,
+            CancellationToken cancellationToken
             )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             var query = SpecificationEvaluator.GetQuery (
                 _dbSet.AsQueryable (),
                 specifications);
@@ -42,9 +48,11 @@ namespace KiaKooshar.Infrastructure.Persistence
             return await query.FirstOrDefaultAsync ();
         }
         public async Task<int> CountAsync (
-                ISpecifications<T> specifications
+                ISpecifications<T> specifications,
+                CancellationToken cancellationToken
             )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             var query = SpecificationEvaluator.GetQuery (
                 _dbSet.AsQueryable (),
                 specifications);
@@ -52,8 +60,11 @@ namespace KiaKooshar.Infrastructure.Persistence
         }
 
         public async Task<bool> AnyAsync (
-            ISpecifications<T> specifications )
+            ISpecifications<T> specifications
+            , CancellationToken cancellationToken
+            )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             var query = SpecificationEvaluator.GetQuery (
                 _dbSet.AsQueryable (),
                 specifications);

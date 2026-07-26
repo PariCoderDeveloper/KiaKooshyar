@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
-using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
 
-namespace KiaKooshar.Application.Validation.User
+namespace KiaKooshar.Application.Validation.Authentication
 {
     public class RegisterUserCommandValidation :
         AbstractValidator<RegisterUserCommand>
-
     {
         public RegisterUserCommandValidation ()
         {
