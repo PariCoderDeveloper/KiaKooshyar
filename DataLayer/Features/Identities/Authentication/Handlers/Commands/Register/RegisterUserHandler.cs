@@ -30,16 +30,11 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             CancellationToken cancellationToken
             )
         {
-
             var user = _mapper.Map<Domain.Entities.Identity.User> (request.RegisterUserDTO);
-
             user.PasswordHash = _passwordHasher.HashPassword (request.RegisterUserDTO.PasswordHash);
-
             _unit.User.AddAsync (user);
             var result = await _unit.CommitAsync ();
-
             return ResultDTO<ReturnUserDTO>.Success (
-
                 new ReturnUserDTO
                 {
                     FirstName = user.FirstName,

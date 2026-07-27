@@ -13,7 +13,7 @@ using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.Login
 {
-    public class LoginCommandHandler :
+    public class LoginHandler :
         IRequestHandler<LoginCommand, ResultDTO<LoginResponseDTO>>
     {
         private readonly IJwtProvider _jwtProvider;
@@ -21,7 +21,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IPasswordHasher _passwordHasher;
         private readonly IMapper _mapper;
         private readonly ICacheService _cache;
-        public LoginCommandHandler (
+        public LoginHandler (
             IJwtProvider jwtProvider,
             IUnitOfWork unit,
             IPasswordHasher passwordHasher,
@@ -67,7 +67,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 .Select (x => x.Name)
                 .ToList ();
             await _cache.SetAsync (
-                CacheKeys.UserRole (user.Id),
+                CacheKeys.UserPermissions (user.Id),
                 roleNames,
                 CachePolicy.Medium
                 );

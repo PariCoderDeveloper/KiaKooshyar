@@ -10,7 +10,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Com
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public string[] CacheKeys => throw new NotImplementedException ();
+        public string[] CacheKeysList => throw new NotImplementedException ();
         public string[]? CacheGroups => throw new NotImplementedException ();
     }
 }

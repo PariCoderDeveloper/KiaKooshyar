@@ -39,7 +39,6 @@
     <Folder Include="Features\Identities\Authorization\Permissions\Requests\Queries\" />
     <Folder Include="Features\Identities\Authorization\Policies\Requests\Commands\" />
     <Folder Include="Features\Identities\Authorization\Policies\Requests\Queries\" />
-    <Folder Include="Features\Identities\Authentication\Handlers\Commands\Logout\" />
     <Folder Include="Features\Identities\Authentication\Handlers\Commands\RevokeToken\" />
     <Folder Include="Features\Identities\Authentication\Handlers\Commands\RefreshToken\" />
     <Folder Include="Features\Identities\Authorization\Roles\Handlers\Commands\" />
