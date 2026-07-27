@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using KiaKooshar.Application.Caching.Contracts;
+using KiaKooshar.Application.Caching.Policies;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
@@ -18,17 +20,20 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IUnitOfWork _unit;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IMapper _mapper;
+        private readonly ICacheService _cache;
         public LoginCommandHandler (
             IJwtProvider jwtProvider,
             IUnitOfWork unit,
             IPasswordHasher passwordHasher,
-            IMapper mapper
+            IMapper mapper,
+            ICacheService cache
             )
         {
             _jwtProvider = jwtProvider;
             _unit = unit;
             _passwordHasher = passwordHasher;
             _mapper = mapper;
+            _cache = cache;
         }
         public async Task<ResultDTO<LoginResponseDTO>> Handle (
             LoginCommand request,
@@ -61,6 +66,11 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             var roleNames = roles
                 .Select (x => x.Name)
                 .ToList ();
+            await _cache.SetAsync (
+                CacheKeys.UserRole (user.Id),
+                roleNames,
+                CachePolicy.Medium
+                );
             return ResultDTO<LoginResponseDTO>.Success (
                 new LoginResponseDTO
                 {

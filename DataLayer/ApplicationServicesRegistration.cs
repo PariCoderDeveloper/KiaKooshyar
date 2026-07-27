@@ -22,7 +22,10 @@ namespace KiaKooshar.Application
                 IConfiguration configuration
             )
         {
+            #region MediatR
             services.AddMediatR (typeof (ApplicationServicesRegistration).Assembly);
+            #endregion
+            #region Mapper
             services.AddSingleton<IMapper> (sp =>
             {
                 var config = new MapperConfiguration (
@@ -35,14 +38,21 @@ namespace KiaKooshar.Application
 
                 return config.CreateMapper ();
             });
+            #endregion
+            #region Behaviors
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (LoggingBehavior<,>));
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (ValidationBehavior<,>));
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (CachingBehavior<,>));
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (CacheInvalidationBehavior<,>));
+            services.AddTransient (typeof (IPipelineBehavior<,>), typeof (PermissionBehavior<,>));
+            #endregion
+            #region FluentValidation
             services.AddValidatorsFromAssembly (typeof (ApplicationServicesRegistration).Assembly);
-
-            services.AddHttpContextAccessor ();
+            #endregion
+            #region Serilog
             ConfigureSerilog (configuration);
+            #endregion
+            services.AddHttpContextAccessor ();
         }
         private static void ConfigureSerilog ( IConfiguration configuration )
         {

@@ -4,15 +4,12 @@ using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.Features.Construct.Logging;
 using KiaKooshar.Infrastructure;
 using KiaKooshar.Infrastructure.Persistence;
+using KiaKooshar.Infrastructure.Persistence.Authentication.Security;
 using KiaKooshar.Infrastructure.Persistence.Logger;
-using KiaKooshar.Infrastructure.Persistence.Security;
 using KiaKooshar.Peresentation.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Diagnostics;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder (args);
 builder.Services.AddControllers ();
@@ -42,35 +39,17 @@ builder.Services.AddAutoMapper (cfg => { }, typeof (AssemblyReference).Assembly)
 
 #endregion
 
+#region UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork> ();
+#endregion
+#region PasswordHasher
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher> ();
+#endregion
+#region BaseLogger
 builder.Services.AddScoped<IBaseLogger, BaseLogger> ();
-
+#endregion
 builder.Host.UseSerilog ();
 
-builder.Services
-    .AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer (options =>
-    {
-        options.TokenValidationParameters =
-            new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-
-                IssuerSigningKey =
-                    new SymmetricSecurityKey (
-                        Encoding.UTF8.GetBytes (
-                            builder.Configuration["Jwt:Key"]!
-                        ))
-            };
-    });
 builder.Services.AddAuthorization ();
 
 var stopwatch = Stopwatch.StartNew ();

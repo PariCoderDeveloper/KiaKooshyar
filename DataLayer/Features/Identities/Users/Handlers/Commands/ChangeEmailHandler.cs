@@ -25,9 +25,8 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
                 specification,
                 cancellationToken
                 );
-            if ( user != null )
+            if ( user is null )
                 return ResultDTO<GetUserByIdDTO>.NotFound ("User not found");
-
             user.Email = request.Email;
             user.UpdatedAt = DateTime.UtcNow;
 

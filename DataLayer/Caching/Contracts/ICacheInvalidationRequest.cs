@@ -2,7 +2,7 @@
 {
     public interface ICacheInvalidationRequest
     {
-        public string[] CacheKeys { get; }
+        public string[] CacheKeysList { get; }
         public string[]? CacheGroups { get; }
     }
 }

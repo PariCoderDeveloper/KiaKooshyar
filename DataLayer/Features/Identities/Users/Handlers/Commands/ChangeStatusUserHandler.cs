@@ -28,8 +28,11 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
         {
             var specification = new UserByIdSpecification (request.Id);
 
-            var user = await _unit.User.FirstOrDefaultAsync (specification);
-            if ( user != null )
+            var user = await _unit.User.FirstOrDefaultAsync (
+                specification,
+                cancellationToken
+                );
+            if ( user is null )
                 return ResultDTO<UserStatus>.NotFound ("User not found");
             switch ( request.Status )
             {

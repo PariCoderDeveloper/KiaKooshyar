@@ -7,7 +7,6 @@ namespace KiaKooshar.Peresentation.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<GlobalExceptionHandler> _logger;
-
         public GlobalExceptionHandler (
             RequestDelegate next,
             ILogger<GlobalExceptionHandler> logger
@@ -16,7 +15,6 @@ namespace KiaKooshar.Peresentation.Middleware
             _logger = logger;
             _next = next;
         }
-
         public async Task InvokeAsync ( HttpContext context )
         {
             try
@@ -30,11 +28,9 @@ namespace KiaKooshar.Peresentation.Middleware
                 throw;
             }
         }
-
         private async Task HandleExceptionAsync ( HttpContext context, Exception exception )
         {
             var errorId = Guid.NewGuid ().ToString ("N");
-
             var result = ResultDTO.ServerError (
                  "An unexpected server error occurred.",
                  new List<string>

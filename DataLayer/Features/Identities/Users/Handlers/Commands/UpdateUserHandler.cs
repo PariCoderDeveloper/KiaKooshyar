@@ -28,15 +28,15 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
         {
             var specification = new UserByIdSpecification (request.UpdateUserDTO.Id);
 
-            var user = await _unit.User.FirstOrDefaultAsync (specification);
-            if ( user != null )
+            var user = await _unit.User.FirstOrDefaultAsync (
+                specification,
+                cancellationToken
+                );
+            if ( user is null )
                 return ResultDTO<UpdateUserDTO>.NotFound ("User not found");
-
             user.UpdatedAt = DateTime.UtcNow;
             _mapper.Map (request.UpdateUserDTO, user);
-
             await _unit.CommitAsync ();
-
             return ResultDTO<UpdateUserDTO>.Success (
                 null,
                 "User updated successfully"

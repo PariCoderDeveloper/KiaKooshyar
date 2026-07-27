@@ -1,4 +1,4 @@
-﻿namespace KiaKooshar.Infrastructure.Persistence.Jwt
+﻿namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
 {
     public class JwtSettings
     {

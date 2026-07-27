@@ -23,16 +23,14 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             )
         {
             var specification = new UserByIdSpecification (request.Id);
-
             var user = await _unit.User.FirstOrDefaultAsync (
                 specification,
                 cancellationToken
                 );
-            if ( user != null )
+            if ( user is null )
                 return ResultDTO<GetUserByIdDTO>.NotFound ("User not found");
             user.PhoneNumber = request.PhoneNumber;
             user.UpdatedAt = DateTime.UtcNow;
-
             await _unit.CommitAsync ();
             return ResultDTO.Success (
                 "The phone number of user changed successfully"

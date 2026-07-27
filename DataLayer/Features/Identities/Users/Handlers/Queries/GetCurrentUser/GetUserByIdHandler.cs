@@ -27,18 +27,13 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Queries.GetC
             )
         {
             var specification = new UserByIdSpecification (request.Id);
-
             var user = await _unit.User.FirstOrDefaultAsync (
                 specification,
                 cancellationToken
                 );
-            if ( user != null )
-            {
+            if ( user is null )
                 return ResultDTO<GetUserByIdDTO>.NotFound ("User not found");
-            }
-
             var result = _mapper.Map<GetUserByIdDTO> (user);
-
             return ResultDTO<GetUserByIdDTO>.Success (result, "User found");
         }
     }

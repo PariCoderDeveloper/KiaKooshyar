@@ -6,7 +6,6 @@ namespace KiaKooshar.Application.Caching.Contracts
     {
         bool BypassCache { get; }
         string CacheKey { get; }
-        string? CacheGroup { get; }
         CacheExpiration Expiration { get; }
     }
 }

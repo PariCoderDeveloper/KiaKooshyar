@@ -17,35 +17,30 @@ namespace KiaKooshar.Infrastructure.Persistence.Logger
                             logOptionsDTO.Message!,
                             logOptionsDTO.Args);
                     break;
-
                 case LogLevel.Debug:
                     Log.ForContext ("IP", logOptionsDTO.IP)
                        .Debug (
                            logOptionsDTO.Message!,
                            logOptionsDTO.Args);
                     break;
-
                 case LogLevel.Information:
                     Log.ForContext ("IP", logOptionsDTO.IP)
                        .Information (
                            logOptionsDTO.Message!,
                            logOptionsDTO.Args);
                     break;
-
                 case LogLevel.Warning:
                     Log.ForContext ("IP", logOptionsDTO.IP)
                         .Warning (
                             logOptionsDTO.Message!,
                             logOptionsDTO.Args);
                     break;
-
                 case LogLevel.Error:
                     Log.ForContext ("IP", logOptionsDTO.IP)
                         .Error (
                             logOptionsDTO.Message!,
                             logOptionsDTO.Args);
                     break;
-
                 case LogLevel.Fatal:
                     Log.ForContext ("IP", logOptionsDTO.IP)
                         .Fatal (

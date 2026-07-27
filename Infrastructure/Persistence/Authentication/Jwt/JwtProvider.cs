@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace KiaKooshar.Infrastructure.Persistence.Jwt
+namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
 {
     public class JwtProvider : IJwtProvider
     {
@@ -31,21 +31,21 @@ namespace KiaKooshar.Infrastructure.Persistence.Jwt
                 new Claim(
                     JwtRegisteredClaimNames.Email,
                     authenticatedUser.User.Email ?? string.Empty
+                    ),
+                new Claim(
+                    JwtRegisteredClaimNames.UniqueName,
+                    authenticatedUser.User.UserName
+                    ),
+                new Claim(
+                     JwtRegisteredClaimNames.Jti,
+                     Guid.NewGuid().ToString()
                     )
             };
-            foreach ( var role in authenticatedUser.Roles )
-            {
-                claims.Add (
-                    new Claim (
-                        ClaimTypes.Role,
-                        role
-                        ));
-            }
             var key = new SymmetricSecurityKey (
-                System.Text.Encoding.UTF8.GetBytes (
+                 System.Text.Encoding.UTF8.GetBytes (
                     _settings.SecretKey
-                    )
-                );
+                )
+            );
             var credentials =
                 new SigningCredentials (
                 key,

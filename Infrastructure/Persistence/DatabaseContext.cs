@@ -33,6 +33,11 @@ namespace KiaKooshar.Infrastructure.Persistence
             base.OnModelCreating (modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly (typeof (DatabaseContext).Assembly);
             SoftDeleteFilter.ApplySoftDeleteQueryFilter (modelBuilder);
+
+        }
+        private void SeedData ( ModelBuilder modelBuilder )
+        {
+
         }
     }
 }

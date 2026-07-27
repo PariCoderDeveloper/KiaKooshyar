@@ -44,7 +44,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
                 );
             return redisValue;
         }
-
         public async Task RemoveAsync (
             string key,
             CancellationToken cancellationToken = default
@@ -57,7 +56,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
                 cancellationToken
             );
         }
-
         public async Task RemoveByPrefixAsync (
             string prefix,
             CancellationToken cancellationToken = default
