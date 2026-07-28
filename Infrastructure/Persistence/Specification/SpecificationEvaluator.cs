@@ -21,6 +21,10 @@ namespace KiaKooshar.Infrastructure.Persistence.Specification
             {
                 query = query.Include (include);
             }
+            foreach ( var includeString in specifications.IncludeStrings )
+            {
+                query = query.Include (includeString);
+            }
 
             if ( specifications.OrderBy != null )
             {

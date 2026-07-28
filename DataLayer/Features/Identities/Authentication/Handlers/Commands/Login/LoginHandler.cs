@@ -58,26 +58,25 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                     "Invalid email or password"
                     );
             var rolesSpecification = new GetUserRolesSpecification (user.Id);
-            var userRoles = await _unit.UserRoles.ListAsync (
+            var userPermissions = await _unit.UserRoles.ListAsync (
                 rolesSpecification,
                 cancellationToken
                 );
-            var roles = _mapper.Map<List<RoleDTO>> (userRoles);
-            var roleNames = roles
+            var permissions = _mapper.Map<List<PermissionDTO>> (userPermissions);
+            var permissionsNames = permissions
                 .Select (x => x.Name)
                 .ToList ();
             await _cache.SetAsync (
                 CacheKeys.UserPermissions (user.Id),
-                roleNames,
-                CachePolicy.Medium
-                );
+                permissionsNames,
+                CachePolicy.Long
+            );
             return ResultDTO<LoginResponseDTO>.Success (
                 new LoginResponseDTO
                 {
                     AccessToken = _jwtProvider.GenerateAccessToken (
                         new AuthenticatedUserDTO
                         {
-                            Roles = roleNames,
                             User = user,
                         }
                         ),
@@ -86,7 +85,6 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                     {
                         Id = user.Id,
                         Username = user.UserName,
-                        Roles = roles
                     }
                 },
                 "Login successful"

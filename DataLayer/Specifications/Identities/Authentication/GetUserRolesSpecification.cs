@@ -10,6 +10,7 @@ namespace KiaKooshar.Application.Specifications.Identities.Authentication
         {
             AddCriteria (x => x.UserId == userId);
             AddInclude (x => x.Role);
+            AddIncludeString ("Roles.Permissions");
         }
     }
 }
