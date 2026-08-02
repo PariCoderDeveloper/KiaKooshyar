@@ -16,14 +16,14 @@ namespace KiaKooshar.Infrastructure.Persistence
             _dbSet = context.Set<T> ();
         }
 
-        public void AddAsync (
+        public void Add (
             T entity
             )
         {
             _dbSet.AddAsync (entity);
         }
         public async Task<List<T>> ListAsync (
-            ISpecifications<T> specifications,
+            Specification<T> specifications,
             CancellationToken cancellationToken
             )
         {
@@ -36,19 +36,19 @@ namespace KiaKooshar.Infrastructure.Persistence
         }
 
         public async Task<T> FirstOrDefaultAsync (
-            ISpecifications<T> specifications,
+            Specification<T> specifications,
             CancellationToken cancellationToken
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
             var query = SpecificationEvaluator.GetQuery (
                 _dbSet.AsQueryable (),
-                specifications);
-
+                specifications
+                );
             return await query.FirstOrDefaultAsync ();
         }
         public async Task<int> CountAsync (
-                ISpecifications<T> specifications,
+                Specification<T> specifications,
                 CancellationToken cancellationToken
             )
         {
@@ -60,7 +60,7 @@ namespace KiaKooshar.Infrastructure.Persistence
         }
 
         public async Task<bool> AnyAsync (
-            ISpecifications<T> specifications
+            Specification<T> specifications
             , CancellationToken cancellationToken
             )
         {

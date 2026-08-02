@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KiaKooshar.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260713082505_Initial")]
-    partial class Initial
+    [Migration("20260728132804_Initia")]
+    partial class Initia
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,24 +35,77 @@ namespace KiaKooshar.Infrastructure.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("DiplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1L,
+                            Code = "User.View",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DiplayName = "View Users",
+                            IsDeleted = false
+                        },
+                        new
+                        {
+                            Id = -2L,
+                            Code = "User.Create",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DiplayName = "Create User",
+                            IsDeleted = false
+                        },
+                        new
+                        {
+                            Id = -3L,
+                            Code = "User.Update",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DiplayName = "Update User",
+                            IsDeleted = false
+                        },
+                        new
+                        {
+                            Id = -4L,
+                            Code = "User.Delete",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DiplayName = "Delete User",
+                            IsDeleted = false
+                        },
+                        new
+                        {
+                            Id = -5L,
+                            Code = "User.Disable",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DiplayName = "Disable User",
+                            IsDeleted = false
+                        },
+                        new
+                        {
+                            Id = -6L,
+                            Code = "User.Block",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DiplayName = "User Block",
+                            IsDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.RefreshToken", b =>
@@ -87,7 +140,7 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("UserId")
@@ -108,12 +161,12 @@ namespace KiaKooshar.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -122,12 +175,49 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Code = "SuperAdmin",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            Name = "Super Administrator"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "Admin",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            Name = "Administrator"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Code = "Manager",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            Name = "Manager"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Code = "User",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.RolePermission", b =>
@@ -150,7 +240,7 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -171,15 +261,16 @@ namespace KiaKooshar.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Avator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BirthDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("date");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -210,11 +301,14 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
@@ -243,7 +337,7 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("UserId", "RoleId");
@@ -286,7 +380,7 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<DateTime>("LoginTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LogoutTime")
+                    b.Property<DateTime?>("LogoutTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OS")
@@ -296,7 +390,7 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<long>("RefreshTokenId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("UserId")

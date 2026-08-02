@@ -23,8 +23,8 @@ namespace KiaKooshar.Peresentation.Middleware
             }
             catch ( Exception ex )
             {
-                await HandleExceptionAsync (context, ex);
-                // _logger.LogError (ex, ex.Message);
+                // await HandleExceptionAsync (context, ex);
+                _logger.LogError (ex, ex.Message);
                 throw;
             }
         }

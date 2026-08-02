@@ -7,7 +7,10 @@ using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Authentication;
 using KiaKooshar.Application.DTOs.Identities.Users.Queries;
 using KiaKooshar.Application.Features.Construct.JWT;
+using KiaKooshar.Application.Features.Construct.Logging;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Interfaces.HttpContext;
+using KiaKooshar.Application.Logging;
 using KiaKooshar.Application.Specifications.Identities.Authentication;
 using MediatR;
 
@@ -21,12 +24,16 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IPasswordHasher _passwordHasher;
         private readonly IMapper _mapper;
         private readonly ICacheService _cache;
+        private readonly IBaseLogger _logger;
+        private readonly IRequestContext _requestContext;
         public LoginHandler (
             IJwtProvider jwtProvider,
             IUnitOfWork unit,
             IPasswordHasher passwordHasher,
             IMapper mapper,
-            ICacheService cache
+            ICacheService cache,
+            IBaseLogger logger,
+            IRequestContext requestContext
             )
         {
             _jwtProvider = jwtProvider;
@@ -34,13 +41,16 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             _passwordHasher = passwordHasher;
             _mapper = mapper;
             _cache = cache;
+            _logger = logger;
+            _requestContext = requestContext;
         }
         public async Task<ResultDTO<LoginResponseDTO>> Handle (
             LoginCommand request,
             CancellationToken cancellationToken
             )
         {
-            var emailSpecification = new GetByEmailSpecification (request.Email);
+            var emailSpecification =
+                new GetByEmailSpecification (request.Email);
             var user = await _unit.User.FirstOrDefaultAsync (
                 emailSpecification,
                 cancellationToken
@@ -57,20 +67,29 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 return ResultDTO<LoginResponseDTO>.Unauthorized (
                     "Invalid email or password"
                     );
-            var rolesSpecification = new GetUserRolesSpecification (user.Id);
-            var userPermissions = await _unit.UserRoles.ListAsync (
+            var rolesSpecification =
+                new GetUserAuthorizationSpecification (user.Id);
+            var userPermissions = await _unit.User.ListAsync (
                 rolesSpecification,
                 cancellationToken
                 );
-            var permissions = _mapper.Map<List<PermissionDTO>> (userPermissions);
+            var permissions =
+                _mapper.Map<List<PermissionDTO>> (userPermissions);
             var permissionsNames = permissions
                 .Select (x => x.Name)
                 .ToList ();
             await _cache.SetAsync (
-                CacheKeys.UserPermissions (user.Id),
+                CacheKeys.User (user.Id),
                 permissionsNames,
                 CachePolicy.Long
             );
+            AuthLogExtensions.LogUserLogin (
+                _logger,
+                user,
+                true,
+                _requestContext.Device,
+                _requestContext.IpAddress
+                );
             return ResultDTO<LoginResponseDTO>.Success (
                 new LoginResponseDTO
                 {

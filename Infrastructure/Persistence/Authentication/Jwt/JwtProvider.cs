@@ -43,7 +43,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
             };
             var key = new SymmetricSecurityKey (
                  System.Text.Encoding.UTF8.GetBytes (
-                    _settings.SecretKey
+                    _settings.Key
                 )
             );
             var credentials =
@@ -92,7 +92,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey (
                         System.Text.Encoding.UTF8.GetBytes (
-                            _settings.SecretKey
+                            _settings.Key
                             )
                         ),
                     ValidateLifetime = false

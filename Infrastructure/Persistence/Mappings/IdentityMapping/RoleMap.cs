@@ -27,27 +27,31 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
         private void SeedData ( EntityTypeBuilder<Role> builder )
         {
             builder.HasData (
-        new Role
-        {
-            Id = 1,
-            Name = Roles.SuperAdmin
-        },
-        new Role
-        {
-            Id = 2,
-            Name = Roles.Admin
-        },
-        new Role
-        {
-            Id = 3,
-            Name = Roles.Manager
-        },
-        new Role
-        {
-            Id = 4,
-            Name = Roles.User
-        }
-    );
+                new Role
+                {
+                    Id = 1,
+                    Name = "Super Administrator",
+                    Code = Roles.SuperAdmin
+                },
+                new Role
+                {
+                    Id = 2,
+                    Name = "Administrator",
+                    Code = Roles.Admin
+                },
+                new Role
+                {
+                    Id = 3,
+                    Name = "Manager",
+                    Code = Roles.Manager
+                },
+                new Role
+                {
+                    Id = 4,
+                    Name = "User",
+                    Code = Roles.User
+                }
+            );
         }
     }
 }

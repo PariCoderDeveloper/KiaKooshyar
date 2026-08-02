@@ -19,12 +19,13 @@ namespace KiaKooshar.Peresentation.Controllers
         }
 
         [HttpPost ("/register")]
-        public async Task<IActionResult> LoginUser (
+        public async Task<IActionResult> RegisterUser (
             RegisterUserCommand registerUserCommand
             )
         {
-            var resuult = await _mediator.Send (registerUserCommand);
-            return ResultExtensions.ToActionResult (resuult);
+            var registrationResult =
+                await _mediator.Send (registerUserCommand);
+            return ResultExtensions.ToActionResult (registrationResult);
         }
 
         [HttpPut ("/update")]
@@ -32,8 +33,9 @@ namespace KiaKooshar.Peresentation.Controllers
             UpdateUserCommand updateUserCommand
             )
         {
-            var result = await _mediator.Send (updateUserCommand);
-            return ResultExtensions.ToActionResult (result);
+            var updateResult =
+                await _mediator.Send (updateUserCommand);
+            return ResultExtensions.ToActionResult (updateResult);
         }
 
         [HttpPatch ("/update/changestatus")]
@@ -41,8 +43,9 @@ namespace KiaKooshar.Peresentation.Controllers
             ChangeStatusUserCommand changeStatusUserCommand
             )
         {
-            var result = await _mediator.Send (changeStatusUserCommand);
-            return ResultExtensions.ToActionResult (result);
+            var changeStatusResult =
+                await _mediator.Send (changeStatusUserCommand);
+            return ResultExtensions.ToActionResult (changeStatusResult);
         }
 
         [HttpPost ("/delete")]
@@ -50,8 +53,9 @@ namespace KiaKooshar.Peresentation.Controllers
             DeleteUserCommand deleteUserCommand
             )
         {
-            var result = await _mediator.Send (deleteUserCommand);
-            return ResultExtensions.ToActionResult (result);
+            var deleteResult =
+                await _mediator.Send (deleteUserCommand);
+            return ResultExtensions.ToActionResult (deleteResult);
         }
 
         [HttpPatch ("update/changephone")]
@@ -59,17 +63,18 @@ namespace KiaKooshar.Peresentation.Controllers
             ChangePhoneNumberCommand changePhoneNumberCommand
             )
         {
-            var result = await _mediator.Send (changePhoneNumberCommand);
-            return ResultExtensions.ToActionResult (result);
+            var changePhoneNumberResult =
+                await _mediator.Send (changePhoneNumberCommand);
+            return ResultExtensions.ToActionResult (changePhoneNumberResult);
         }
-
         [HttpPatch ("update/changepassword")]
         public async Task<IActionResult> ChangePassword (
             ChangePasswordCommand changePasswordCommand
             )
         {
-            var result = await _mediator.Send (changePasswordCommand);
-            return ResultExtensions.ToActionResult (result);
+            var changePasswordResult =
+                await _mediator.Send (changePasswordCommand);
+            return ResultExtensions.ToActionResult (changePasswordResult);
         }
 
         [HttpPatch ("update/changeemail")]
@@ -77,8 +82,9 @@ namespace KiaKooshar.Peresentation.Controllers
             ChangeEmailCommand changeEmailCommand
             )
         {
-            var result = await _mediator.Send (changeEmailCommand);
-            return ResultExtensions.ToActionResult (result);
+            var changeEmailResult =
+                await _mediator.Send (changeEmailCommand);
+            return ResultExtensions.ToActionResult (changeEmailResult);
         }
     }
 }

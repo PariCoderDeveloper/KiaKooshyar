@@ -3,9 +3,9 @@ using KiaKooshar.Application.Caching.Policies;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
+namespace KiaKooshar.Infrastructure.Caching.Services
 {
-    public class RedisCacheService : IDistributedCacheService
+    public class RedisCacheService : ICacheService
     {
         private readonly IConnectionMultiplexer _connection;
         private readonly IDatabase _database;
@@ -24,7 +24,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
                 await server.FlushAllDatabasesAsync ();
             }
         }
-
         public async Task<T?> GetAsync<T> (
             string key,
             CancellationToken cancellationToken = default
@@ -36,7 +35,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
                 return default;
             return JsonSerializer.Deserialize<T> (value!);
         }
-
         public async Task RemoveAsync (
             string key,
             CancellationToken cancellationToken = default
@@ -45,7 +43,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Caching.Services
             cancellationToken.ThrowIfCancellationRequested ();
             await _database.KeyDeleteAsync (key);
         }
-
         public async Task RemoveByPrefixAsync (
             string prefix,
             CancellationToken cancellationToken = default

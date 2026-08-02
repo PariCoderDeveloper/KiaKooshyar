@@ -1,7 +1,8 @@
-﻿using KiaKooshar.Application.Caching.Contracts;
-using KiaKooshar.Application.Features.Construct.JWT;
+﻿using KiaKooshar.Application.Features.Construct.JWT;
+using KiaKooshar.Application.Features.Interfaces.HttpContext;
+using KiaKooshar.Infrastructure.Caching.Extensions;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Jwt;
-using KiaKooshar.Infrastructure.Persistence.Caching.Services;
+using KiaKooshar.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,17 +19,21 @@ namespace KiaKooshar.Infrastructure
             IConfiguration configuration
             )
         {
+            services.AddCacheService (
+                configuration
+            );
             services.AddMemoryCache ();
-            services.AddSingleton<IConnectionMultiplexer> (_ =>
+            services.AddSingleton<IConnectionMultiplexer> (sp =>
             {
-                return ConnectionMultiplexer.Connect (
+                var options = ConfigurationOptions.Parse (
                     configuration.GetConnectionString ("Redis")
-                    );
+                );
+                options.AbortOnConnectFail = false;
+                return ConnectionMultiplexer.Connect (options);
             });
-            services.AddScoped<ICacheService, HybridCacheService> ();
-            services.AddScoped<ILocalCacheService, MemoryCacheService> ();
-            services.AddScoped<IDistributedCacheService, RedisCacheService> ();
+
             services.AddScoped<IJwtProvider, JwtProvider> ();
+            services.AddScoped<IRequestContext, HttpRequestContext> ();
             services
             .AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer (options =>
@@ -49,6 +54,9 @@ namespace KiaKooshar.Infrastructure
                         ))
                 };
             });
+            services.Configure<JwtSettings> (
+                configuration.GetSection ("Jwt")
+            );
             return services;
         }
     }

@@ -7,7 +7,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Specification
     {
         public static IQueryable<T> GetQuery<T> (
                 IQueryable<T> inputQuery,
-                ISpecifications<T> specifications
+                Specification<T> specifications
             ) where T : class
         {
             var query = inputQuery;

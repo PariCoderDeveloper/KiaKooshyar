@@ -6,20 +6,20 @@ namespace KiaKooshar.Application.Construct.DataBases
     public interface IRepository<T>
         where T : BaseEntity
     {
-        void AddAsync ( T entity );
+        void Add ( T entity );
         Task<List<T>> ListAsync (
-            ISpecifications<T> specifications,
+            Specification<T> specifications,
             CancellationToken cancellationToken );
         Task<T?> FirstOrDefaultAsync (
-            ISpecifications<T?> specifications,
+            Specification<T?> specifications,
             CancellationToken cancellationToken );
 
         Task<int> CountAsync (
-            ISpecifications<T> specifications,
+            Specification<T> specifications,
             CancellationToken cancellationToken
             );
         Task<bool> AnyAsync (
-            ISpecifications<T> specifications,
+            Specification<T> specifications,
             CancellationToken cancellationToken
             );
         void Delete ( T entity );

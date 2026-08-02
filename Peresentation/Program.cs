@@ -6,7 +6,9 @@ using KiaKooshar.Infrastructure;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Security;
 using KiaKooshar.Infrastructure.Persistence.Logger;
+using KiaKooshar.Peresentation.Authorization;
 using KiaKooshar.Peresentation.Middleware;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Diagnostics;
@@ -25,20 +27,17 @@ builder.Services.AddDbContext<DatabaseContext> (options =>
 });
 
 #endregion
-
 #region Configration
 
 builder.Services.ConfigureApplicationServices (builder.Configuration);
 builder.Services.AddInfrastructureServices (builder.Configuration);
 
 #endregion
-
 #region AutoMapper
 
 builder.Services.AddAutoMapper (cfg => { }, typeof (AssemblyReference).Assembly);
 
 #endregion
-
 #region UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork> ();
 #endregion
@@ -47,6 +46,10 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher> ();
 #endregion
 #region BaseLogger
 builder.Services.AddScoped<IBaseLogger, BaseLogger> ();
+#endregion
+#region Authorization
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler> ();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider> ();
 #endregion
 builder.Host.UseSerilog ();
 
@@ -70,9 +73,9 @@ app.Lifetime.ApplicationStopping.Register (() =>
         stopwatch.ElapsedMilliseconds);
 });
 
+app.UseMiddleware<GlobalExceptionHandler> ();
 app.UseAuthentication ();
 app.UseAuthorization ();
-app.UseMiddleware<GlobalExceptionHandler> ();
 app.UseSwagger ();
 app.UseSwaggerUI ();
 app.MapControllers ();

@@ -7,7 +7,9 @@ namespace KiaKooshar.Infrastructure.Persistence
 {
     public class DatabaseContext : DbContext, IDatabaseContext
     {
-        public DatabaseContext ( DbContextOptions<DatabaseContext> options ) : base (options) { }
+        public DatabaseContext (
+            DbContextOptions<DatabaseContext> options
+            ) : base (options) { }
 
         public DbSet<Permission> Permissions { get; }
 
@@ -33,11 +35,6 @@ namespace KiaKooshar.Infrastructure.Persistence
             base.OnModelCreating (modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly (typeof (DatabaseContext).Assembly);
             SoftDeleteFilter.ApplySoftDeleteQueryFilter (modelBuilder);
-
-        }
-        private void SeedData ( ModelBuilder modelBuilder )
-        {
-
         }
     }
 }

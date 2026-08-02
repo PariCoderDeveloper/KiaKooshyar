@@ -22,31 +22,32 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
         {
             builder.HasData (new Permission
             {
+                Id = -1,
                 DiplayName = "View Users",
                 Code = Permissions.UserView,
-            });
-            builder.HasData (new Permission
+            }, new Permission
             {
+                Id = -2,
                 DiplayName = "Create User",
                 Code = Permissions.UserCreate,
-            });
-            builder.HasData (new Permission
+            }, new Permission
             {
+                Id = -3,
                 DiplayName = "Update User",
                 Code = Permissions.UserUpdate,
-            });
-            builder.HasData (new Permission
+            }, new Permission
             {
+                Id = -4,
                 DiplayName = "Delete User",
                 Code = Permissions.UserDelete,
-            });
-            builder.HasData (new Permission
+            }, new Permission
             {
+                Id = -5,
                 DiplayName = "Disable User",
                 Code = Permissions.UserDisable,
-            });
-            builder.HasData (new Permission
+            }, new Permission
             {
+                Id = -6,
                 DiplayName = "User Block",
                 Code = Permissions.UserBlock,
             });

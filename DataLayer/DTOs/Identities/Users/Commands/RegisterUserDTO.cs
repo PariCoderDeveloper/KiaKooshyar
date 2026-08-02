@@ -8,7 +8,7 @@ namespace KiaKooshar.Application.DTOs.Identities.Users.Commands
         public string LastName { get; set; } = null!;
         public string UserName { get; set; } = null!;
         //[IgnoreLogging]
-        public string PasswordHash { get; set; } = null!;
+        public string Password { get; set; } = null!;
         public string? Avator { get; set; }
         public DateOnly? BirthDate { get; set; }
         public string Gender { get; set; } = null!;

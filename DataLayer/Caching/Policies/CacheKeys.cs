@@ -2,7 +2,7 @@
 {
     public class CacheKeys
     {
-        public static string UserPermissions ( long userId )
-            => $"identity:user:{userId}:permissions";
+        public static string User ( long userId )
+          => $"identity:user:{userId}";
     }
 }

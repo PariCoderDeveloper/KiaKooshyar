@@ -42,9 +42,6 @@ namespace KiaKooshar.Application
             #region Behaviors
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (LoggingBehavior<,>));
             services.AddTransient (typeof (IPipelineBehavior<,>), typeof (ValidationBehavior<,>));
-            services.AddTransient (typeof (IPipelineBehavior<,>), typeof (CachingBehavior<,>));
-            services.AddTransient (typeof (IPipelineBehavior<,>), typeof (CacheInvalidationBehavior<,>));
-            services.AddTransient (typeof (IPipelineBehavior<,>), typeof (PermissionBehavior<,>));
             #endregion
             #region FluentValidation
             services.AddValidatorsFromAssembly (typeof (ApplicationServicesRegistration).Assembly);
