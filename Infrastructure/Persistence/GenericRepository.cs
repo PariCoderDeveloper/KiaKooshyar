@@ -1,8 +1,7 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
-using KiaKooshar.Application.Specifications.Base;
 using KiaKooshar.Domain.Entities.BaseEntities;
-using KiaKooshar.Infrastructure.Persistence.Specification;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace KiaKooshar.Infrastructure.Persistence
 {
@@ -16,63 +15,57 @@ namespace KiaKooshar.Infrastructure.Persistence
             _dbSet = context.Set<T> ();
         }
 
-        public void Add (
+        public virtual async Task<TResult> GetByIdAsync<TResult> (
+            Expression<Func<T, TResult>>? selector,
+            long id,
+            CancellationToken cancellationToken
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested ();
+            if ( selector == null )
+                throw new ArgumentNullException (nameof (selector));
+            return await _dbSet
+                .Where (e => e.Id == id)
+                .Select (selector)
+                .FirstOrDefaultAsync ();
+        }
+        public virtual async Task<List<TResult>> GetAllAsync<TResult> (
+            Expression<Func<T, TResult>> selector,
+            CancellationToken cancellationToken
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested ();
+            return await _dbSet.AsNoTracking ()
+                .Select (selector).ToListAsync ();
+        }
+        public virtual async Task<List<TResult>> GetAllAsync<TResult> (
+            Expression<Func<T, bool>> wherePredicate,
+            Expression<Func<T, TResult>> selectExpression,
+            CancellationToken cancellationToken
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested ();
+            return await _dbSet
+                .AsNoTracking ()
+                .Where (wherePredicate)
+                .Select (selectExpression)
+                .ToListAsync ();
+        }
+
+        public virtual async Task AddAsync (
+            T entity,
+            CancellationToken cancellationToken
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested ();
+            await _dbSet.AddAsync (entity);
+        }
+        public virtual void Delete<T> (
             T entity
-            )
-        {
-            _dbSet.AddAsync (entity);
-        }
-        public async Task<List<T>> ListAsync (
-            Specification<T> specifications,
-            CancellationToken cancellationToken
-            )
-        {
-            cancellationToken.ThrowIfCancellationRequested ();
-            var query = SpecificationEvaluator.GetQuery (
-                    _dbSet.AsNoTracking (),
-                    specifications
-                );
-            return await query.ToListAsync ();
-        }
-
-        public async Task<T> FirstOrDefaultAsync (
-            Specification<T> specifications,
-            CancellationToken cancellationToken
-            )
-        {
-            cancellationToken.ThrowIfCancellationRequested ();
-            var query = SpecificationEvaluator.GetQuery (
-                _dbSet.AsQueryable (),
-                specifications
-                );
-            return await query.FirstOrDefaultAsync ();
-        }
-        public async Task<int> CountAsync (
-                Specification<T> specifications,
-                CancellationToken cancellationToken
-            )
-        {
-            cancellationToken.ThrowIfCancellationRequested ();
-            var query = SpecificationEvaluator.GetQuery (
-                _dbSet.AsQueryable (),
-                specifications);
-            return await query.CountAsync ();
-        }
-
-        public async Task<bool> AnyAsync (
-            Specification<T> specifications
-            , CancellationToken cancellationToken
-            )
-        {
-            cancellationToken.ThrowIfCancellationRequested ();
-            var query = SpecificationEvaluator.GetQuery (
-                _dbSet.AsQueryable (),
-                specifications);
-            return await query.AnyAsync ();
-        }
-        public void Delete ( T entity )
+            ) where T : BaseEntity
         {
             entity.IsDeleted = true;
+            _context.Entry (entity).State = EntityState.Modified;
         }
     }
 }

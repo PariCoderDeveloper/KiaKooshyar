@@ -1,27 +1,31 @@
-﻿using KiaKooshar.Application.Specifications.Base;
-using KiaKooshar.Domain.Entities.BaseEntities;
+﻿using KiaKooshar.Domain.Entities.BaseEntities;
+using System.Linq.Expressions;
 
 namespace KiaKooshar.Application.Construct.DataBases
 {
     public interface IRepository<T>
         where T : BaseEntity
     {
-        void Add ( T entity );
-        Task<List<T>> ListAsync (
-            Specification<T> specifications,
-            CancellationToken cancellationToken );
-        Task<T?> FirstOrDefaultAsync (
-            Specification<T?> specifications,
-            CancellationToken cancellationToken );
-
-        Task<int> CountAsync (
-            Specification<T> specifications,
-            CancellationToken cancellationToken
-            );
-        Task<bool> AnyAsync (
-            Specification<T> specifications,
-            CancellationToken cancellationToken
-            );
-        void Delete ( T entity );
+        Task<TResult?> GetByIdAsync<TResult> (
+            Expression<Func<T, TResult>>? selector,
+            long id,
+            CancellationToken cancellationToken = default
+        );
+        Task<List<TResult>> GetAllAsync<TResult> (
+            Expression<Func<T, TResult>> selector,
+            CancellationToken cancellationToken = default
+        );
+        Task<List<TResult>> GetAllAsync<TResult> (
+            Expression<Func<T, bool>> wherePredicate,
+            Expression<Func<T, TResult>> selectExpression,
+            CancellationToken cancellationToken = default
+        );
+        Task AddAsync (
+            T entity,
+            CancellationToken cancellationToken = default
+        );
+        void Delete<T> (
+            T entity
+        ) where T : BaseEntity;
     }
 }
