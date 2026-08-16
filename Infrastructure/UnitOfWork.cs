@@ -1,39 +1,55 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
-using KiaKooshar.Domain.Entities.Identity;
+using KiaKooshar.Application.Features.Interfaces.Repositories;
 
 namespace KiaKooshar.Infrastructure.Persistence
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
-        public IRepository<Permission> Permission { get; private set; }
+        public IUserRepository Users { get; }
 
-        public IRepository<Role> Role { get; private set; }
+        public IRoleRepository Roles { get; }
 
-        public IRepository<User> User { get; private set; }
+        public IPermissionRepository Permissions { get; }
 
-        public IRepository<UserRole> UserRoles { get; private set; }
+        public IUserRoleRepository UserRoles { get; }
 
-        public IRepository<UserSession> UserSession { get; private set; }
+        public IRolePermissionRepository RolePermission { get; }
 
-        public IRepository<RolePermission> RolePermissions { get; private set; }
+        public IRefreshTokenRepository RefreshToken { get; }
 
-        public IRepository<RefreshToken> RefreshToken { get; private set; }
+        public IUserSessionRepository UserSessions { get; }
+        public IUploadedFileRepository UploadedFile { get; }
 
         private bool _disposed = false;
-        public UnitOfWork ( DatabaseContext context )
+        public UnitOfWork (
+            DatabaseContext context,
+            IUserRepository userRepository,
+            IRoleRepository roleRepository,
+            IPermissionRepository permissions,
+            IUserRoleRepository userRoles,
+            IRolePermissionRepository rolePermission,
+            IRefreshTokenRepository refreshToken,
+            IUserSessionRepository userSessions,
+            IUploadedFileRepository uploadedFile
+            )
         {
             _context = context;
-            Permission = new GenericRepository<Permission> (_context);
-            Role = new GenericRepository<Role> (_context);
-            User = new GenericRepository<User> (_context);
-            RolePermissions = new GenericRepository<RolePermission> (_context);
-            UserRoles = new GenericRepository<UserRole> (_context);
-            UserSession = new GenericRepository<UserSession> (_context);
-            RefreshToken = new GenericRepository<RefreshToken> (_context);
+            Users = userRepository;
+            Roles = roleRepository;
+            Permissions = permissions;
+            RolePermission = rolePermission;
+            UserRoles = userRoles;
+            RefreshToken = refreshToken;
+            UserSessions = userSessions;
+            UploadedFile = uploadedFile;
         }
-        public async Task<int> CommitAsync ()
+
+        public async Task<int> CommitAsync (
+            CancellationToken cancellationToken = default
+            )
         {
+            cancellationToken.ThrowIfCancellationRequested ();
             var result = await _context.SaveChangesAsync ();
             return result;
         }

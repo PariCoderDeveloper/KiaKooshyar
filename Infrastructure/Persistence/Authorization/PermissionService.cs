@@ -4,7 +4,6 @@ using KiaKooshar.Application.Caching.Policies;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Identities.Authorization;
 using KiaKooshar.Application.Features.Interfaces.Authorization;
-using KiaKooshar.Application.Specifications.Identities.Authentication;
 
 namespace KiaKooshar.Infrastructure.Persistence.Authorization
 {
@@ -29,35 +28,41 @@ namespace KiaKooshar.Infrastructure.Persistence.Authorization
             )
         {
             string key = CacheKeys.User (userId);
-            var cacheResult = await _cache.GetAsync<AuthorizationInfo>
-                (key, cancellationToken);
+            var cacheResult = await _cache.GetAsync<AuthorizationInfo> (
+                key,
+                cancellationToken
+                );
             if ( cacheResult is not null )
                 return cacheResult;
-            var spec = new GetUserAuthorizationSpecification (userId);
-            var user = await _unit.User.FirstOrDefaultAsync (
-                spec,
+            var user = await _unit.Users.GetUserPermissions (
+                userId,
                 cancellationToken
                 );
-            var permissions = user.UserRole
-                .SelectMany (x => x.Role.RolePermission)
-                .Select (x => x.Permission.Code)
-                .Distinct ()
-                .ToHashSet ();
-            var roles = user.UserRole
-                .Select (x => x.Role.Code)
-                .Distinct ()
-                .ToHashSet ();
-            var authorizationInfo = new AuthorizationInfo
+            //var permissions = user.UserRole
+            //    .SelectMany (x => x.Role.RolePermission)
+            //    .Select (x => x.Permission.Code)
+            //    .Distinct ()
+            //    .ToHashSet ();
+            //var roles = user.UserRole
+            //    .Select (x => x.Role.Code)
+            //    .Distinct ()
+            //    .ToHashSet ();
+            //var authorizationInfo = new AuthorizationInfo
+            //{
+            //    Roles = roles,
+            //    Permissions = permissions
+            //};
+            //await _cache.SetAsync (
+            //    CacheKeys.User (userId),
+            //    authorizationInfo,
+            //    CachePolicy.Long,
+            //    cancellationToken
+            //    );
+            //return authorizationInfo;
+            AuthorizationInfo authorizationInfo = new AuthorizationInfo
             {
-                Roles = roles,
-                Permissions = permissions
+
             };
-            await _cache.SetAsync (
-                CacheKeys.User (userId),
-                authorizationInfo,
-                CachePolicy.Long,
-                cancellationToken
-                );
             return authorizationInfo;
         }
         public async Task<bool> HasPermissionAsync (

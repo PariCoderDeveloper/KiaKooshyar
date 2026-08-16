@@ -2,7 +2,6 @@
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Users.Queries;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
-using KiaKooshar.Application.Specifications.Identities.Users;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
@@ -17,12 +16,13 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
         {
             _unit = unit;
         }
-        public async Task<ResultDTO> Handle ( ChangeEmailCommand request, CancellationToken cancellationToken )
+        public async Task<ResultDTO> Handle (
+            ChangeEmailCommand request,
+            CancellationToken cancellationToken
+            )
         {
-            var specification = new UserByIdSpecification (request.Id);
-
-            var user = await _unit.User.FirstOrDefaultAsync (
-                specification,
+            var user = await _unit.Users.GetByIdAsync (
+                request.Id,
                 cancellationToken
                 );
             if ( user is null )

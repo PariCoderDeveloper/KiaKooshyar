@@ -30,7 +30,6 @@ namespace KiaKooshar.Application.Logging
                 IP = ip
             });
         }
-
         public static void LogUserLogout (
             this IBaseLogger logger,
             long userId,

@@ -5,7 +5,6 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Com
 {
     public class LogoutCommand : IRequest<ResultDTO>
     {
-        public long Id { get; set; }
-        public string RefreshToken { get; set; } = null!;
+        public string? RefreshToken { get; set; }
     }
 }

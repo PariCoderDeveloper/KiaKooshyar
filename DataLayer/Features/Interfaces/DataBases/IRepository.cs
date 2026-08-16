@@ -6,21 +6,18 @@ namespace KiaKooshar.Application.Construct.DataBases
     public interface IRepository<T>
         where T : BaseEntity
     {
-        Task<TResult?> GetByIdAsync<TResult> (
-            Expression<Func<T, TResult>>? selector,
+        Task<T?> GetByIdAsync (
             long id,
             CancellationToken cancellationToken = default
         );
-        Task<List<TResult>> GetAllAsync<TResult> (
-            Expression<Func<T, TResult>> selector,
+        Task<List<T>> GetAllAsync (
             CancellationToken cancellationToken = default
         );
-        Task<List<TResult>> GetAllAsync<TResult> (
-            Expression<Func<T, bool>> wherePredicate,
-            Expression<Func<T, TResult>> selectExpression,
+        Task<List<T>> GetAllAsync (
+                Expression<Func<T, bool>> wherePredicate,
             CancellationToken cancellationToken = default
         );
-        Task AddAsync (
+        Task<T> AddAsync (
             T entity,
             CancellationToken cancellationToken = default
         );

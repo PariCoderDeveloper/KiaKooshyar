@@ -9,6 +9,7 @@ namespace KiaKooshar.Application.Mppings
         public AuthenticationProfile ()
         {
             CreateMap<User, PermissionDTO> ().ReverseMap ();
+            CreateMap<User, AuthenticatedUserDTO> ().ReverseMap ();
         }
     }
 }

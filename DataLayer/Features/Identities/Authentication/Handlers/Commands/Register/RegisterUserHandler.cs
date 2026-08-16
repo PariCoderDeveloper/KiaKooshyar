@@ -4,7 +4,7 @@ using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Commons;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
-using KiaKooshar.Application.Specifications.Identities.Authentication;
+using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Domain.Entities.Identity;
 using MediatR;
 
@@ -16,15 +16,21 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unit;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
         public RegisterUserHandler (
-            IUnitOfWork unit,
             IPasswordHasher passwordHasher,
-            IMapper mapper
+            IMapper mapper,
+            IUserRepository userRepository,
+            IUnitOfWork unit,
+            IUserRoleRepository userRoleRepository
             )
         {
             _mapper = mapper;
-            _unit = unit;
             _passwordHasher = passwordHasher;
+            _userRepository = userRepository;
+            _userRoleRepository = userRoleRepository;
+            _unit = unit;
         }
         public async Task<ResultDTO<ReturnUserDTO>> Handle
             (
@@ -33,24 +39,28 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             )
         {
             var user = _mapper.Map<Domain.Entities.Identity.User> (
-                request.RegisterUserDTO);
+                request.RegisterUserDTO
+                );
             user.PasswordHash = _passwordHasher.HashPassword (
                 request.RegisterUserDTO.Password);
             user.IsEmailConfirmed = false;
             user.Status = Domain.Enums.UserStatus.Active;
-            _unit.User.Add (user);
-            var result = await _unit.CommitAsync ();
-            var defaultRoleSpecification = new DefaultRoleSpecification ();
-            var defaultRole = _unit.Role.FirstOrDefaultAsync (
-                defaultRoleSpecification,
+            await _userRepository.AddAsync (
+                user,
                 cancellationToken
                 );
-            var userRole = new UserRole
-            {
-                RoleId = defaultRole.Id,
-                UserId = user.Id,
-            };
-            _unit.UserRoles.Add (userRole);
+            List<UserRole> userRole = request.Roles
+                .Select (x => new UserRole
+                {
+                    User = user,
+                    RoleId = x.RoleId,
+                })
+                .ToList ();
+            await _userRoleRepository.AddRangeAsync (
+                 userRole,
+                 cancellationToken
+                 );
+            await _unit.CommitAsync (cancellationToken);
             return ResultDTO<ReturnUserDTO>.Success (
                 new ReturnUserDTO
                 {
@@ -60,7 +70,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                     Gender = user.Gender,
                     Status = user.Status,
                 },
-                "Registration successful. You have been assigned the default 'User' role.");
+                "Registration successful. You have been assigned the default 'User' role."
+            );
         }
     }
 }

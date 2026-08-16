@@ -18,8 +18,8 @@ namespace KiaKooshar.Domain.Entities.Identity
         public string? PhoneNumber { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public bool IsPhoneConfirmed { get; set; }
-        public virtual ICollection<UserRole> UserRole { get; set; } = null!;
-        public virtual ICollection<RefreshToken> RefreshToken { get; set; } = null!;
-        public virtual ICollection<UserSession> UserSession { get; set; } = null!;
+        public virtual ICollection<UserRole> UserRole { get; set; } = new List<UserRole> ();
+        public virtual ICollection<RefreshToken> RefreshToken { get; set; } = new List<RefreshToken> ();
+        public virtual ICollection<UserSession> UserSession { get; set; } = new List<UserSession> ();
     }
 }

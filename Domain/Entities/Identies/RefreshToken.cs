@@ -5,6 +5,7 @@ namespace KiaKooshar.Domain.Entities.Identity
     public class RefreshToken : BaseEntity
     {
         public string Token { get; set; } = null!;
+        public string AccessToken { get; set; } = null!;
         public DateTime ExpireDate { get; set; }
         public DateTime? Revoked { get; set; }
         public string Device { get; set; } = null!;

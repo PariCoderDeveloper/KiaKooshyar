@@ -1,4 +1,5 @@
-﻿using KiaKooshar.Application.DTOs.Identities.Authorization;
+﻿
+using KiaKooshar.Application.DTOs.Identities.Authorization;
 
 namespace KiaKooshar.Application.Features.Interfaces.Authorization
 {

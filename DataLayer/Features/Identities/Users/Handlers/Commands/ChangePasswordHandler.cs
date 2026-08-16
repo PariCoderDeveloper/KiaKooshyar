@@ -3,7 +3,6 @@ using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Users.Queries;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
-using KiaKooshar.Application.Specifications.Identities.Users;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
@@ -26,11 +25,7 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             CancellationToken cancellationToken
             )
         {
-            var specification = new UserByIdSpecification (request.Id);
-            var user = await _unit.User.FirstOrDefaultAsync (
-                specification,
-                cancellationToken
-                );
+            var user = await _unit.Users.GetByIdAsync (request.Id);
             if ( user is null )
                 return ResultDTO<GetUserByIdDTO>.NotFound ("User not found");
             user.PasswordHash = _passwordHasher.HashPassword (request.Password);

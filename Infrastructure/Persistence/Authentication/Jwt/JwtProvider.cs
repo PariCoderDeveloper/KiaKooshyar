@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
 {
@@ -22,24 +23,14 @@ namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
             AuthenticatedUserDTO authenticatedUser
             )
         {
+            var authenticatedUserJson =
+                JsonSerializer.Serialize (authenticatedUser);
             var claims = new List<Claim>
             {
                 new Claim(
                     JwtRegisteredClaimNames.Sub,
-                    authenticatedUser.User.Id.ToString()
+                    authenticatedUserJson
                     ),
-                new Claim(
-                    JwtRegisteredClaimNames.Email,
-                    authenticatedUser.User.Email ?? string.Empty
-                    ),
-                new Claim(
-                    JwtRegisteredClaimNames.UniqueName,
-                    authenticatedUser.User.UserName
-                    ),
-                new Claim(
-                     JwtRegisteredClaimNames.Jti,
-                     Guid.NewGuid().ToString()
-                    )
             };
             var key = new SymmetricSecurityKey (
                  System.Text.Encoding.UTF8.GetBytes (
@@ -75,6 +66,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
                 ExpireDate = DateTime.UtcNow.AddDays (
                     _settings.RefreshTokenExpirationDays
                     ),
+                AccessToken = refreshTokenRequest.AccessToken,
                 UserId = refreshTokenRequest.UserId,
                 Device = refreshTokenRequest.Device,
                 IP = refreshTokenRequest.Ip,

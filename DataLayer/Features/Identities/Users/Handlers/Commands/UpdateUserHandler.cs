@@ -3,7 +3,6 @@ using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Users.Commands;
 using KiaKooshar.Application.Features.Identities.Users.Requests.Commands;
-using KiaKooshar.Application.Specifications.Identities.Users;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
@@ -26,19 +25,18 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             CancellationToken cancellationToken
             )
         {
-            var specification = new UserByIdSpecification (request.UpdateUserDTO.Id);
-
-            var user = await _unit.User.FirstOrDefaultAsync (
-                specification,
+            var user = await _unit.Users.GetByIdAsync (
+                request.UpdateUserDTO.Id,
                 cancellationToken
                 );
             if ( user is null )
                 return ResultDTO<UpdateUserDTO>.NotFound ("User not found");
-            user.UpdatedAt = DateTime.UtcNow;
             _mapper.Map (request.UpdateUserDTO, user);
-            await _unit.CommitAsync ();
+            user.UpdatedAt = DateTime.UtcNow;
+            await _unit.CommitAsync (cancellationToken);
+            var resultDto = _mapper.Map<UpdateUserDTO> (user);
             return ResultDTO<UpdateUserDTO>.Success (
-                null,
+                resultDto,
                 "User updated successfully"
                 );
         }

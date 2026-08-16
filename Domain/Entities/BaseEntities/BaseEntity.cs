@@ -4,8 +4,9 @@
     {
         public TKey Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
         public bool IsDeleted { get; set; }
+        public byte[] RowVersion { get; set; } = null!;
     }
     public abstract class BaseEntity : BaseEntity<long>
     {

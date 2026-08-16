@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\Identities\Authorization\" />
     <Folder Include="Features\Identities\Authentication\Handlers\Queries\" />
     <Folder Include="Features\Identities\Authentication\Requests\Queries\" />
     <Folder Include="Features\Identities\Authorization\Policies\Handlers\Commands\" />
@@ -36,13 +37,12 @@
     <Folder Include="Features\Identities\Authorization\Policies\" />
     <Folder Include="Features\Identities\Authorization\Policies\Requests\Commands\" />
     <Folder Include="Features\Identities\Authorization\Policies\Requests\Queries\" />
-    <Folder Include="Features\Identities\Authentication\Handlers\Commands\RevokeToken\" />
-    <Folder Include="Features\Identities\Authentication\Handlers\Commands\RefreshToken\" />
     <Folder Include="Features\Identities\Authorization\Roles\Handlers\Commands\" />
     <Folder Include="Features\Identities\Authorization\Roles\Handlers\Queries\" />
     <Folder Include="Features\Identities\Authorization\Roles\Requests\Commands\" />
     <Folder Include="Features\Identities\Authorization\Roles\Requests\Queries\" />
-    <Folder Include="Specifications\Identities\Authorization\" />
+    <Folder Include="Features\Interfaces\Job\" />
+    <Folder Include="Features\Job\" />
     <Folder Include="Validation\Authorization\" />
   </ItemGroup>
 

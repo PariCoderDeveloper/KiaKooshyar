@@ -1,14 +1,10 @@
-﻿using KiaKooshar.Domain.Entities.Identity;
+﻿using KiaKooshar.Domain.Entities.Audit;
+using KiaKooshar.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KiaKooshar.Application.Construct.DataBases
 {
-    public interface IDatabaseContext  
+    public interface IDatabaseContext
     {
         public DbSet<Permission> Permissions { get; }
         public DbSet<User> Users { get; }
@@ -17,8 +13,11 @@ namespace KiaKooshar.Application.Construct.DataBases
         public DbSet<UserRole> UserRoles { get; }
         public DbSet<RefreshToken> RefreshTokens { get; }
         public DbSet<UserSession> UserSessions { get; }
-        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, 
-            CancellationToken cancellationToken = new CancellationToken());
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
+        public DbSet<AuditLog> AuditLogs { get; }
+        public Task<int> SaveChangesAsync (
+            bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = new CancellationToken ()
+            );
+        public Task<int> SaveChangesAsync ( CancellationToken cancellationToken = new CancellationToken () );
     }
 }

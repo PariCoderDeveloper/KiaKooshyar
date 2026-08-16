@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KiaKooshar.Application.Features.Interfaces.CurrentUser;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace KiaKooshar.Infrastructure.Persistence;
@@ -13,6 +14,15 @@ public class DatabaseContextFactory
         optionsBuilder.UseSqlServer (
             "Server=.;Database=KiaKooshyarDB;Trusted_Connection=True;TrustServerCertificate=True"
         );
-        return new DatabaseContext (optionsBuilder.Options);
+        return new DatabaseContext (
+            optionsBuilder.Options,
+            new DesignTimeCurrentUserService ()
+            );
     }
+}
+internal class DesignTimeCurrentUserService : ICurrentUserService
+{
+    public long? UserId => null;
+    public string? Username => null;
+    public string? IP => null;
 }

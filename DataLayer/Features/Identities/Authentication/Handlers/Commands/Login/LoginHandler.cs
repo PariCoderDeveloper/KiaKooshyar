@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KiaKooshar.Application.Caching.Contracts;
+using KiaKooshar.Application.Caching.Models;
 using KiaKooshar.Application.Caching.Policies;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
@@ -11,8 +12,8 @@ using KiaKooshar.Application.Features.Construct.Logging;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
 using KiaKooshar.Application.Logging;
-using KiaKooshar.Application.Specifications.Identities.Authentication;
 using MediatR;
+using System.Text.Json;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.Login
 {
@@ -49,15 +50,14 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             CancellationToken cancellationToken
             )
         {
-            var emailSpecification =
-                new GetByEmailSpecification (request.Email);
-            var user = await _unit.User.FirstOrDefaultAsync (
-                emailSpecification,
+            var user = await _unit.Users.GetUserByEmail (
+                request.Email,
                 cancellationToken
                 );
-            if ( user == null )
-                return ResultDTO<LoginResponseDTO>.NotFound (
-                    "Invalid email or password"
+            if ( user is null )
+                return ResultDTO<LoginResponseDTO>.NotFound
+                    (
+                        "Invalid email or password"
                     );
             var isCorrect = _passwordHasher.VerifyPassword (
                     user.PasswordHash,
@@ -67,20 +67,25 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 return ResultDTO<LoginResponseDTO>.Unauthorized (
                     "Invalid email or password"
                     );
-            var rolesSpecification =
-                new GetUserAuthorizationSpecification (user.Id);
-            var userPermissions = await _unit.User.ListAsync (
-                rolesSpecification,
-                cancellationToken
+            var userPermission = await _unit.Users.GetUserPermissions
+                (
+                    user.Id
                 );
-            var permissions =
-                _mapper.Map<List<PermissionDTO>> (userPermissions);
-            var permissionsNames = permissions
-                .Select (x => x.Name)
-                .ToList ();
+            var roleNames = await _unit.Users.GetUserRoles
+                (
+                    user.Id
+                );
+            var cacheModel = new UserAuthorizationCacheModel
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                Username = user.UserName,
+                Roles = roleNames,
+                Permissions = userPermission
+            };
             await _cache.SetAsync (
                 CacheKeys.User (user.Id),
-                permissionsNames,
+                JsonSerializer.Serialize (cacheModel),
                 CachePolicy.Long
             );
             AuthLogExtensions.LogUserLogin (
@@ -90,16 +95,28 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 _requestContext.Device,
                 _requestContext.IpAddress
                 );
+            var autheticatedUser = _mapper.Map<AuthenticatedUserDTO> (user);
+            var accessToken = _jwtProvider.GenerateAccessToken (
+               autheticatedUser
+              );
+            var refreshToken = _jwtProvider.GenerateRefreshToken (
+                new RefreshTokenRequestDTO
+                {
+                    Device = _requestContext.Device,
+                    Ip = _requestContext.IpAddress,
+                    UserId = user.Id,
+                    AccessToken = accessToken
+                }
+              );
+            await _unit.RefreshToken.AddAsync (refreshToken);
+            await _unit.CommitAsync (cancellationToken);
             return ResultDTO<LoginResponseDTO>.Success (
                 new LoginResponseDTO
                 {
-                    AccessToken = _jwtProvider.GenerateAccessToken (
-                        new AuthenticatedUserDTO
-                        {
-                            User = user,
-                        }
-                        ),
+                    AccessToken = refreshToken.AccessToken,
+                    RefreshToken = refreshToken.Token,
                     AccessTokenExpiration = DateTime.UtcNow.AddMinutes (15),
+                    RefreshTokenExpiration = DateTime.UtcNow.AddDays (7),
                     User = new UserInfoDTO
                     {
                         Id = user.Id,

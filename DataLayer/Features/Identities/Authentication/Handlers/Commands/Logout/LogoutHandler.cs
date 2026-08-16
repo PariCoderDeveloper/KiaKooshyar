@@ -4,7 +4,6 @@ using KiaKooshar.Application.Features.Construct.Logging;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
 using KiaKooshar.Application.Logging;
-using KiaKooshar.Application.Specifications.Identities.Authentication;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.Logout
@@ -30,18 +29,17 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             CancellationToken cancellationToken
             )
         {
-            var sepecification = new LogoutSpecification (request.RefreshToken);
-            var logOutUser = await _unit.RefreshToken.FirstOrDefaultAsync (
-                sepecification,
-                cancellationToken
+            var logOutRefreshToken = await _unit.RefreshToken.FindByToken
+                (
+                    request.RefreshToken
                 );
-            if ( logOutUser is null )
+            if ( logOutRefreshToken is null )
                 return ResultDTO.NotFound ("Invalid Refresh Token");
-            logOutUser.Revoked = DateTime.UtcNow;
+            logOutRefreshToken.Revoked = DateTime.UtcNow;
             await _unit.CommitAsync ();
             AuthLogExtensions.LogUserLogout (
                 _logger,
-                request.Id,
+                logOutRefreshToken.Id,
                 _requestContext.Device,
                 _requestContext.IpAddress
               );
