@@ -26,18 +26,11 @@ namespace KiaKooshar.Infrastructure.Caching.Extensions
                     services.AddScoped<ICacheService, RedisCacheService> ();
                     break;
                 case "memory":
-                    services.AddMemoryCache (options =>
-                    {
-                        if ( cacheSettings.MemorySettings.SizeLimit.HasValue )
-                            options.SizeLimit =
-                            cacheSettings.MemorySettings.SizeLimit.Value;
-                    });
                     services.AddScoped<ICacheService, MemoryCacheService> ();
                     break;
                 default:
                     throw new InvalidOperationException (
                         $"Cache provider '{cacheSettings.Provider}' is not supported.");
-                    break;
             }
             return services;
         }
