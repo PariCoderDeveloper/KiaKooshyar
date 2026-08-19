@@ -18,12 +18,14 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IPasswordHasher _passwordHasher;
         private readonly IUserRepository _userRepository;
         private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IRoleRepository _roleRepository;
         public RegisterUserHandler (
             IPasswordHasher passwordHasher,
             IMapper mapper,
             IUserRepository userRepository,
             IUnitOfWork unit,
-            IUserRoleRepository userRoleRepository
+            IUserRoleRepository userRoleRepository,
+            IRoleRepository roleRepository
             )
         {
             _mapper = mapper;
@@ -31,6 +33,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             _userRepository = userRepository;
             _userRoleRepository = userRoleRepository;
             _unit = unit;
+            _roleRepository = roleRepository;
         }
         public async Task<ResultDTO<ReturnUserDTO>> Handle
             (
@@ -49,14 +52,14 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 user,
                 cancellationToken
                 );
-            List<UserRole> userRole = request.Roles
-                .Select (x => new UserRole
-                {
-                    User = user,
-                    RoleId = x.RoleId,
-                })
-                .ToList ();
-            await _userRoleRepository.AddRangeAsync (
+            var role = await _roleRepository.GetByIdAsync (
+                4, cancellationToken);
+            UserRole userRole = new UserRole
+            {
+                User = user,
+                Role = role!,
+            };
+            await _userRoleRepository.AddAsync (
                  userRole,
                  cancellationToken
                  );

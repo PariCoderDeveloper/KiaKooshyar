@@ -5,7 +5,8 @@ using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands
 {
-    public class RegisterUserCommand : IRequest<ResultDTO<ReturnUserDTO>>
+    public class RegisterUserCommand :
+        IRequest<ResultDTO<ReturnUserDTO>>
     {
         public RegisterUserDTO RegisterUserDTO { get; set; } = null!;
     }
