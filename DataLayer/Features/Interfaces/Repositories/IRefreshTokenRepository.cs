@@ -5,9 +5,15 @@ namespace KiaKooshar.Application.Features.Interfaces.Repositories
 {
     public interface IRefreshTokenRepository : IRepository<RefreshToken>
     {
-        Task<RefreshToken> FindByToken (
+        Task<RefreshToken?> FindByTokenAsync (
             string token,
             CancellationToken cancellationToken = default
             );
+        Task<List<RefreshToken>> GetExpiredOrRevokedAsync (
+            DateTime dateTime,
+            CancellationToken cancellationToken
+            );
+        void RemoveRange ( IEnumerable<RefreshToken> refreshTokens );
+
     }
 }

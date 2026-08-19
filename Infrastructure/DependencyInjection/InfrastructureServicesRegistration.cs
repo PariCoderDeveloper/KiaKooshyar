@@ -1,12 +1,17 @@
-﻿using KiaKooshar.Application.Features.Construct.JWT;
+﻿using Hangfire;
+using Hangfire.SqlServer;
+using KiaKooshar.Application.Features.Construct.JWT;
 using KiaKooshar.Application.Features.Interfaces.CurrentUser;
 using KiaKooshar.Application.Features.Interfaces.Files;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
+using KiaKooshar.Application.Features.Interfaces.Jobs;
+using KiaKooshar.Application.Features.Jobs;
+using KiaKooshar.Infrastructure.BackgroundJobs;
 using KiaKooshar.Infrastructure.Caching.Extensions;
 using KiaKooshar.Infrastructure.Files;
-using KiaKooshar.Infrastructure.Identities.RateLimiting;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Jwt;
+using KiaKooshar.Infrastructure.RateLimiting;
 using KiaKooshar.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -57,12 +62,32 @@ namespace KiaKooshar.Infrastructure.DependencyInjection
                     tags: new[] { "cache", "redis" }
                 );
             #endregion
-            #region 
+            #region HealthChecksUI
             services.AddHealthChecksUI (setup =>
             {
                 setup.SetEvaluationTimeInSeconds (15);
                 setup.AddHealthCheckEndpoint ("Kiakooshyar API", "/health");
             }).AddInMemoryStorage ();
+            #endregion
+            #region Hangfire
+            services.AddHangfire (config => config
+                .SetDataCompatibilityLevel (CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer ()
+                .UseRecommendedSerializerSettings ()
+                .UseSqlServerStorage (
+                    configuration.GetConnectionString ("DefaultConnection"),
+                    new SqlServerStorageOptions
+                    {
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes (5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes (5),
+                        QueuePollInterval = TimeSpan.Zero,
+                        UseRecommendedIsolationLevel = true,
+                        DisableGlobalLocks = true
+                    })
+            );
+            services.AddHangfireServer ();
+            services.AddScoped<IBackgroundJobScheduler, HangfireJobScheduler> ();
+            services.AddScoped<RefreshTokenCleanupJob> ();
             #endregion
             services.AddScoped<IJwtProvider, JwtProvider> ();
             services.AddScoped<IRequestContext, HttpRequestContext> ();
