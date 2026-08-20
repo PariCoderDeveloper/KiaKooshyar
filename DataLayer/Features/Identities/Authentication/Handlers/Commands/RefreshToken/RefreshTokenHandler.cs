@@ -29,7 +29,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             CancellationToken cancellationToken
             )
         {
-            var refreshToken = await _unit.RefreshToken.FindByToken
+            var refreshToken = await _unit.RefreshToken.FindByTokenAsync
                 (
                     request.RefreshToken
                 );
@@ -55,10 +55,9 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 );
             if ( user is null )
                 return ResultDTO<ResponseRefreshTokenDTO>.NotFound ("User does not found");
-            var authenticateUser = _mapper.Map<AuthenticatedUserDTO> (user);
             var accessToken = _jwtProvider.GenerateAccessToken
                 (
-                   authenticateUser
+                   user.Id
                 );
             refreshToken.AccessToken = accessToken;
             await _unit.CommitAsync ();

@@ -17,16 +17,33 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
         {
             _context = context;
         }
-        public async Task<RefreshToken> FindByToken (
+        public async Task<RefreshToken?> FindByTokenAsync (
             string token,
             CancellationToken cancellationToken
             )
         {
-            cancellationToken.ThrowIfCancellationRequested ();
             var foundToken = await _context.RefreshTokens
                .Where (x => x.Token == token)
-               .FirstOrDefaultAsync ();
+               .FirstOrDefaultAsync (cancellationToken);
             return foundToken;
+        }
+        public async Task<List<RefreshToken>> GetExpiredOrRevokedAsync (
+            DateTime dateTime,
+            CancellationToken cancellationToken
+            )
+        {
+            return await _context.RefreshTokens
+                .Where (rt =>
+                    rt.ExpireDate <= dateTime ||
+                    rt.Revoked != null
+                )
+                .ToListAsync (cancellationToken);
+        }
+        public void RemoveRange (
+            IEnumerable<RefreshToken> refreshTokens
+            )
+        {
+            _context.RefreshTokens.RemoveRange (refreshTokens);
         }
     }
 }

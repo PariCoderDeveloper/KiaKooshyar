@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace KiaKooshar.Infrastructure.Services
 {
-    internal class CurrentUserService : ICurrentUserService
+    public class CurrentUserService : ICurrentUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         public CurrentUserService (

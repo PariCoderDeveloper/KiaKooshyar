@@ -99,9 +99,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 _requestContext.Device,
                 _requestContext.IpAddress
                 );
-            var autheticatedUser = _mapper.Map<AuthenticatedUserDTO> (user);
             var accessToken = _jwtProvider.GenerateAccessToken (
-               autheticatedUser
+               user.Id
               );
             var refreshToken = _jwtProvider.GenerateRefreshToken (
                 new RefreshTokenRequestDTO

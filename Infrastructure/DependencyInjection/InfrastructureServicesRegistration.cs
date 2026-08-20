@@ -98,24 +98,68 @@ namespace KiaKooshar.Infrastructure.DependencyInjection
 
             services
             .AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer (options =>
-            {
-                options.TokenValidationParameters =
-                new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey =
-                        new SymmetricSecurityKey (
-                            Encoding.UTF8.GetBytes (
-                                configuration["Jwt:Key"]!
-                        ))
-                };
-            });
+       .AddJwtBearer (options =>
+       {
+           options.MapInboundClaims = false;
+
+           options.TokenValidationParameters =
+               new TokenValidationParameters
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidateLifetime = true,
+                   ValidateIssuerSigningKey = true,
+
+                   ValidIssuer =
+                       configuration["Jwt:Issuer"],
+
+                   ValidAudience =
+                       configuration["Jwt:Audience"],
+
+                   IssuerSigningKey =
+                       new SymmetricSecurityKey (
+                           Encoding.UTF8.GetBytes (
+                               configuration["Jwt:Key"]!
+                           )
+                       ),
+
+                   ClockSkew = TimeSpan.Zero
+               };
+
+           options.Events = new JwtBearerEvents
+           {
+               OnMessageReceived = context =>
+               {
+                   var accessToken =
+                       context.Request.Cookies["access-token"];
+
+                   if ( !string.IsNullOrEmpty (accessToken) )
+                   {
+                       context.Token = accessToken;
+                   }
+
+                   return Task.CompletedTask;
+               },
+
+               OnAuthenticationFailed = context =>
+               {
+                   switch ( context.Exception )
+                   {
+                       case SecurityTokenExpiredException:
+                           context.Response.Headers["X-Token-Expired"] =
+                               "true";
+                           break;
+
+                       case SecurityTokenInvalidSignatureException:
+                           context.Response.Headers["X-Token-Invalid"] =
+                               "true";
+                           break;
+                   }
+
+                   return Task.CompletedTask;
+               }
+           };
+       });
             services.Configure<JwtSettings> (
                 configuration.GetSection ("Jwt")
             );

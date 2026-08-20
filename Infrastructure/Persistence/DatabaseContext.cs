@@ -19,7 +19,6 @@ namespace KiaKooshar.Infrastructure.Persistence
         {
             _currentUserService = currentUserService;
         }
-
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }

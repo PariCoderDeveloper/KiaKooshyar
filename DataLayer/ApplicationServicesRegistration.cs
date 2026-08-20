@@ -80,7 +80,6 @@ namespace KiaKooshar.Application
                 .Enrich.WithMachineName ()
                 .Enrich.WithThreadId ()
                 .Enrich.WithProcessId ()
-
                 .WriteTo.MSSqlServer (
                     connectionString: sqlConnectionString,
                     sinkOptions: new MSSqlServerSinkOptions
@@ -88,12 +87,12 @@ namespace KiaKooshar.Application
                         TableName = "Logs",
                         SchemaName = "dbo",
                         AutoCreateSqlTable = true,
-
                         BatchPostingLimit = 50,
                         BatchPeriod = TimeSpan.FromSeconds (5)
                     },
                     columnOptions: columnOptions
                 )
+                .WriteTo.Seq ("http://localhost:5244")
                 .CreateLogger ();
         }
     }

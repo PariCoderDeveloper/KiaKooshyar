@@ -20,7 +20,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             CancellationToken cancellationToken
             )
         {
-            var tokenResult = await _unit.RefreshToken.FindByToken (
+            var tokenResult = await _unit.RefreshToken.FindByTokenAsync (
                 request.RefreshToken,
                 cancellationToken
                 );
