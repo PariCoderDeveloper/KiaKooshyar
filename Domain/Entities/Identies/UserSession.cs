@@ -12,7 +12,6 @@ namespace KiaKooshar.Domain.Entities.Identity
         public DateTime? LogoutTime { get; set; }
         public DateTime LastActivity { get; set; }
         public bool IsActive { get; set; } = true;
-        public long RefreshTokenId { get; set; }
         public virtual RefreshToken RefreshToken { get; set; } = null!;
         public long UserId { get; set; }
         public virtual User User { get; set; } = null!;

@@ -24,7 +24,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
             )
         {
             var userSession = await _context.UserSessions.
-                FirstOrDefaultAsync (s => s.RefreshTokenId == refreshTokenId);
+                FirstOrDefaultAsync (s => s.RefreshToken.Id == refreshTokenId);
             return userSession;
         }
         public async Task<UserSession> GetUserSessionByUserId (
@@ -37,6 +37,21 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                     s => s.UserId == userId,
                     cancellationToken
                     );
+            return userSession;
+        }
+
+        public async Task<UserSession> GetUserSession (
+            long userId,
+            long sessionId,
+            CancellationToken cancellationToken = default
+            )
+        {
+            var userSession = await _context.UserSessions
+                .Where (
+                    x => x.UserId == userId &&
+                    x.Id == sessionId
+                )
+                .FirstOrDefaultAsync (cancellationToken);
             return userSession;
         }
     }
