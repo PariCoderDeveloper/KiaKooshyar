@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KiaKooshar.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260819082514_ChangeLastActivityFieldType")]
-    partial class ChangeLastActivityFieldType
+    [Migration("20260820082836_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,9 +231,15 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("UserSessionId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserSessionId")
+                        .IsUnique();
 
                     b.ToTable("RefreshTokens");
                 });
@@ -497,6 +503,9 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -513,9 +522,6 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("RefreshTokenId")
-                        .HasColumnType("bigint");
-
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
@@ -529,8 +535,6 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RefreshTokenId");
 
                     b.HasIndex("UserId");
 
@@ -588,7 +592,15 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("KiaKooshar.Domain.Entities.Identity.UserSession", "UserSession")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("KiaKooshar.Domain.Entities.Identity.RefreshToken", "UserSessionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("User");
+
+                    b.Navigation("UserSession");
                 });
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.RolePermission", b =>
@@ -631,19 +643,11 @@ namespace KiaKooshar.Infrastructure.Migrations
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.UserSession", b =>
                 {
-                    b.HasOne("KiaKooshar.Domain.Entities.Identity.RefreshToken", "RefreshToken")
-                        .WithMany()
-                        .HasForeignKey("RefreshTokenId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("KiaKooshar.Domain.Entities.Identity.User", "User")
                         .WithMany("UserSession")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("RefreshToken");
 
                     b.Navigation("User");
                 });
@@ -667,6 +671,12 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Navigation("UserRole");
 
                     b.Navigation("UserSession");
+                });
+
+            modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.UserSession", b =>
+                {
+                    b.Navigation("RefreshToken")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
