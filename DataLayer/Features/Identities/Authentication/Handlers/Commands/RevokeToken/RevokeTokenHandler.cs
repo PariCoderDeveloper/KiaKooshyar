@@ -1,6 +1,6 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
-using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.RevokeToken;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.RevokeToken

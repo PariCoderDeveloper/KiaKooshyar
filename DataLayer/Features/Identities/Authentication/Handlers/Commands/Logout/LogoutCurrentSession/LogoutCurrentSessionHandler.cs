@@ -1,20 +1,20 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Construct.Logging;
-using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Logout;
 using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Application.Logging;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.Logout.LogoutByRefreshToken
 {
-    public class LogoutByRefreshTokenHandler :
-        IRequestHandler<LogoutByRefreshTokenCommand, ResultDTO>
+    public class LogoutCurrentSessionHandler :
+        IRequestHandler<LogoutCurrentSessionCommand, ResultDTO>
     {
         private readonly IUnitOfWork _unit;
         private readonly IBaseLogger _logger;
         private readonly IUserSessionRepository _userSession;
-        public LogoutByRefreshTokenHandler (
+        public LogoutCurrentSessionHandler (
             IUnitOfWork unit,
             IBaseLogger logger,
             IUserSessionRepository userSession
@@ -25,7 +25,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             _userSession = userSession;
         }
         public async Task<ResultDTO> Handle (
-            LogoutByRefreshTokenCommand request,
+            LogoutCurrentSessionCommand request,
             CancellationToken cancellationToken
             )
         {

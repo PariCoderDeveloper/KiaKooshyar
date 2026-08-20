@@ -1,22 +1,22 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
-using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Logout;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.Logout.LogoutById
 {
-    public class LogoutBySessionIdHandler :
-        IRequestHandler<LogoutBySessionIdCommand, ResultDTO>
+    public class RevokeSessionHandler :
+        IRequestHandler<RevokeSessionCommand, ResultDTO>
     {
         private readonly IUnitOfWork _unit;
-        public LogoutBySessionIdHandler (
+        public RevokeSessionHandler (
             IUnitOfWork unit
             )
         {
             _unit = unit;
         }
         public async Task<ResultDTO> Handle (
-            LogoutBySessionIdCommand request,
+            RevokeSessionCommand request,
             CancellationToken cancellationToken
             )
         {

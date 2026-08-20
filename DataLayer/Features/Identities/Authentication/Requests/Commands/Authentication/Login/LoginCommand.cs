@@ -2,7 +2,7 @@
 using KiaKooshar.Application.DTOs.Identities.Authentication;
 using MediatR;
 
-namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands
+namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Login
 {
     public class LoginCommand : IRequest<ResultDTO<LoginResponseDTO>>
     {

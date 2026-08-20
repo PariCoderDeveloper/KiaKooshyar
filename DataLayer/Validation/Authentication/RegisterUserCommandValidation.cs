@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Register;
 
 namespace KiaKooshar.Application.Validation.Authentication
 {

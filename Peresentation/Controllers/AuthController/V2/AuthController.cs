@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Login;
 using KiaKooshar.Infrastructure.RateLimiting;
 using KiaKooshar.Peresentation.Extentions;
 using MediatR;
@@ -83,7 +84,7 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V2
         {
             var refreshToken = Request.Cookies["refresh-token"];
             var logoutResult =
-                await _mediator.Send (new LogoutByRefreshTokenCommand
+                await _mediator.Send (new LogoutCurrentSessionCommand
                 {
                     RefreshToken = refreshToken ?? null
                 });

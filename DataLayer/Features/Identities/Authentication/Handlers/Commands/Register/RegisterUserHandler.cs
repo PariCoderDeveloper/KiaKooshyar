@@ -3,7 +3,7 @@ using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Commons;
-using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Register;
 using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Domain.Entities.Identity;
 using MediatR;

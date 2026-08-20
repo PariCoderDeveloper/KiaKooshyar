@@ -3,7 +3,7 @@ using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Authentication;
 using KiaKooshar.Application.Features.Construct.JWT;
-using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.RefreshToken;
 using MediatR;
 
 namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Commands.RefreshToken

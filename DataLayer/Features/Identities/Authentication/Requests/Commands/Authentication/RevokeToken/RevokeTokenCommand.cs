@@ -1,7 +1,7 @@
 ﻿using KiaKooshar.Application.DTOs.Common;
 using MediatR;
 
-namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands
+namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.RevokeToken
 {
     public class RevokeTokenCommand :
         IRequest<ResultDTO>
