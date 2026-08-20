@@ -6,5 +6,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Com
     public class RevokeMySessionsCommand
         : IRequest<ResultDTO>
     {
+        public long sessionId { get; set; }
+        public long userId { get; set; }
     }
 }

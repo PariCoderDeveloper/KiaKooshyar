@@ -27,7 +27,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             if ( userSession is null )
                 return ResultDTO.NotFound ("Invalid User Session");
             var refreshToken = await _unit.RefreshToken.GetByIdAsync (
-                userSession.RefreshTokenId,
+                userSession.RefreshToken.Id,
                 cancellationToken
                 );
             if ( refreshToken is null )

@@ -1,6 +1,8 @@
 ﻿using Asp.Versioning;
-using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Login;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Logout;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.RefreshToken;
+using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.RevokeToken;
 using KiaKooshar.Infrastructure.RateLimiting;
 using KiaKooshar.Peresentation.Extentions;
 using MediatR;
@@ -94,9 +96,9 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
             return ResultExtensions.ToActionResult (logoutResult);
         }
         [Authorize]
-        [HttpPost ("logoutByS")]
-        public async Task<IActionResult> LogoutByUserSessionId (
-            LogoutBySessionIdCommand request
+        [HttpPost ("revokesession")]
+        public async Task<IActionResult> RevokeSession (
+            RevokeSessionCommand request
             )
         {
             var result = await _mediator.Send (request);
