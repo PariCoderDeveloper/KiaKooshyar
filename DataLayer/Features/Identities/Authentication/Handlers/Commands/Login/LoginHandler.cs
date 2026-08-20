@@ -11,6 +11,7 @@ using KiaKooshar.Application.Features.Construct.JWT;
 using KiaKooshar.Application.Features.Construct.Logging;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
+using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Application.Logging;
 using MediatR;
 using System.Text.Json;
@@ -27,6 +28,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly ICacheService _cache;
         private readonly IBaseLogger _logger;
         private readonly IRequestContext _requestContext;
+        private readonly IUserSessionRepository _userSession;
         public LoginHandler (
             IJwtProvider jwtProvider,
             IUnitOfWork unit,
@@ -34,7 +36,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             IMapper mapper,
             ICacheService cache,
             IBaseLogger logger,
-            IRequestContext requestContext
+            IRequestContext requestContext,
+            IUserSessionRepository userSession
             )
         {
             _jwtProvider = jwtProvider;
@@ -44,6 +47,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             _cache = cache;
             _logger = logger;
             _requestContext = requestContext;
+            _userSession = userSession;
         }
         public async Task<ResultDTO<LoginResponseDTO>> Handle (
             LoginCommand request,
@@ -109,6 +113,18 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 }
               );
             await _unit.RefreshToken.AddAsync (refreshToken);
+            var userSession = new Domain.Entities.Identity.UserSession
+            {
+                Device = _requestContext.Device,
+                Browser = _requestContext.Browser,
+                IP = _requestContext.IpAddress,
+                OS = _requestContext.OS,
+                LoginTime = DateTime.UtcNow,
+                LastActivity = DateTime.UtcNow,
+                RefreshToken = refreshToken,
+                User = user
+            };
+            _userSession.AddAsync (userSession);
             await _unit.CommitAsync (cancellationToken);
             return ResultDTO<LoginResponseDTO>.Success (
                 new LoginResponseDTO
