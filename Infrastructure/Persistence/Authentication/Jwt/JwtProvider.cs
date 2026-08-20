@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text.Json;
 
 namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
 {
@@ -20,16 +19,14 @@ namespace KiaKooshar.Infrastructure.Persistence.Authentication.Jwt
             _settings = settings.Value;
         }
         public string GenerateAccessToken (
-            AuthenticatedUserDTO authenticatedUser
+             long Id
             )
         {
-            var authenticatedUserJson =
-                JsonSerializer.Serialize (authenticatedUser);
             var claims = new List<Claim>
             {
                 new Claim(
                     JwtRegisteredClaimNames.Sub,
-                    authenticatedUserJson
+                    Id.ToString()
                     ),
             };
             var key = new SymmetricSecurityKey (

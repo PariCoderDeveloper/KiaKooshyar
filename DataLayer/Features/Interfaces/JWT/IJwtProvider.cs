@@ -7,7 +7,7 @@ namespace KiaKooshar.Application.Features.Construct.JWT
     public interface IJwtProvider
     {
         string GenerateAccessToken (
-              AuthenticatedUserDTO authenticatedUser
+              long id
             );
         RefreshToken GenerateRefreshToken (
             RefreshTokenRequestDTO refreshTokenRequest
