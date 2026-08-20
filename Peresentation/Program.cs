@@ -1,10 +1,13 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using Hangfire;
 using HealthChecks.UI.Client;
 using KiaKooshar.Application;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.Features.Construct.Logging;
+using KiaKooshar.Infrastructure;
+using KiaKooshar.Infrastructure.BackgroundJobs.JobSchaduler;
 using KiaKooshar.Infrastructure.DependencyInjection;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Security;
@@ -23,7 +26,7 @@ var builder = WebApplication.CreateBuilder (args);
 builder.Services.AddControllers ();
 
 
-#region DataBaseCofig
+#region DataBaseConfig
 
 builder.Services.AddDbContext<DatabaseContext> (options =>
 {
@@ -88,20 +91,27 @@ app.MapHealthChecks ("/health", new Microsoft.AspNetCore.Diagnostics.HealthCheck
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
-app.MapHealthChecks ("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
-{
-    Predicate = _ => false
-});
-app.MapHealthChecks ("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
-{
-    Predicate = check => check.Tags.Contains ("db") ||
-        check.Tags.Contains ("cache"),
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
+app.MapHealthChecks ("/health/live",
+    new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
+app.MapHealthChecks ("/health/ready",
+    new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+    {
+        Predicate = check => check.Tags.Contains ("db") ||
+            check.Tags.Contains ("cache"),
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 #endregion
 #region HealthCheckUI
 app.MapHealthChecksUI (config => config.UIPath = "/health-ui");
 #endregion
+#region HangfireDashboard
+app.UseHangfireDashboard ("/hangfire");
+#endregion
+
+
 Log.Information (
     "Application started at {Time}",
     DateTime.UtcNow);
@@ -114,7 +124,8 @@ app.UseMiddleware<GlobalExceptionHandler> ();
 app.UseAuthentication ();
 app.UseAuthorization ();
 app.UseSwagger ();
-
+app.UseHangfireDashboard ("/hangfire");
+app.Services.CleanupRefreshToken ();
 app.UseSwaggerUI (options =>
 {
     options.SwaggerEndpoint (

@@ -1,8 +1,9 @@
 ﻿using Asp.Versioning;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands;
+using KiaKooshar.Infrastructure.RateLimiting;
 using KiaKooshar.Peresentation.Extentions;
-using KiaKooshar.Peresentation.RateLimiting;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -78,18 +79,27 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
                     });
             return ResultExtensions.ToActionResult (result);
         }
-        [HttpPost ("logout")]
-        public async Task<IActionResult> Logout ()
+        [HttpPost ("logout/refresh-token")]
+        public async Task<IActionResult> LogoutByRefreshToken ()
         {
             var refreshToken = Request.Cookies["refresh-token"];
             var logoutResult =
-                await _mediator.Send (new LogoutCommand
+                await _mediator.Send (new LogoutByRefreshTokenCommand
                 {
                     RefreshToken = refreshToken ?? null
                 });
             Response.Cookies.Delete ("access-token");
             Response.Cookies.Delete ("refresh-token");
             return ResultExtensions.ToActionResult (logoutResult);
+        }
+        [Authorize]
+        [HttpPost ("logoutByS")]
+        public async Task<IActionResult> LogoutByUserSessionId (
+            LogoutBySessionIdCommand request
+            )
+        {
+            var result = await _mediator.Send (request);
+            return ResultExtensions.ToActionResult (result);
         }
         [HttpPost ("revoke-token")]
         public async Task<IActionResult> RevokeToken ()
