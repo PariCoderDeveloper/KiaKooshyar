@@ -5,7 +5,7 @@ namespace KiaKooshar.Infrastructure.BackgroundJobs.JobSchaduler
 {
     public static class AppRegisteregJob
     {
-        public static void CleanupRefreshToken (
+        public static async Task CleanupRefreshToken (
             this IServiceProvider provider
             )
         {

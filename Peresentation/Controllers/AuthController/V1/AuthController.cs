@@ -104,6 +104,14 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
             var result = await _mediator.Send (request);
             return ResultExtensions.ToActionResult (result);
         }
+        [HttpPost ("revokesmysessions")]
+        public async Task<IActionResult> RevokeMySessions (
+            RevokeMySessionsCommand request
+            )
+        {
+            var result = await _mediator.Send (request);
+            return ResultExtensions.ToActionResult (result);
+        }
         [HttpPost ("revoke-token")]
         public async Task<IActionResult> RevokeToken ()
         {

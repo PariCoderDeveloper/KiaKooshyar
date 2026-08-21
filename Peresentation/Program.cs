@@ -6,8 +6,8 @@ using KiaKooshar.Application;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.Features.Construct.Logging;
-using KiaKooshar.Infrastructure;
 using KiaKooshar.Infrastructure.BackgroundJobs.JobSchaduler;
+using KiaKooshar.Infrastructure.Caching;
 using KiaKooshar.Infrastructure.DependencyInjection;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Security;
@@ -125,7 +125,9 @@ app.UseAuthentication ();
 app.UseAuthorization ();
 app.UseSwagger ();
 app.UseHangfireDashboard ("/hangfire");
-app.Services.CleanupRefreshToken ();
+await app.Services.CleanupRefreshToken ();
+await DatabaseMigration.ApplyAsync (app.Services);
+await CacheRegistration.CacheSeeder (app.Services);
 app.UseSwaggerUI (options =>
 {
     options.SwaggerEndpoint (

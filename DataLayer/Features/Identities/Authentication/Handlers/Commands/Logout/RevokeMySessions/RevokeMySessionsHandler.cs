@@ -36,9 +36,10 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 return ResultDTO.NotFound (
                     "Refresh token doesnt found"
                     );
-            refreshToken.Revoked = DateTime.UtcNow;
-            userSession.LogoutTime = DateTime.UtcNow;
-            userSession.UpdatedAt = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
+            refreshToken.Revoked = now;
+            userSession.LogoutTime = now;
+            userSession.UpdatedAt = now;
             userSession.IsActive = false;
             await _unit.CommitAsync (cancellationToken);
             return ResultDTO.Success (
