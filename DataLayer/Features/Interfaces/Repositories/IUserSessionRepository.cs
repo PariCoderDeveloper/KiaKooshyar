@@ -18,5 +18,9 @@ namespace KiaKooshar.Application.Features.Interfaces.Repositories
             long sessionId,
             CancellationToken cancellationToken = default
             );
+        IQueryable<UserSession> GetUserSessionsByUserId (
+            long userId,
+            CancellationToken cancellationToken = default
+            );
     }
 }

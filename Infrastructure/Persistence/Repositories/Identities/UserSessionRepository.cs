@@ -55,5 +55,15 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                 .FirstOrDefaultAsync (cancellationToken);
             return userSession;
         }
+
+        public IQueryable<UserSession> GetUserSessionsByUserId (
+            long userId,
+            CancellationToken cancellationToken = default
+            )
+        {
+            return _context.UserSessions
+                .Where (x => x.UserId == userId)
+                .AsQueryable<UserSession> ();
+        }
     }
 }

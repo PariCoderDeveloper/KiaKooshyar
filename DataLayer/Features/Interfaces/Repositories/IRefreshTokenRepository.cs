@@ -11,7 +11,12 @@ namespace KiaKooshar.Application.Features.Interfaces.Repositories
             );
         Task<List<RefreshToken>> GetExpiredOrRevokedAsync (
             DateTime dateTime,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default
+            );
+
+        IQueryable<RefreshToken> GetRefreshTokenById (
+            long userId,
+            CancellationToken cancellationToken = default
             );
         void RemoveRange ( IEnumerable<RefreshToken> refreshTokens );
 

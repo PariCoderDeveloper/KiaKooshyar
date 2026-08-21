@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
 {
-    public class RefreshTokenRepository :
+    public class
+        RefreshTokenRepository :
         GenericRepository<RefreshToken>,
         IRefreshTokenRepository
     {
@@ -19,7 +20,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
         }
         public async Task<RefreshToken?> FindByTokenAsync (
             string token,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default
             )
         {
             var foundToken = await _context.RefreshTokens
@@ -29,7 +30,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
         }
         public async Task<List<RefreshToken>> GetExpiredOrRevokedAsync (
             DateTime dateTime,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default
             )
         {
             return await _context.RefreshTokens
@@ -39,6 +40,17 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                 )
                 .ToListAsync (cancellationToken);
         }
+
+        public IQueryable<RefreshToken> GetRefreshTokenById (
+            long userId,
+            CancellationToken cancellationToken = default
+            )
+        {
+            return _context.RefreshTokens
+                .Where (x => x.UserId == userId)
+                .AsQueryable<RefreshToken> ();
+        }
+
         public void RemoveRange (
             IEnumerable<RefreshToken> refreshTokens
             )

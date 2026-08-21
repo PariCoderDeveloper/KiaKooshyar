@@ -31,6 +31,8 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Identities\Authorization\" />
+    <Folder Include="Features\Identities\Admin\Handlers\Queries\" />
+    <Folder Include="Features\Identities\Admin\Requests\Queries\" />
     <Folder Include="Features\Identities\Authentication\Handlers\Commands\Logout\RevokeUserSessions\" />
     <Folder Include="Features\Identities\Authorization\Policies\Handlers\Commands\" />
     <Folder Include="Features\Identities\Authorization\Policies\Handlers\Queries\" />
