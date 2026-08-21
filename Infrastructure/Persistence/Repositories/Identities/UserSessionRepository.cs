@@ -51,6 +51,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                     x => x.UserId == userId &&
                     x.Id == sessionId
                 )
+                .Include (x => x.RefreshToken)
                 .FirstOrDefaultAsync (cancellationToken);
             return userSession;
         }

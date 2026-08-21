@@ -28,7 +28,10 @@ namespace KiaKooshar.Infrastructure.Persistence
         public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<UploadedFile> UploadedFiles { get; set; }
         public DbSet<KiaKooshar.Domain.Entities.Audit.AuditLog> AuditLogs { get; set; }
-        public override Task<int> SaveChangesAsync ( bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default )
+        public override Task<int> SaveChangesAsync (
+            bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default
+            )
             => base.SaveChangesAsync (acceptAllChangesOnSuccess, cancellationToken);
         public override async Task<int> SaveChangesAsync (
             CancellationToken cancellationToken = default

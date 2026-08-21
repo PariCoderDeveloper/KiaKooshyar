@@ -18,20 +18,6 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
                 .HasOne (x => x.Permission)
                 .WithMany (x => x.RolePermissions)
                 .HasForeignKey (x => x.PermissionId);
-            builder.HasData (
-                new RolePermission
-                {
-                    Id = 1,
-                    RoleId = 1,
-                    PermissionId = -1
-                },
-                new RolePermission
-                {
-                    Id = 2,
-                    RoleId = 1,
-                    PermissionId = -2
-                }
-            );
         }
     }
 }
