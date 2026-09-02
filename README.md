@@ -1,6 +1,6 @@
 # KiaKooshar Identity Service
 
-A production-grade **Identity & Authorization microservice** built with **.NET 8**, following **Clean Architecture** and **CQRS (Vertical Slice)** principles. This service handles authentication, role/permission-based authorization, user management, auditing, and background job processing for the KiaKooshar platform.
+A production-grade **Identity & Authorization microservice** built with **.NET 9**, following **Clean Architecture** and **CQRS (Vertical Slice)** principles. This service handles authentication, role/permission-based authorization, user management, auditing, and background job processing for the KiaKooshar platform.
 
 ---
 
