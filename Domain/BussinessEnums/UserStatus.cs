@@ -6,5 +6,7 @@ public enum UserStatus
     Active = 2,
     Inactive = 3,
     Suspended = 4,
-    Locked = 5
+    Locked = 5,
+    Block = 6,
+    Unblock = 7
 }

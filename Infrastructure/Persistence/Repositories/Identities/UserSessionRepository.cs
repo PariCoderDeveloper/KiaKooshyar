@@ -62,7 +62,9 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
             )
         {
             return _context.UserSessions
-                .Where (x => x.UserId == userId)
+                .Where (x => x.UserId == userId
+                    && x.IsActive == true
+                    && x.IsDeleted == false)
                 .AsQueryable<UserSession> ();
         }
     }

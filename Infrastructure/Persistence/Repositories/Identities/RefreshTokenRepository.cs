@@ -41,13 +41,15 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                 .ToListAsync (cancellationToken);
         }
 
-        public IQueryable<RefreshToken> GetRefreshTokenById (
+        public IQueryable<RefreshToken> GetRefreshTokenByUserId (
             long userId,
             CancellationToken cancellationToken = default
             )
         {
             return _context.RefreshTokens
-                .Where (x => x.UserId == userId)
+                .Where (x => x.UserId == userId
+                    && x.IsDeleted == false
+                    && x.Revoked == null)
                 .AsQueryable<RefreshToken> ();
         }
 

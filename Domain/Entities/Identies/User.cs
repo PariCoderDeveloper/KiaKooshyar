@@ -1,4 +1,5 @@
 ﻿using KiaKooshar.Domain.Entities.BaseEntities;
+using KiaKooshar.Domain.Entities.Identies;
 using KiaKooshar.Domain.Enums;
 
 namespace KiaKooshar.Domain.Entities.Identity
@@ -18,8 +19,17 @@ namespace KiaKooshar.Domain.Entities.Identity
         public string? PhoneNumber { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public bool IsPhoneConfirmed { get; set; }
-        public virtual ICollection<UserRole> UserRole { get; set; } = new List<UserRole> ();
-        public virtual ICollection<RefreshToken> RefreshToken { get; set; } = new List<RefreshToken> ();
-        public virtual ICollection<UserSession> UserSession { get; set; } = new List<UserSession> ();
+        public bool? ForcePasswordChange { get; set; }
+        public DateTime? LastPasswordResetChange { get; set; }
+        public long? PasswordResetedBy { get; set; }
+        public long? StatusChangedBy { get; set; }
+        public virtual ICollection<UserPermission> UserPermissions { get; set; } =
+            new List<UserPermission> ();
+        public virtual ICollection<UserRole> UserRole { get; set; } =
+            new List<UserRole> ();
+        public virtual ICollection<RefreshToken> RefreshToken { get; set; } =
+            new List<RefreshToken> ();
+        public virtual ICollection<UserSession> UserSession { get; set; } =
+            new List<UserSession> ();
     }
 }

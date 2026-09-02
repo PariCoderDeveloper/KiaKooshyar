@@ -1,4 +1,5 @@
-﻿using KiaKooshar.Application.DTOs.Common;
+﻿using KiaKooshar.Application.Common.Models;
+using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Identities.Users.Queries;
 using MediatR;
 
@@ -7,5 +8,6 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Que
     public class GetAllUsersQuery :
         IRequest<ResultDTO<List<GetAllUsersDTO>>>
     {
+        public PaginationRequest MyProperty { get; set; }
     }
 }

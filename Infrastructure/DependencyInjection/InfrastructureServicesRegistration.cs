@@ -1,6 +1,7 @@
 ﻿using Hangfire;
 using Hangfire.SqlServer;
 using KiaKooshar.Application.Features.Construct.JWT;
+using KiaKooshar.Application.Features.Interfaces.Cache;
 using KiaKooshar.Application.Features.Interfaces.CurrentUser;
 using KiaKooshar.Application.Features.Interfaces.Files;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
@@ -8,6 +9,7 @@ using KiaKooshar.Application.Features.Interfaces.Jobs;
 using KiaKooshar.Application.Features.Jobs;
 using KiaKooshar.Infrastructure.BackgroundJobs;
 using KiaKooshar.Infrastructure.Caching.Extensions;
+using KiaKooshar.Infrastructure.Caching.Seed;
 using KiaKooshar.Infrastructure.Files;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Jwt;
@@ -17,7 +19,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using StackExchange.Redis;
 using System.Text;
 
 namespace KiaKooshar.Infrastructure.DependencyInjection
@@ -32,15 +33,7 @@ namespace KiaKooshar.Infrastructure.DependencyInjection
             services.AddCacheService (
                 configuration
             );
-            services.AddMemoryCache ();
-            services.AddSingleton<IConnectionMultiplexer> (sp =>
-            {
-                var options = ConfigurationOptions.Parse (
-                    configuration.GetConnectionString ("Redis")
-                );
-                options.AbortOnConnectFail = false;
-                return ConnectionMultiplexer.Connect (options);
-            });
+
             #region FileCoonverter
             services.AddSingleton<IFileConverter, FileConverter> ();
             #endregion
@@ -89,81 +82,85 @@ namespace KiaKooshar.Infrastructure.DependencyInjection
             services.AddScoped<IBackgroundJobScheduler, HangfireJobScheduler> ();
             services.AddScoped<RefreshTokenCleanupJob> ();
             #endregion
+            #region CacheSeeder
+            services.AddScoped<IUserCacheSeeder, UserCacheSeeder> ();
+            #endregion
             services.AddScoped<IJwtProvider, JwtProvider> ();
             services.AddScoped<IRequestContext, HttpRequestContext> ();
             services.AddScoped<ICurrentUserService, CurrentUserService> ();
             services.AddRepositories ();
 
             AddRateLimit.AddFixedWindowRateLimit (services, configuration);
+            #region AddAuthentication
+            services.AddAuthentication (
+                JwtBearerDefaults.AuthenticationScheme
+                )
+                .AddJwtBearer (options =>
+                {
+                    options.MapInboundClaims = false;
 
-            services
-            .AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
-       .AddJwtBearer (options =>
-       {
-           options.MapInboundClaims = false;
+                    options.TokenValidationParameters =
+                        new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
 
-           options.TokenValidationParameters =
-               new TokenValidationParameters
-               {
-                   ValidateIssuer = true,
-                   ValidateAudience = true,
-                   ValidateLifetime = true,
-                   ValidateIssuerSigningKey = true,
+                            ValidIssuer =
+                                configuration["Jwt:Issuer"],
 
-                   ValidIssuer =
-                       configuration["Jwt:Issuer"],
+                            ValidAudience =
+                                configuration["Jwt:Audience"],
 
-                   ValidAudience =
-                       configuration["Jwt:Audience"],
+                            IssuerSigningKey =
+                                new SymmetricSecurityKey (
+                                    Encoding.UTF8.GetBytes (
+                                        configuration["Jwt:Key"]!
+                                    )
+                                ),
 
-                   IssuerSigningKey =
-                       new SymmetricSecurityKey (
-                           Encoding.UTF8.GetBytes (
-                               configuration["Jwt:Key"]!
-                           )
-                       ),
+                            ClockSkew = TimeSpan.Zero
+                        };
 
-                   ClockSkew = TimeSpan.Zero
-               };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken =
+                                context.Request.Cookies["access-token"];
 
-           options.Events = new JwtBearerEvents
-           {
-               OnMessageReceived = context =>
-               {
-                   var accessToken =
-                       context.Request.Cookies["access-token"];
+                            if ( !string.IsNullOrEmpty (accessToken) )
+                            {
+                                context.Token = accessToken;
+                            }
 
-                   if ( !string.IsNullOrEmpty (accessToken) )
-                   {
-                       context.Token = accessToken;
-                   }
+                            return Task.CompletedTask;
+                        },
 
-                   return Task.CompletedTask;
-               },
+                        OnAuthenticationFailed = context =>
+                        {
+                            switch ( context.Exception )
+                            {
+                                case SecurityTokenExpiredException:
+                                    context.Response.Headers["X-Token-Expired"] =
+                                        "true";
+                                    break;
 
-               OnAuthenticationFailed = context =>
-               {
-                   switch ( context.Exception )
-                   {
-                       case SecurityTokenExpiredException:
-                           context.Response.Headers["X-Token-Expired"] =
-                               "true";
-                           break;
+                                case SecurityTokenInvalidSignatureException:
+                                    context.Response.Headers["X-Token-Invalid"] =
+                                        "true";
+                                    break;
+                            }
 
-                       case SecurityTokenInvalidSignatureException:
-                           context.Response.Headers["X-Token-Invalid"] =
-                               "true";
-                           break;
-                   }
-
-                   return Task.CompletedTask;
-               }
-           };
-       });
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
             services.Configure<JwtSettings> (
                 configuration.GetSection ("Jwt")
             );
-
+            #endregion
             return services;
         }
     }

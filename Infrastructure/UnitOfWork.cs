@@ -20,6 +20,7 @@ namespace KiaKooshar.Infrastructure.Persistence
 
         public IUserSessionRepository UserSessions { get; }
         public IUploadedFileRepository UploadedFile { get; }
+        public IUserPermissionRepository UserPermission { get; }
 
         private bool _disposed = false;
         public UnitOfWork (
@@ -31,7 +32,8 @@ namespace KiaKooshar.Infrastructure.Persistence
             IRolePermissionRepository rolePermission,
             IRefreshTokenRepository refreshToken,
             IUserSessionRepository userSessions,
-            IUploadedFileRepository uploadedFile
+            IUploadedFileRepository uploadedFile,
+            IUserPermissionRepository userPermission
             )
         {
             _context = context;
@@ -43,6 +45,7 @@ namespace KiaKooshar.Infrastructure.Persistence
             RefreshToken = refreshToken;
             UserSessions = userSessions;
             UploadedFile = uploadedFile;
+            UserPermission = userPermission;
         }
 
         public async Task<int> CommitAsync (

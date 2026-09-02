@@ -91,6 +91,61 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.ToTable("AuditLogs");
                 });
 
+            modelBuilder.Entity("KiaKooshar.Domain.Entities.Identies.UserPermission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("GrantedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("GrantedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsGranted")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("PermissionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GrantedBy");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("UserId", "PermissionId")
+                        .IsUnique();
+
+                    b.ToTable("UserPermissions");
+                });
+
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.Permission", b =>
                 {
                     b.Property<long>("Id")
@@ -128,56 +183,6 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Permissions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1L,
-                            Code = "User.View",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DiplayName = "View Users",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = -2L,
-                            Code = "User.Create",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DiplayName = "Create User",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = -3L,
-                            Code = "User.Update",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DiplayName = "Update User",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = -4L,
-                            Code = "User.Delete",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DiplayName = "Delete User",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = -5L,
-                            Code = "User.Disable",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DiplayName = "Disable User",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = -6L,
-                            Code = "User.Block",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DiplayName = "User Block",
-                            IsDeleted = false
-                        });
                 });
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.RefreshToken", b =>
@@ -278,40 +283,6 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Code = "SuperAdmin",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            Name = "Super Administrator"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Code = "Admin",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            Name = "Administrator"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Code = "Manager",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            Name = "Manager"
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Code = "User",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            Name = "User"
-                        });
                 });
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.RolePermission", b =>
@@ -350,24 +321,6 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RolePermissions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            PermissionId = -1L,
-                            RoleId = 1L
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            PermissionId = -2L,
-                            RoleId = 1L
-                        });
                 });
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.User", b =>
@@ -394,6 +347,9 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("ForcePasswordChange")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -411,6 +367,9 @@ namespace KiaKooshar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("LastPasswordResetChange")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("NationalCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -418,6 +377,9 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("PasswordResetedBy")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -431,6 +393,9 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("StatusChangedBy")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -446,20 +411,20 @@ namespace KiaKooshar.Infrastructure.Migrations
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.UserRole", b =>
                 {
-                    b.Property<long>("UserId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -470,9 +435,15 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId", "RoleId")
+                        .IsUnique();
 
                     b.ToTable("UserRoles");
                 });
@@ -581,6 +552,30 @@ namespace KiaKooshar.Infrastructure.Migrations
                     b.ToTable("UploadedFiles");
                 });
 
+            modelBuilder.Entity("KiaKooshar.Domain.Entities.Identies.UserPermission", b =>
+                {
+                    b.HasOne("KiaKooshar.Domain.Entities.Identity.User", null)
+                        .WithMany()
+                        .HasForeignKey("GrantedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KiaKooshar.Domain.Entities.Identity.Permission", "Permission")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("KiaKooshar.Domain.Entities.Identity.User", "User")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.RefreshToken", b =>
                 {
                     b.HasOne("KiaKooshar.Domain.Entities.Identity.User", "User")
@@ -652,6 +647,8 @@ namespace KiaKooshar.Infrastructure.Migrations
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.Permission", b =>
                 {
                     b.Navigation("RolePermissions");
+
+                    b.Navigation("UserPermissions");
                 });
 
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.Role", b =>
@@ -664,6 +661,8 @@ namespace KiaKooshar.Infrastructure.Migrations
             modelBuilder.Entity("KiaKooshar.Domain.Entities.Identity.User", b =>
                 {
                     b.Navigation("RefreshToken");
+
+                    b.Navigation("UserPermissions");
 
                     b.Navigation("UserRole");
 

@@ -63,6 +63,10 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                     (
                         "Invalid email or password"
                     );
+            if ( user.IsDeleted )
+                return ResultDTO<LoginResponseDTO>.Unauthorized (
+                    "Invalid email or password"
+                );
             var isCorrect = _passwordHasher.VerifyPassword (
                     user.PasswordHash,
                     request.Password
@@ -75,10 +79,12 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 (
                     user.Id
                 );
+
             var roleNames = await _unit.Users.GetUserRoles
                 (
                     user.Id
                 );
+
             var cacheModel = new UserAuthorizationCacheModel
             {
                 UserId = user.Id,
@@ -123,7 +129,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 RefreshToken = refreshToken,
                 User = user
             };
-            _userSession.AddAsync (userSession);
+            await _userSession.AddAsync (userSession);
             await _unit.CommitAsync (cancellationToken);
             return ResultDTO<LoginResponseDTO>.Success (
                 new LoginResponseDTO

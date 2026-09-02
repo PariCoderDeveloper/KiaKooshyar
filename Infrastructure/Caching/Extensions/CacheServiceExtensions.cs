@@ -3,6 +3,7 @@ using KiaKooshar.Infrastructure.Caching.Options;
 using KiaKooshar.Infrastructure.Caching.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace KiaKooshar.Infrastructure.Caching.Extensions
 {
@@ -23,9 +24,18 @@ namespace KiaKooshar.Infrastructure.Caching.Extensions
             switch ( cacheSettings.Provider?.ToLowerInvariant () )
             {
                 case "redis":
+                    services.AddSingleton<IConnectionMultiplexer> (sp =>
+                    {
+                        var options = ConfigurationOptions.Parse (
+                            configuration.GetConnectionString ("Redis")
+                        );
+                        options.AbortOnConnectFail = false;
+                        return ConnectionMultiplexer.Connect (options);
+                    });
                     services.AddScoped<ICacheService, RedisCacheService> ();
                     break;
                 case "memory":
+                    services.AddMemoryCache ();
                     services.AddScoped<ICacheService, MemoryCacheService> ();
                     break;
                 default:

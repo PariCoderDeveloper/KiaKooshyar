@@ -12,6 +12,7 @@ namespace KiaKooshar.Application.Construct.DataBases
         public IRefreshTokenRepository RefreshToken { get; }
         public IUserSessionRepository UserSessions { get; }
         public IUploadedFileRepository UploadedFile { get; }
+        public IUserPermissionRepository UserPermission { get; }
         public Task<int> CommitAsync (
             CancellationToken cancellationToken = default
             );

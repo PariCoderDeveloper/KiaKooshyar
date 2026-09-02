@@ -25,7 +25,7 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Queries.GetC
             CancellationToken cancellationToken
             )
         {
-            var user = _unit.Users.GetByIdAsync (
+            var user = await _unit.Users.GetByIdAsync (
                 request.Id,
                 cancellationToken
                 );

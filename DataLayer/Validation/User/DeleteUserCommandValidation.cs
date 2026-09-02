@@ -8,7 +8,7 @@ namespace KiaKooshar.Application.Validation.User
     {
         public DeleteUserCommandValidation ()
         {
-            RuleFor (x => x.Id)
+            RuleFor (x => x.UserId)
                 .GreaterThan (0)
                 .WithMessage ("User id must be greater than zero.");
         }

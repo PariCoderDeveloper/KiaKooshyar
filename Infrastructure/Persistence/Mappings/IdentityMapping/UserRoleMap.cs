@@ -6,25 +6,27 @@ namespace KiaKooshar.Infrastructure.Persistence.Mappings.IdentityMapping
 {
     public class UserRoleMap : IEntityTypeConfiguration<UserRole>
     {
-        public void Configure(EntityTypeBuilder<UserRole> builder)
+        public void Configure ( EntityTypeBuilder<UserRole> builder )
         {
+            builder.HasKey (x => x.Id);
 
             builder
-                .HasOne(x => x.User)
-                .WithMany(x => x.UserRole)
-                .HasForeignKey(x => x.UserId);
+                .HasOne (x => x.User)
+                .WithMany (x => x.UserRole)
+                .HasForeignKey (x => x.UserId);
 
             builder
-                .HasOne(x => x.Role)
-                .WithMany(x => x.UserRole)
-                .HasForeignKey(x => x.RoleId);
+                .HasOne (x => x.Role)
+                .WithMany (x => x.UserRole)
+                .HasForeignKey (x => x.RoleId);
 
             builder
-                .HasKey(x => new
+                .HasIndex (x => new
                 {
-                     x.UserId,
-                     x.RoleId
-                });
+                    x.UserId,
+                    x.RoleId
+                })
+                .IsUnique ();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace KiaKooshar.Application.Features.Identities.Users.Handlers.Commands
             CancellationToken cancellationToken
             )
         {
-            var user = await _unit.Users.GetByIdAsync (request.Id);
+            var user = await _unit.Users.GetByIdAsync (request.UserId);
             if ( user is null )
                 return ResultDTO<GetUserByIdDTO>.NotFound ("User not found");
             _unit.Users.Delete (user);

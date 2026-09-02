@@ -28,7 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Admin\V2\" />
+    <Folder Include="Controllers\Admin\AdminAuthorization\V2\" />
+    <Folder Include="Controllers\Admin\UserManagment\V2\" />
   </ItemGroup>
 
 </Project>

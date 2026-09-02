@@ -14,7 +14,7 @@ namespace KiaKooshar.Application.Features.Interfaces.Repositories
             CancellationToken cancellationToken = default
             );
 
-        IQueryable<RefreshToken> GetRefreshTokenById (
+        IQueryable<RefreshToken> GetRefreshTokenByUserId (
             long userId,
             CancellationToken cancellationToken = default
             );

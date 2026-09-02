@@ -18,24 +18,22 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Generic
             _dbSet = context.Set<T> ();
         }
 
-        public virtual async Task<T> GetByIdAsync (
+        public virtual async Task<T?> GetByIdAsync (
             long id,
             CancellationToken cancellationToken
             )
         {
-            cancellationToken.ThrowIfCancellationRequested ();
             return await _dbSet
                 .Where (e => e.Id == id)
-                .FirstOrDefaultAsync ();
+                .FirstOrDefaultAsync (cancellationToken);
         }
-        public virtual async Task<List<T>> GetAllAsync (
+        public virtual IQueryable<T> GetAllAsync (
             CancellationToken cancellationToken
             )
         {
             cancellationToken.ThrowIfCancellationRequested ();
-            return await _dbSet
-                .AsNoTracking ()
-                .ToListAsync (cancellationToken);
+            return _dbSet
+                .AsNoTracking ();
         }
         public virtual async Task<List<T>> GetAllAsync (
             Expression<Func<T, bool>> wherePredicate,
@@ -76,7 +74,8 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Generic
                 query = query.Where (filter);
             if ( !string.IsNullOrWhiteSpace (request.SortBy) )
             {
-                var direction = request.SortDescending ? "descending" : "ascending";
+                var direction = request.SortDescending ?
+                    "descending" : "ascending";
                 query = query.OrderBy ($"{request.SortBy} {direction}");
             }
             var totalCount = await query.CountAsync (cancellationToken);

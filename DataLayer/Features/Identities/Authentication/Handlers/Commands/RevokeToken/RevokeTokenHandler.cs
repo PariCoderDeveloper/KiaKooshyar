@@ -24,6 +24,10 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 request.RefreshToken,
                 cancellationToken
                 );
+            if ( tokenResult is null )
+                return ResultDTO.NotFound (
+                    "Refresh token is invalid"
+                    );
             if ( string.IsNullOrWhiteSpace (request.RefreshToken) )
                 return ResultDTO.Success (
                     "Refresh token revoked."

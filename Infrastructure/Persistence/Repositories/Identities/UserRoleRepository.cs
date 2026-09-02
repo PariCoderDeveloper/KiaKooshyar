@@ -2,6 +2,8 @@
 using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Domain.Entities.Identity;
 using KiaKooshar.Infrastructure.Persistence.Repositories.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
 {
@@ -26,6 +28,44 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                     userRoles,
                     cancellationToken
                 );
+        }
+        public async Task<List<long>> GetExistingRoleIdsForUserAsync (
+            long userId,
+            List<long> roleId,
+            CancellationToken cancellationToken = default
+            )
+        {
+            return await _context.UserRoles
+                 .Where (x =>
+                     x.UserId == userId &&
+                     roleId.Contains (x.RoleId))
+                 .Select (x => x.Id)
+                 .ToListAsync ();
+        }
+        public async Task<UserRole?> GetExistingRoleIdForUserAsync (
+                long userId,
+                long roleId,
+                CancellationToken cancellationToken = default
+            )
+        {
+            return await _context.UserRoles
+                .Where (x =>
+                    x.UserId == userId &&
+                    x.RoleId == roleId)
+                .FirstOrDefaultAsync (cancellationToken);
+        }
+        public async Task<UserRole?> GetUserRoleAsync (
+            Expression<Func<UserRole, bool>> wherePeredicate,
+            long roleId,
+            CancellationToken cancellationToken = default
+            )
+        {
+            return await _context.UserRoles
+                .Where (x =>
+                    x.RoleId == roleId)
+                .Where (wherePeredicate)
+                .FirstOrDefaultAsync
+                    (cancellationToken);
         }
     }
 }

@@ -3,6 +3,7 @@ using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Domain.Entities.Identity;
 using KiaKooshar.Infrastructure.Persistence.Repositories.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
 {
@@ -32,7 +33,7 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                 .ToListAsync ();
             return userPermission;
         }
-        public async Task<User> GetUserByEmail (
+        public async Task<User?> GetUserByEmail (
             string email,
             CancellationToken cancellationToken = default
             )
@@ -54,6 +55,18 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                 .Select (x => x.Role.Name)
                 .ToListAsync ();
             return roleNames;
+        }
+
+        public async Task<User?> GetUserByChangingValues (
+            Expression<Func<User, bool>> wherePredicate,
+            CancellationToken cancellationToken = default
+            )
+        {
+            return await _context.Users
+                .Where (wherePredicate)
+                .FirstOrDefaultAsync (
+                    cancellationToken
+                    );
         }
     }
 }

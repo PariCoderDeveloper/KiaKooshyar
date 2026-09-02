@@ -30,7 +30,17 @@ builder.Services.AddControllers ();
 
 builder.Services.AddDbContext<DatabaseContext> (options =>
 {
-    options.UseSqlServer (builder.Configuration.GetConnectionString ("DefaultConnection"));
+    options.UseSqlServer (
+        builder.Configuration.GetConnectionString
+            ("DefaultConnection"),
+        sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure (
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds (30),
+                errorNumbersToAdd: null
+            );
+        });
 });
 
 #endregion
@@ -55,7 +65,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher> ();
 builder.Services.AddScoped<IBaseLogger, BaseLogger> ();
 #endregion
 #region Authorization
-builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler> ();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler> ();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider> ();
 #endregion
 #region ApiVersion
@@ -81,11 +91,26 @@ builder.Services.AddTransient<
 builder.Host.UseSerilog ();
 
 builder.Services.AddAuthorization ();
-
+#region SignalR
+builder.Services.AddSignalR ();
+builder.Services.AddCors (options =>
+{
+    options.AddPolicy ("AngularClient", policy =>
+    {
+        policy.WithOrigins ("https://localhost:4200")
+            .AllowAnyHeader ()
+            .AllowAnyMethod ()
+            .AllowCredentials ();
+    });
+});
+#endregion
 var stopwatch = Stopwatch.StartNew ();
 
 var app = builder.Build ();
 
+#region SignalR
+app.UseCors ("AngularClient");
+#endregion
 #region HealthCheckMap
 app.MapHealthChecks ("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
 {

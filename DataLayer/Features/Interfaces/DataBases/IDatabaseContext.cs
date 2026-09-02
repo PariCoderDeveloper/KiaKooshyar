@@ -1,5 +1,7 @@
 ﻿using KiaKooshar.Domain.Entities.Audit;
+using KiaKooshar.Domain.Entities.Identies;
 using KiaKooshar.Domain.Entities.Identity;
+using KiaKooshar.Domain.Entities.UploadFile;
 using Microsoft.EntityFrameworkCore;
 
 namespace KiaKooshar.Application.Construct.DataBases
@@ -14,6 +16,8 @@ namespace KiaKooshar.Application.Construct.DataBases
         public DbSet<RefreshToken> RefreshTokens { get; }
         public DbSet<UserSession> UserSessions { get; }
         public DbSet<AuditLog> AuditLogs { get; }
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
+        public DbSet<UserPermission> UserPermissions { get; set; }
         public Task<int> SaveChangesAsync (
             bool acceptAllChangesOnSuccess,
             CancellationToken cancellationToken = new CancellationToken ()

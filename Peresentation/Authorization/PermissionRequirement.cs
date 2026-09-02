@@ -2,12 +2,18 @@
 
 namespace KiaKooshar.Peresentation.Authorization
 {
-    public class PermissionRequirement : IAuthorizationRequirement
+    public class PermissionRoleRequirement
+        : IAuthorizationRequirement
     {
-        public string Permission { get; } = null!;
-        public PermissionRequirement ( string permission )
+        public string? Permission { get; } = null!;
+        public string? RequiredRole { get; set; }
+        public PermissionRoleRequirement (
+            string? permission,
+            string? requiredRole
+            )
         {
             Permission = permission;
+            RequiredRole = requiredRole;
         }
     }
 }

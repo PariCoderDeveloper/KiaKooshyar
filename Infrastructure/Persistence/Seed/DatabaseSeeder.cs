@@ -31,12 +31,19 @@ namespace KiaKooshar.Infrastructure.Persistence.Seed
 
             if ( newPermissions.Count == 0 )
                 return;
+            await ExecuteWithIdentityInsertAsync (
+                context,
+                "Permissions",
+                async () =>
+                {
+                    await context.Permissions.AddRangeAsync (
+                        newPermissions,
+                        cancellationToken);
 
-            await context.Permissions.AddRangeAsync (
-                newPermissions,
-                cancellationToken);
-
-            await context.SaveChangesAsync (cancellationToken);
+                    await context.SaveChangesAsync (cancellationToken);
+                },
+                cancellationToken
+                );
         }
         private static async Task SeedRoleAsync (
             DatabaseContext context,
@@ -56,12 +63,51 @@ namespace KiaKooshar.Infrastructure.Persistence.Seed
             if ( newRoles.Count == 0 )
                 return;
 
-            await context.Roles.AddRangeAsync (
-                newRoles,
-                cancellationToken
-                );
+            await ExecuteWithIdentityInsertAsync (
+                context,
+                "Roles",
+                async () =>
+                {
+                    await context.Roles.AddRangeAsync (
+                       newRoles,
+                       cancellationToken
+                       );
+                    await context.SaveChangesAsync (cancellationToken);
+                },
+                cancellationToken);
+        }
+        private static async Task ExecuteWithIdentityInsertAsync (
+            DatabaseContext context,
+            string tableName,
+            Func<Task> action,
+            CancellationToken cancellationToken = default
+            )
+        {
+            var strategy = context.Database.CreateExecutionStrategy ();
 
-            await context.SaveChangesAsync (cancellationToken);
+            await strategy.ExecuteAsync (async () =>
+            {
+                await context.Database.OpenConnectionAsync (cancellationToken);
+
+                try
+                {
+                    await context.Database.ExecuteSqlRawAsync (
+                        $"SET IDENTITY_INSERT dbo.{tableName} ON",
+                        cancellationToken
+                        );
+
+                    await action ();
+
+                    await context.Database.ExecuteSqlRawAsync (
+                        $"SET IDENTITY_INSERT dbo.{tableName} OFF",
+                        cancellationToken
+                        );
+                }
+                finally
+                {
+                    await context.Database.CloseConnectionAsync ();
+                }
+            });
         }
     }
 }

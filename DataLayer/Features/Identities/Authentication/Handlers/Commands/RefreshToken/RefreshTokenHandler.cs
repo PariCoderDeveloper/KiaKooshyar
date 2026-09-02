@@ -31,7 +31,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         {
             var refreshToken = await _unit.RefreshToken.FindByTokenAsync
                 (
-                    request.RefreshToken
+                    request.RefreshToken,
+                    cancellationToken
                 );
             if ( refreshToken is null )
                 return ResultDTO<ResponseRefreshTokenDTO>.Unauthorized
@@ -48,16 +49,37 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                     (
                         "Refresh token expired"
                     );
+
+            var userSession = await _unit.UserSessions
+                .GetUserSessionByRefreshTokenId (
+                    refreshToken.Id,
+                    cancellationToken
+                    );
+            if ( userSession is null )
+                return ResultDTO<ResponseRefreshTokenDTO>.Unauthorized
+                   (
+                       "Invalid user session"
+                   );
+            if ( !userSession.IsActive )
+                return ResultDTO<ResponseRefreshTokenDTO>.Unauthorized
+                   (
+                       "Invalid user session"
+                   );
+            if ( userSession.LogoutTime is not null )
+                return ResultDTO<ResponseRefreshTokenDTO>.Unauthorized
+                   (
+                       "Invalid user session"
+                   );
+            if ( userSession.IsDeleted )
+                return ResultDTO<ResponseRefreshTokenDTO>.Unauthorized
+                   (
+                       "Invalid user session"
+                   );
+
             refreshToken.UpdatedAt = DateTime.UtcNow;
-            var user = await _unit.Users.GetByIdAsync
-                (
-                    refreshToken.UserId
-                );
-            if ( user is null )
-                return ResultDTO<ResponseRefreshTokenDTO>.NotFound ("User does not found");
             var accessToken = _jwtProvider.GenerateAccessToken
                 (
-                   user.Id
+                   refreshToken.UserId
                 );
             refreshToken.AccessToken = accessToken;
             await _unit.CommitAsync ();

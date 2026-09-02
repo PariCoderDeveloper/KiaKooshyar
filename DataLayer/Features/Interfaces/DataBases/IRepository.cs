@@ -1,5 +1,4 @@
-﻿using KiaKooshar.Application.Common.Models;
-using KiaKooshar.Domain.Entities.BaseEntities;
+﻿using KiaKooshar.Domain.Entities.BaseEntities;
 using System.Linq.Expressions;
 
 namespace KiaKooshar.Application.Construct.DataBases
@@ -11,7 +10,7 @@ namespace KiaKooshar.Application.Construct.DataBases
             long id,
             CancellationToken cancellationToken = default
         );
-        Task<List<T>> GetAllAsync (
+        IQueryable<T> GetAllAsync (
             CancellationToken cancellationToken = default
         );
         Task<List<T>> GetAllAsync (
@@ -25,11 +24,5 @@ namespace KiaKooshar.Application.Construct.DataBases
         void Delete<T> (
             T entity
         ) where T : BaseEntity;
-
-        Task<PagedResult<T>> GetPagedAsync (
-          PaginationRequest request,
-          Expression<Func<T, bool>>? filter = null,
-          CancellationToken cancellationToken = default
-          );
     }
 }

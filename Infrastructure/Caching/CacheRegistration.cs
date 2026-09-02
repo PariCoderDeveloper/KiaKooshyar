@@ -1,4 +1,4 @@
-﻿using KiaKooshar.Infrastructure.Caching.Seed;
+﻿using KiaKooshar.Application.Features.Interfaces.Cache;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KiaKooshar.Infrastructure.Caching
@@ -12,8 +12,8 @@ namespace KiaKooshar.Infrastructure.Caching
         {
             using var scope = service.CreateScope ();
             var userCacheSeeder = scope.ServiceProvider
-                .GetRequiredService<UserCacheSeeder> ();
-            await userCacheSeeder.SeedAsync (cancellationToken);
+                .GetRequiredService<IUserCacheSeeder> ();
+            await userCacheSeeder.SeedToCacheAsync (cancellationToken);
         }
     }
 }

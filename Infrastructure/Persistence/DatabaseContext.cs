@@ -1,5 +1,7 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Features.Interfaces.CurrentUser;
+using KiaKooshar.Domain.Entities.BaseEntities;
+using KiaKooshar.Domain.Entities.Identies;
 using KiaKooshar.Domain.Entities.Identity;
 using KiaKooshar.Domain.Entities.UploadFile;
 using KiaKooshar.Infrastructure.AuditLog;
@@ -27,6 +29,7 @@ namespace KiaKooshar.Infrastructure.Persistence
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<UploadedFile> UploadedFiles { get; set; }
+        public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<KiaKooshar.Domain.Entities.Audit.AuditLog> AuditLogs { get; set; }
         public override Task<int> SaveChangesAsync (
             bool acceptAllChangesOnSuccess,
@@ -36,7 +39,25 @@ namespace KiaKooshar.Infrastructure.Persistence
         public override async Task<int> SaveChangesAsync (
             CancellationToken cancellationToken = default
             )
+
         {
+            var now = DateTime.UtcNow;
+
+            foreach ( var entry in ChangeTracker.Entries<BaseEntity> () )
+            {
+                if ( entry.State == EntityState.Added )
+                {
+                    entry.Entity.GetType ().GetProperty (
+                        nameof (BaseEntity.CreatedAt))?
+                        .SetValue (entry.Entity, now);
+                }
+                else if ( entry.State == EntityState.Modified )
+                {
+                    entry.Entity.GetType ().GetProperty (
+                        nameof (BaseEntity.UpdatedAt))?
+                        .SetValue (entry.Entity, now);
+                }
+            }
             var auditEntries = OnBeforeSaveChanges ();
             var result = await base.SaveChangesAsync (cancellationToken);
             await OnAfterSaveChanges (auditEntries, cancellationToken);
@@ -45,7 +66,8 @@ namespace KiaKooshar.Infrastructure.Persistence
         protected override void OnModelCreating ( ModelBuilder modelBuilder )
         {
             base.OnModelCreating (modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly (typeof (DatabaseContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly
+                (typeof (DatabaseContext).Assembly);
             SoftDeleteFilter.ApplySoftDeleteQueryFilter (modelBuilder);
             RowVersionFilter.ApplyRowVersionConcurrencyToken (modelBuilder);
         }
@@ -53,7 +75,9 @@ namespace KiaKooshar.Infrastructure.Persistence
         {
             ChangeTracker.DetectChanges ();
             var auditEntries = new List<AuditEntry> ();
-            foreach ( var entry in ChangeTracker.Entries () )
+            var entries = ChangeTracker.Entries ().ToList ();
+
+            foreach ( var entry in entries )
             {
                 if ( entry.Entity is KiaKooshar.Domain.Entities.Audit.AuditLog ||
                     entry.State == EntityState.Detached ||
