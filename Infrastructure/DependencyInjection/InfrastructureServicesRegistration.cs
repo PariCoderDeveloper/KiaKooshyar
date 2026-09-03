@@ -6,6 +6,7 @@ using KiaKooshar.Application.Features.Interfaces.CurrentUser;
 using KiaKooshar.Application.Features.Interfaces.Files;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
 using KiaKooshar.Application.Features.Interfaces.Jobs;
+using KiaKooshar.Application.Features.Interfaces.SignalR;
 using KiaKooshar.Application.Features.Jobs;
 using KiaKooshar.Infrastructure.BackgroundJobs;
 using KiaKooshar.Infrastructure.Caching.Extensions;
@@ -15,7 +16,9 @@ using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Jwt;
 using KiaKooshar.Infrastructure.RateLimiting;
 using KiaKooshar.Infrastructure.Services;
+using KiaKooshar.Infrastructure.SignalRHub;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -84,6 +87,12 @@ namespace KiaKooshar.Infrastructure.DependencyInjection
             #endregion
             #region CacheSeeder
             services.AddScoped<IUserCacheSeeder, UserCacheSeeder> ();
+            #endregion
+
+            #region signalR
+            services.AddSignalR ();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider> ();
+            services.AddScoped<IUserNotificationService, UserNotificationService> ();
             #endregion
             services.AddScoped<IJwtProvider, JwtProvider> ();
             services.AddScoped<IRequestContext, HttpRequestContext> ();

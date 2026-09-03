@@ -67,5 +67,15 @@ namespace KiaKooshar.Infrastructure.Persistence.Repositories.Identities
                 .FirstOrDefaultAsync
                     (cancellationToken);
         }
+        public async Task<List<long>> GetUserRoles (
+            long roleId,
+            CancellationToken cancellationToken = default
+            )
+        {
+            return await _context.UserRoles
+                .Where (x => x.RoleId == roleId)
+                .Select (x => x.Id)
+                .ToListAsync (cancellationToken);
+        }
     }
 }

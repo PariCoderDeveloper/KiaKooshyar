@@ -52,8 +52,4 @@
     <ProjectReference Include="..\DataLayer\KiaKooshar.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="SignalRHub\" />
-  </ItemGroup>
-
 </Project>

@@ -25,5 +25,9 @@ namespace KiaKooshar.Application.Features.Interfaces.Repositories
                 long roleId,
                 CancellationToken cancellationToken = default
             );
+        Task<List<long>> GetUserRoles (
+            long roleId,
+            CancellationToken cancellationToken = default
+            );
     }
 }

@@ -12,6 +12,7 @@ using KiaKooshar.Infrastructure.DependencyInjection;
 using KiaKooshar.Infrastructure.Persistence;
 using KiaKooshar.Infrastructure.Persistence.Authentication.Security;
 using KiaKooshar.Infrastructure.Persistence.Logger;
+using KiaKooshar.Infrastructure.SignalRHub;
 using KiaKooshar.Peresentation.Authorization;
 using KiaKooshar.Peresentation.Middleware;
 using KiaKooshar.Peresentation.Swagger;
@@ -108,9 +109,6 @@ var stopwatch = Stopwatch.StartNew ();
 
 var app = builder.Build ();
 
-#region SignalR
-app.UseCors ("AngularClient");
-#endregion
 #region HealthCheckMap
 app.MapHealthChecks ("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
 {
@@ -164,5 +162,9 @@ app.UseSwaggerUI (options =>
         "KiaKooshar.Presentation V2");
 });
 app.MapControllers ();
+
+#region MapHubs
+app.MapHub<NotificationHub> ("/hubs/notification");
+#endregion
 
 app.Run ();
