@@ -42,6 +42,7 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.17" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.17" />
     <PackageReference Include="Polly" Version="8.7.0" />
+    <PackageReference Include="SkiaSharp" Version="4.151.2" />
     <PackageReference Include="StackExchange.Redis" Version="3.0.17" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.21.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.7.3" />

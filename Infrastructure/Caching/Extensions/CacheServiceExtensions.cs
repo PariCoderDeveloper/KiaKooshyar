@@ -35,7 +35,6 @@ namespace KiaKooshar.Infrastructure.Caching.Extensions
                     services.AddScoped<ICacheService, RedisCacheService> ();
                     break;
                 case "memory":
-                    services.AddMemoryCache ();
                     services.AddScoped<ICacheService, MemoryCacheService> ();
                     break;
                 default:

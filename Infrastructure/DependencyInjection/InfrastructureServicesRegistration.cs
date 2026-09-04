@@ -2,6 +2,7 @@
 using Hangfire.SqlServer;
 using KiaKooshar.Application.Features.Construct.JWT;
 using KiaKooshar.Application.Features.Interfaces.Cache;
+using KiaKooshar.Application.Features.Interfaces.Captcha;
 using KiaKooshar.Application.Features.Interfaces.CurrentUser;
 using KiaKooshar.Application.Features.Interfaces.Files;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
@@ -93,6 +94,10 @@ namespace KiaKooshar.Infrastructure.DependencyInjection
             services.AddSignalR ();
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider> ();
             services.AddScoped<IUserNotificationService, UserNotificationService> ();
+            #endregion
+            #region Capcha
+            services.AddMemoryCache ();
+            services.AddScoped<ICaptchaService, CaptchaService> ();
             #endregion
             services.AddScoped<IJwtProvider, JwtProvider> ();
             services.AddScoped<IRequestContext, HttpRequestContext> ();

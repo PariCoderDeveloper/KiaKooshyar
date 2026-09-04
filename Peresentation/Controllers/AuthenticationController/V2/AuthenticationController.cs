@@ -39,7 +39,7 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V2
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict,
+                        SameSite = SameSiteMode.None,
                         Expires = loginResult.Data.AccessTokenExpiration
                     }
                     );
@@ -50,7 +50,7 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V2
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict,
+                        SameSite = SameSiteMode.None,
                         Expires = loginResult.Data.RefreshTokenExpiration
                     }
                     );
@@ -76,7 +76,7 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V2
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict,
+                        SameSite = SameSiteMode.None,
                         Expires = result.Data.AccessTokenExpiration
                     });
             return ResultExtensions.ToActionResult (result);

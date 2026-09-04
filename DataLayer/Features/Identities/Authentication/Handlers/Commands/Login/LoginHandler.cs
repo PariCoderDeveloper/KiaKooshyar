@@ -10,6 +10,7 @@ using KiaKooshar.Application.DTOs.Identities.Users.Queries;
 using KiaKooshar.Application.Features.Construct.JWT;
 using KiaKooshar.Application.Features.Construct.Logging;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Login;
+using KiaKooshar.Application.Features.Interfaces.Captcha;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
 using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Application.Logging;
@@ -29,6 +30,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IBaseLogger _logger;
         private readonly IRequestContext _requestContext;
         private readonly IUserSessionRepository _userSession;
+        private readonly ICaptchaService _captchaService;
+
         public LoginHandler (
             IJwtProvider jwtProvider,
             IUnitOfWork unit,
@@ -37,7 +40,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             ICacheService cache,
             IBaseLogger logger,
             IRequestContext requestContext,
-            IUserSessionRepository userSession
+            IUserSessionRepository userSession,
+            ICaptchaService captchaService
             )
         {
             _jwtProvider = jwtProvider;
@@ -48,12 +52,19 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             _logger = logger;
             _requestContext = requestContext;
             _userSession = userSession;
+            _captchaService = captchaService;
         }
         public async Task<ResultDTO<LoginResponseDTO>> Handle (
             LoginCommand request,
             CancellationToken cancellationToken
             )
         {
+            var isCaptchaValid = await _captchaService.ValidateAsync
+                (request.CaptchaId, request.CaptchaCode);
+            if ( !isCaptchaValid )
+                return ResultDTO<LoginResponseDTO>.BadRequest
+                    ("Security code is invalid");
+
             var user = await _unit.Users.GetUserByEmail (
                 request.Email,
                 cancellationToken
