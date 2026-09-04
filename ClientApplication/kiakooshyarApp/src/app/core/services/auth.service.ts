@@ -1,17 +1,22 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, tap } from "rxjs";
-import { ApiSrvice } from "./api.service";
+import { ApiService } from "./api.service";
 
 @Injectable({providedIn:"root"})
 export class AuthService {
     private loggedIn = false;
 
     constructor(
-       private api:ApiSrvice,
+       private api:ApiService,
        private router : Router
     ){}
-    public login(credentials: {username:string, password:string})
+    public login(credentials: {
+        email:string,
+        password:string,
+        captchaId:string,
+        captchaCode:string
+    })
        :Observable<any>{
             return this.api.post(
                 "Authentication",
@@ -38,6 +43,6 @@ export class AuthService {
     
     private handleLoggedOut():void{
         this.loggedIn = false;
-        this.router.
+      //  this.router.
     }
 }

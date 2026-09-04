@@ -9,7 +9,9 @@ export interface CaptchaResult {
 
 @Injectable({ providedIn: 'root' })
 export class CaptchaService {
-  constructor(private api: ApiService) {}
+  constructor(
+    private api: ApiService
+) {}
 
   public generate(): Observable<CaptchaResult> {
     return this.api.get<CaptchaResult>('captcha', 'generate');

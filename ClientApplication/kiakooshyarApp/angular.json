@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "77500233-6e43-47c2-a32e-4d7a958203c6"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -64,10 +65,12 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "kiakooshyarApp:build:production"
+              "buildTarget": "kiakooshyarApp:build:production",
+              "proxyConfig": "proxy.conf.json"
             },
             "development": {
-              "buildTarget": "kiakooshyarApp:build:development"
+              "buildTarget": "kiakooshyarApp:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

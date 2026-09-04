@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:kiakooshyarApp": "node dist/kiakooshyarApp/server/server.mjs"
+    "serve:ssr:kiakooshyarApp": "node --use-system-ca dist/kiakooshyarApp/server/server.mjs"
   },
   "private": true,
   "packageManager": "npm@11.3.0",
@@ -20,6 +20,7 @@
     "@angular/platform-server": "^22.1.0",
     "@angular/router": "^22.1.0",
     "@angular/ssr": "^22.1.7",
+    "@microsoft/signalr": "^10.0.11",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"

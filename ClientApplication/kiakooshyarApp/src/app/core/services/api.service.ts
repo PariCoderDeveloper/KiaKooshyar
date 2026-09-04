@@ -1,11 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from "../../environments/environment.prod";
 import { Observable } from "rxjs";
+import { environments } from "../../environments/environment";
 
 @Injectable({providedIn:"root"})
-export class ApiSrvice{
-    private readonly baseUrl = environment.apiUrl;
+export class ApiService{
+    private readonly baseUrl = environments.apiUrl;
     constructor(
         private http:HttpClient
     ){}
@@ -26,9 +26,11 @@ export class ApiSrvice{
         params? : any 
     ):Observable<T>{
         const url = this.buildUrl(controller,action);
-        return this.http.post<T>(url,{
-            withCredentials:true,
-            params
+        return this.http.post<T>(
+            url,
+            params,
+            {
+            withCredentials:true
         });
     }
     public put<T>(
@@ -37,10 +39,12 @@ export class ApiSrvice{
         params? : any 
     ):Observable<T>{
         const url = this.buildUrl(controller,action);
-        return this.http.put<T>(url,{
+        return this.http.put<T>(
+            url,
+            params,
+            {
             withCredentials:true,
-            params
-        });
+            });
     }
     public patch<T>(
         controller : string,
@@ -48,9 +52,11 @@ export class ApiSrvice{
         params? : any 
     ):Observable<T>{
         const url = this.buildUrl(controller,action);
-        return this.http.patch<T>(url,{
+        return this.http.patch<T>(
+            url,
+            params,
+            {
             withCredentials:true,
-            params
         });
     }
     public delete<T>(
