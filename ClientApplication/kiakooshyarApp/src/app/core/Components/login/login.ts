@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule,FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Capcha } from '../../../shared/component/capcha/capcha';
 import { CommonModule } from '@angular/common';
+import { AuthStateService } from '../../services/auth.state.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
   imports:[
     ReactiveFormsModule,
     CommonModule,
+    RouterLink,
     Capcha
   ]
 })
@@ -24,15 +26,15 @@ export class LoginComponent {
   captchaId: string = '';
   captchaCode: string = '';
 
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private authStateService : AuthStateService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 
@@ -78,10 +80,13 @@ export class LoginComponent {
     this.authService.login(loginPayload).subscribe({
       next: (response) => {
         this.isLoading = false;
+        var user = response.data.user;
+        this.authStateService.setRoles(user.roles);
+        this.authStateService.setPermissions(user.permissions);
         this.router.navigate(['/dashboard']);
       },
-      error: (error) => {
-        this.isLoading = true;
+      error: (error) => {  
+        this.isLoading = false;
         this.errorMessage = error.message;
       }
     });
