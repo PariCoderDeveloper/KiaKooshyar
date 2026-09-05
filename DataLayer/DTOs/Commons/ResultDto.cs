@@ -126,7 +126,8 @@ namespace KiaKooshar.Application.DTOs.Common
             {
                 Error = returnResultDTO.Error,
                 Message = returnResultDTO.Message,
-                IsSuccess = returnResultDTO.IsSuccess
+                IsSuccess = returnResultDTO.IsSuccess,
+                ResultStatus = returnResultDTO.ResultStatus
             })
         {
             Data = returnResultDTO.Data;

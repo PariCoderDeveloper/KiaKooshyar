@@ -7,7 +7,7 @@ namespace KiaKooshar.Peresentation.Extentions
     public static class ResultExtensions
     {
         public static IActionResult ToActionResult (
-                this ResultDTO resultDTO
+                ResultDTO resultDTO
             )
         {
             return resultDTO.ResultStatus switch
@@ -23,8 +23,8 @@ namespace KiaKooshar.Peresentation.Extentions
                     {
                         StatusCode = StatusCodes.Status403Forbidden
                     },
-                ResultStatus.ValidationError &
-                ResultStatus.Failure &
+                ResultStatus.ValidationError or
+                ResultStatus.Failure or
                 ResultStatus.BadRequest =>
                     new BadRequestObjectResult (resultDTO),
                 ResultStatus.Conflict =>
@@ -32,12 +32,9 @@ namespace KiaKooshar.Peresentation.Extentions
                 ResultStatus.ServerError =>
                     new ObjectResult (resultDTO)
                     {
-                        StatusCode = StatusCodes.Status404NotFound
+                        StatusCode = StatusCodes.Status500InternalServerError
                     },
-                _ => new OkObjectResult (resultDTO)
-                {
-                    StatusCode = StatusCodes.Status500InternalServerError
-                }
+
             };
         }
     }
