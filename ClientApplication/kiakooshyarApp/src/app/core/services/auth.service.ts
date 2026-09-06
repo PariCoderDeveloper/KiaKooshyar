@@ -31,6 +31,22 @@ export class AuthService {
                 "refresh-token"
             );
     }
+    public register(credentials:{
+      firstname: string,
+      lastname: string,
+      username: string,
+      email: string,
+      password: string,
+      captchaId: string,
+      captchaCode: string
+    })
+        :Observable<any>{
+            return this.api.post(
+                "user",
+                "registeruser",
+                credentials
+            );
+    }
     public logout():void{
         this.api.post(
             "Authentication",

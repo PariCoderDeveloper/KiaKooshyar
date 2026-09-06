@@ -1,13 +1,22 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from './core/Components/login/login';
+import { SignalRService } from './core/services/signalr.service';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
-  imports: [LoginComponent],
+  imports: [RouterOutlet],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {
+export class App implements OnInit{
   protected readonly title = signal('kiakooshyarApp');
+  signalRService = inject(SignalRService);
+  authService = inject(AuthService);
+  ngOnInit(): void {
+    this.signalRService.notification$.subscribe(reason =>{
+      alert(reason);
+      this.authService.logout();
+    });
+  }
 }
