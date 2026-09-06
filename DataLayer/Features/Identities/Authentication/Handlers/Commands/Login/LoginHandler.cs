@@ -75,7 +75,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                         "Invalid email or password"
                     );
             if ( user.IsDeleted )
-                return ResultDTO<LoginResponseDTO>.Unauthorized (
+                return ResultDTO<LoginResponseDTO>.Forbid (
                     "Invalid email or password"
                 );
             var isCorrect = _passwordHasher.VerifyPassword (
@@ -83,7 +83,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                     request.Password
             );
             if ( !isCorrect )
-                return ResultDTO<LoginResponseDTO>.Unauthorized (
+                return ResultDTO<LoginResponseDTO>.Forbid (
                     "Invalid email or password"
                     );
             var userPermission = await _unit.Users.GetUserPermissions
@@ -153,6 +153,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                     {
                         Id = user.Id,
                         Username = user.UserName,
+                        Roles = roleNames,
+                        Permissions = userPermission
                     }
                 },
                 "Login successful"

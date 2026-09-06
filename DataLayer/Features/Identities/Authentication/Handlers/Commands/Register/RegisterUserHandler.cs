@@ -4,6 +4,7 @@ using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.DTOs.Commons;
 using KiaKooshar.Application.Features.Identities.Authentication.Requests.Commands.Authentication.Register;
+using KiaKooshar.Application.Features.Interfaces.Captcha;
 using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Domain.Entities.Identity;
 using MediatR;
@@ -19,13 +20,15 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IUserRepository _userRepository;
         private readonly IUserRoleRepository _userRoleRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly ICaptchaService _captchaService;
         public RegisterUserHandler (
             IPasswordHasher passwordHasher,
             IMapper mapper,
             IUserRepository userRepository,
             IUnitOfWork unit,
             IUserRoleRepository userRoleRepository,
-            IRoleRepository roleRepository
+            IRoleRepository roleRepository,
+            ICaptchaService captchaService
             )
         {
             _mapper = mapper;
@@ -34,6 +37,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             _userRoleRepository = userRoleRepository;
             _unit = unit;
             _roleRepository = roleRepository;
+            _captchaService = captchaService;
         }
         public async Task<ResultDTO<ReturnUserDTO>> Handle
             (
@@ -41,6 +45,12 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             CancellationToken cancellationToken
             )
         {
+            var isCaptchaValid = await _captchaService.ValidateAsync
+                (request.CaptchaId, request.CaptchaCode);
+            if ( !isCaptchaValid )
+                return ResultDTO<ReturnUserDTO>.BadRequest
+                    ("Security code is invalid");
+
             var user = _mapper.Map<Domain.Entities.Identity.User> (
                 request.RegisterUserDTO
                 );
