@@ -61,7 +61,7 @@ namespace KiaKooshar.Infrastructure.Caching.Services
         public async Task SetAsync<T> (
             string key,
             T value,
-            CacheExpiration expiration,
+            CacheExpiration? expiration,
             CancellationToken cancellationToken = default
             )
         {
@@ -70,7 +70,9 @@ namespace KiaKooshar.Infrastructure.Caching.Services
             await _database.StringSetAsync (
                 key,
                 json,
-                expiration.AbsoluteExpiration
+                  expiration is not null
+                    ? new Expiration (expiration.AbsoluteExpiration)
+                    : Expiration.Default
                 );
         }
     }

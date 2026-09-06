@@ -1,5 +1,4 @@
 ﻿using KiaKooshar.Application.Caching.Contracts;
-using KiaKooshar.Application.Caching.Policies;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Identities.Cache;
 using KiaKooshar.Application.Features.Interfaces.Cache;
@@ -96,7 +95,7 @@ namespace KiaKooshar.Infrastructure.Caching.Seed
                 await _cacheService.SetAsync (
                     $"users:{user.Id}",
                     user,
-                    CachePolicy.Medium,
+                    null,
                     cancellationToken
                     );
             }

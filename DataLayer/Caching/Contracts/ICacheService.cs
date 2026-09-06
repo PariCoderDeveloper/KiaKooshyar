@@ -11,7 +11,7 @@ namespace KiaKooshar.Application.Caching.Contracts
         Task SetAsync<T> (
             string key,
             T value,
-            CacheExpiration expiration,
+            CacheExpiration? expiration,
             CancellationToken cancellationToken = default
             );
         Task RemoveAsync (
