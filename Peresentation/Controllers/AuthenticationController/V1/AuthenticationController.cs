@@ -25,6 +25,7 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
             _mediator = mediator;
         }
         [HttpPost ("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login (
             LoginCommand loginCommand
             )
@@ -58,6 +59,7 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
             }
             return ResultExtensions.ToActionResult (loginResult);
         }
+        [AllowAnonymous]
         [EnableRateLimiting (RateLimitPolicy.RefreshToken)]
         [HttpPost ("refresh-token")]
         public async Task<IActionResult> RefreshToken ()

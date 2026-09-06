@@ -10,5 +10,9 @@ namespace KiaKooshar.Infrastructure.SignalRHub
         {
             await base.OnConnectedAsync ();
         }
+        public override Task OnDisconnectedAsync ( Exception? exception )
+        {
+            return base.OnDisconnectedAsync (exception);
+        }
     }
 }

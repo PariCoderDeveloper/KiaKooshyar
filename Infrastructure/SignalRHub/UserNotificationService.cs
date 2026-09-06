@@ -19,7 +19,7 @@ namespace KiaKooshar.Infrastructure.SignalRHub
             )
         {
             await _hubContext.Clients.User (userId)
-                .SendAsync ("Force Logout", reason);
+                .SendAsync ("ForceLogout", reason);
         }
 
         public async Task NotifyForceLogoutAsync (

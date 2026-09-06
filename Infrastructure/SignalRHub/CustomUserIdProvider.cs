@@ -10,8 +10,9 @@ namespace KiaKooshar.Infrastructure.SignalRHub
             HubConnectionContext connection
             )
         {
-            return connection.User?.FindFirst
-                (JwtRegisteredClaimNames.Sub).Value;
+            return connection.User?.FindFirst (
+                JwtRegisteredClaimNames.Sub
+                )?.Value;
         }
     }
 }

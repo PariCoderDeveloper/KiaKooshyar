@@ -111,9 +111,15 @@ namespace KiaKooshar.Infrastructure.Persistence.Authentication.Security
                 var prfValue = ReadUInt32BigEndian (decoded, 1);
                 prf = prfValue switch
                 {
-                    0 => KeyDerivationPrf.HMACSHA1,
-                    1 => KeyDerivationPrf.HMACSHA256,
-                    2 => KeyDerivationPrf.HMACSHA512,
+                    (uint) KeyDerivationPrf.HMACSHA1 =>
+                        KeyDerivationPrf.HMACSHA1,
+
+                    (uint) KeyDerivationPrf.HMACSHA256 =>
+                        KeyDerivationPrf.HMACSHA256,
+
+                    (uint) KeyDerivationPrf.HMACSHA512 =>
+                        KeyDerivationPrf.HMACSHA512,
+
                     _ => throw new FormatException ("Unknown PRF marker.")
                 };
 

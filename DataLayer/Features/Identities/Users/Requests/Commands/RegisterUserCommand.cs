@@ -9,5 +9,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Requests.Com
         IRequest<ResultDTO<ReturnUserDTO>>
     {
         public RegisterUserDTO RegisterUserDTO { get; set; } = null!;
+        public string CaptchaCode { get; set; } = null!;
+        public string CaptchaId { get; set; } = null!;
     }
 }
