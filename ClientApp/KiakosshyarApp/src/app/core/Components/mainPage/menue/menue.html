@@ -1,0 +1,158 @@
+<aside class="sidebar">
+
+  <!-- Logo -->
+
+  <div class="logo">
+
+    <div class="logo-icon">
+      K
+    </div>
+
+    <div class="logo-text">
+      <span class="logo-title">KiaKooshar</span>
+      <span class="logo-subtitle">Admin Panel</span>
+    </div>
+
+  </div>
+
+
+  <!-- User -->
+
+  <div class="user-box">
+
+    <div class="avatar">
+      P
+    </div>
+
+    <div class="user-info">
+
+      <span class="user-name">
+        Admin
+      </span>
+
+      <span class="user-role">
+        Administrator
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- Menu -->
+
+  <nav class="menu">
+
+    <div class="menu-section">
+      MAIN MENU
+    </div>
+
+
+    <ng-container
+      *ngFor="let menu of menus">
+      
+      <div
+        class="menu-item"
+        [class.has-children]="menu.children"
+        [class.expanded]="menu.expanded"
+        [routerLinkActive]="!menu.children ? 'active' : ''"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="toggleMenu(menu)"
+      >
+
+        <a
+          *ngIf="menu.route"
+          [routerLink]="menu.route"
+          class="menu-link"
+          (click)="$event.stopPropagation()"
+        >
+
+          <span class="icon">
+            {{ menu.icon }}
+          </span>
+
+          <span class="title">
+            {{ menu.title }}
+          </span>
+
+        </a>
+
+
+        <div
+          *ngIf="!menu.route"
+          class="menu-link"
+        >
+
+          <span class="icon">
+            {{ menu.icon }}
+          </span>
+
+          <span class="title">
+            {{ menu.title }}
+          </span>
+
+          <span
+            *ngIf="menu.children"
+            class="arrow"
+          >
+            {{ menu.expanded ? '⌃' : '⌄' }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Children -->
+
+      <div
+        *ngIf="menu.children && menu.expanded"
+        class="submenu"
+      >
+
+        <a
+          *ngFor="let child of menu.children"
+          [routerLink]="child.route"
+          routerLinkActive="active"
+          class="submenu-item"
+        >
+
+          <span class="submenu-dot">
+            {{ child.icon }}
+          </span>
+
+          <span>
+            {{ child.title }}
+          </span>
+
+        </a>
+
+      </div>
+
+    </ng-container>
+
+  </nav>
+
+
+  <!-- Bottom -->
+
+  <div class="sidebar-bottom">
+
+    <button
+      class="logout-button"
+      (click)="logout()"
+    >
+
+      <span class="icon">
+        ⇥
+      </span>
+
+      <span>
+        Logout
+      </span>
+
+    </button>
+
+  </div>
+
+</aside>
