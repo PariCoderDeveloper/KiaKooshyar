@@ -1,0 +1,294 @@
+/* استایل‌های هدر */
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* دکمه Refresh */
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refresh-icon {
+  transition: transform 0.3s ease;
+}
+
+.refresh-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* دکمه Add User */
+.add-btn {
+  padding: 10px 20px;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-btn:hover {
+  background-color: #2563eb;
+}
+.users-container {
+  padding: 30px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.users-header h2 {
+  margin: 0;
+  font-size: 26px;
+  color: #1f2937;
+}
+
+.users-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.add-btn {
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-btn:hover {
+  background: #1d4ed8;
+}
+
+.table-wrapper {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+}
+
+.users-table thead {
+  background: #f9fafb;
+}
+
+.users-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.users-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #374151;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.users-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: #3730a3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.username {
+  display: block;
+  font-weight: 600;
+  color: #111827;
+}
+
+.user-id {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 250px;
+}
+
+.role-tag,
+.permission-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.role-tag {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.permission-tag {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.status.active {
+  color: #15803d;
+}
+
+.status.active .status-dot {
+  background: #22c55e;
+}
+
+.status.inactive {
+  color: #6b7280;
+}
+
+.status.inactive .status-dot {
+  background: #9ca3af;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.action-btn {
+  border: none;
+  padding: 7px 9px;
+  border-radius: 5px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.action-btn:hover {
+  opacity: 0.75;
+}
+
+.status-btn {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+
+.role-btn {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.permission-btn {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.logout-btn {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.logout-btn:hover {
+  background: #fee2e2;
+}
+
+.empty-state {
+  padding: 50px;
+  text-align: center;
+  color: #9ca3af;
+}

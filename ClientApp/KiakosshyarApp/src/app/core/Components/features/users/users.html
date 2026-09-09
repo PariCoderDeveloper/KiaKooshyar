@@ -1,0 +1,204 @@
+<div class="users-container">
+
+  <div class="users-header">
+    <div>
+      <h2>Users</h2>
+      <p>Manage users, roles and permissions</p>
+    </div>
+
+    <div class="header-actions">
+      <button 
+        class="refresh-btn" 
+        (click)="loadUsers()"
+        [disabled]=""
+        title="Refresh users list">
+        <svg 
+          class="refresh-icon" 
+          [class.spinning]=""
+          xmlns="http://www.w3.org/2000/svg" 
+          width="18" 
+          height="18" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        <span>Refresh</span>
+      </button>
+
+      <button class="add-btn">
+        + Add User
+      </button>
+    </div>
+  </div>
+
+
+  <div class="table-wrapper">
+
+    <table class="users-table">
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>User</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Roles</th>
+          <th>Permissions</th>
+          <th>Role Permissions</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+
+        @for (user of users; track $index) {
+        <tr>
+          <td>
+            {{ user.id  }}
+          </td>
+
+          <td>
+            <div class="user-info">
+
+              <div class="avatar">
+                {{ user.userName.charAt(0).toUpperCase() }}
+              </div>
+
+              <div>
+
+                <span class="username">
+                  {{ user.firstName }} {{ user.lastName }}
+                </span>
+
+                <span class="user-id">
+                  @{{ user.userName }}
+                </span>
+
+              </div>
+
+            </div>
+          </td>
+
+          <td>
+            {{ user.email || '-' }}
+          </td>
+
+          <td>
+            {{ user.phoneNumber || '-' }}
+          </td>
+
+          <td>
+
+            <div class="tags">
+
+              @for (role of user.roles; track $index) {
+              <span
+                class="role-tag"
+                >
+                {{ role }}
+              </span>
+}
+              @if(user.roles.length === 0){
+              <span>
+                -
+              </span>
+}
+            </div>
+
+          </td>
+
+          <td>
+
+            <div class="tags">
+
+              @for (permission of user.permissions; track $index) {
+              <span
+                class="permission-tag"
+               >
+
+                {{ permission }}
+
+              </span>
+} 
+              @if(user.permissions.length === 0){
+              <span>
+                -
+              </span>
+}
+            </div>
+
+          </td>
+
+          <td>
+
+            <div class="tags">
+
+              @for (permission of user.rolePermissions; track $index) {
+              <span
+                class="permission-tag"
+                >
+                {{ permission }}
+               </span>
+}
+              @if(user.rolePermissions.length === 0){
+              <span>
+                -
+              </span>
+}
+            </div>
+
+          </td>
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                class="action-btn role-btn"
+                (click)="changeRoles(user)">
+                Roles
+              </button>
+
+
+              <button
+                class="action-btn permission-btn"
+                (click)="changePermissions(user)">
+
+                Permissions
+
+              </button>
+             
+              <button
+                class="action-btn logout-btn"
+                (click)="forceLogout(user)">
+                Logout Sessions
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+}
+      </tbody>
+
+    </table>
+
+
+    @if(users.length === 0){
+    <div
+      class="empty-state"
+      >
+      No users found.
+    </div>
+}
+  </div>
+
+</div>
