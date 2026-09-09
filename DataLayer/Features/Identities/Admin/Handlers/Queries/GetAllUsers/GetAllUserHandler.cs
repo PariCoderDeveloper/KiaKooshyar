@@ -28,7 +28,7 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Queries.GetA
             CancellationToken cancellationToken
             )
         {
-            var users = _unit.Users.GetAllAsync
+            var users = _unit.Users.GetAllUsersAsync
                 (cancellationToken);
 
             var filteredUser = await users.ToPagedResultAsync (
