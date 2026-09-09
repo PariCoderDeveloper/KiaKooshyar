@@ -1,0 +1,11 @@
+    <div class="captcha-wrapper">
+      <img [src]="'data:image/png;base64,' + imageBase64" alt="captcha" />
+      <button type="button" (click)="refresh()">🔄</button>
+      <input
+        type="text"
+        placeholder="Enter security code"
+        [(ngModel)]="userInput"
+        (ngModelChange)="onValueChange()"
+        [ngModelOptions]="{ standalone: true }" 
+      />
+    </div>
