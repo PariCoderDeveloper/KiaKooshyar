@@ -1,6 +1,7 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Admin.Requests.Command.RolePermissionManagement;
+using KiaKooshar.Application.Features.Interfaces.SignalR;
 using KiaKooshar.Domain.Entities.Identity;
 using MediatR;
 
@@ -10,11 +11,14 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.Role
         IRequestHandler<RemoveRoleFromUserCommand, ResultDTO>
     {
         private readonly IUnitOfWork _unit;
+        private readonly IUserNotificationService _userNotificationService;
         public RemoveRoleFromUserHandler (
-            IUnitOfWork unit
+            IUnitOfWork unit,
+            IUserNotificationService userNotificationService
             )
         {
             _unit = unit;
+            _userNotificationService = userNotificationService;
         }
         public async Task<ResultDTO> Handle (
             RemoveRoleFromUserCommand request,
@@ -74,6 +78,12 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.Role
 
             userRole.IsDeleted = true;
             await _unit.CommitAsync (cancellationToken);
+
+            await _userNotificationService.NotifyForceLogoutAsync (
+              user.Id.ToString (),
+              "Your access changed. Please enter again. "
+              );
+
             return ResultDTO.Success (
                 "Role successfully deleted"
                 );

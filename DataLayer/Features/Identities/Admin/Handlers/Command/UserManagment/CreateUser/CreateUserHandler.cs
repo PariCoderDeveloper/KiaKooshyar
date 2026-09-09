@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KiaKooshar.Application.Caching.Contracts;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
@@ -7,6 +8,7 @@ using KiaKooshar.Application.Features.Interfaces.CurrentUser;
 using KiaKooshar.Domain.Entities.Identies;
 using KiaKooshar.Domain.Entities.Identity;
 using MediatR;
+using System.Text.Json;
 
 namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.UserManagment.CreateUser
 {
@@ -17,15 +19,18 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
         private readonly IMapper _mapper;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ICacheService _cacheService;
         public CreateUserHandler (
             IUnitOfWork unit,
             IMapper mapper,
+            ICacheService cacheService,
             IPasswordHasher passwordHasher,
             ICurrentUserService currentUserService
             )
         {
             _unit = unit;
             _mapper = mapper;
+            _cacheService = cacheService;
             _passwordHasher = passwordHasher;
             _currentUserService = currentUserService;
         }
@@ -45,13 +50,13 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
                 cancellationToken
                 );
 
-            var validRoleIds = await _unit.Roles.
-                GetActiveRoleIdsAsync (
+            var validRoleIds = await _unit.Roles
+                .GetActiveRoleIdsAsync (
                     request.Roles,
                     cancellationToken
                 );
-            var invalidRoleIds = request.Roles.
-                Except (validRoleIds);
+            var invalidRoleIds = request.Roles
+                .Except (validRoleIds);
             if ( invalidRoleIds.Any () )
                 return ResultDTO.BadRequest (
                     $"Invalid roles: {string.Join
@@ -68,7 +73,7 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
             if ( invalidPermissionIds.Any () )
                 return ResultDTO.BadRequest (
                      $"Invalid permission: {string.Join
-                     (", ", invalidPermissionIds)}"
+                        (", ", invalidPermissionIds)}"
                     );
 
             var userRoles = validRoleIds.Select (
@@ -102,6 +107,17 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
             var result = await _unit.CommitAsync (
                 cancellationToken
                 );
+            var cachedUser = await _unit.Users.GetCachedUserAsync (
+                    user.Id,
+                    cancellationToken
+                );
+            var data = JsonSerializer.Serialize (cachedUser);
+            await _cacheService.SetAsync (
+                    $"users:{user.Id}",
+                    data,
+                    null,
+                    cancellationToken
+                 );
             if ( result <= 0 )
                 return ResultDTO.BadRequest ("Error in saving information");
 

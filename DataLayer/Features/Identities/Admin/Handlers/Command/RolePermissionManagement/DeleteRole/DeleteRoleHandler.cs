@@ -32,6 +32,7 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.Role
             var result = await _unit.CommitAsync (
                 cancellationToken
              );
+
             if ( result < 0 )
                 return ResultDTO.Failure (
                     "There is an error in deleting role"

@@ -2,6 +2,7 @@
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Admin.Requests.Command.RolePermissionManagement;
+using KiaKooshar.Application.Features.Interfaces.SignalR;
 using KiaKooshar.Domain.Entities.Identity;
 using MediatR;
 
@@ -13,13 +14,16 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.Role
     {
         private readonly IUnitOfWork _unit;
         private readonly IMapper _mapper;
+        private readonly IUserNotificationService _userNotificationService;
         public AssignPermissionsToRoleHandler (
-            IUnitOfWork unit
-            , IMapper mapper
+            IUserNotificationService userNotificationService,
+            IUnitOfWork unit,
+            IMapper mapper
             )
         {
             _unit = unit;
             _mapper = mapper;
+            _userNotificationService = userNotificationService;
         }
 
         public async Task<ResultDTO> Handle (
@@ -64,6 +68,17 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.Role
             var result = await _unit.CommitAsync (
                 cancellationToken
                 );
+
+            var userIds = await _unit.UserRoles.GetUserRoles
+                (role.Id, cancellationToken);
+            foreach ( var userId in userIds )
+            {
+                await _userNotificationService.NotifyForceLogoutAsync (
+                    userId.ToString (),
+                    "Your access changed. Please enter again. "
+                    );
+            }
+
             if ( result == 0 )
                 return ResultDTO.Failure (
                     "There is an error in adding role"

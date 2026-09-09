@@ -1,6 +1,7 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Admin.Requests.Command.UserManagment;
+using KiaKooshar.Application.Features.Interfaces.SignalR;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +11,14 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
         IRequestHandler<ForceLogoutUserCmmand, ResultDTO>
     {
         private readonly IUnitOfWork _unit;
+        private readonly IUserNotificationService _userNotificationService;
         public ForceLogoutUserHandler (
-            IUnitOfWork unit
+            IUnitOfWork unit,
+            IUserNotificationService userNotificationService
             )
         {
             _unit = unit;
+            _userNotificationService = userNotificationService;
         }
         public async Task<ResultDTO> Handle (
             ForceLogoutUserCmmand request,
@@ -40,6 +44,10 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
                 , cancellationToken
             );
             await _unit.CommitAsync (cancellationToken);
+            await _userNotificationService.NotifyForceLogoutAsync (
+                 request.Id.ToString (),
+                "Your access changed. Please enter again. "
+                );
             return ResultDTO.Success ("All Refresh Tokens Revoked");
         }
     }

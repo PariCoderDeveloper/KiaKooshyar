@@ -2,6 +2,7 @@
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Admin.Requests.Command.UserManagment;
 using KiaKooshar.Application.Features.Interfaces.CurrentUser;
+using KiaKooshar.Application.Features.Interfaces.SignalR;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,13 +13,16 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
     {
         private readonly IUnitOfWork _unit;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IUserNotificationService _userNotificationService;
         public DisableUserHandler (
             IUnitOfWork unit,
-            ICurrentUserService currentUserService
+            ICurrentUserService currentUserService,
+            IUserNotificationService userNotificationService
             )
         {
             _unit = unit;
             _currentUserService = currentUserService;
+            _userNotificationService = userNotificationService;
         }
 
         public async Task<ResultDTO> Handle (
@@ -59,6 +63,12 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
             await _unit.CommitAsync (
                 cancellationToken
                 );
+
+            await _userNotificationService.NotifyForceLogoutAsync (
+              user.Id.ToString (),
+              "Your access changed. Please enter again. "
+              );
+
             return ResultDTO.Success (
                 "User status changed to block"
                 );

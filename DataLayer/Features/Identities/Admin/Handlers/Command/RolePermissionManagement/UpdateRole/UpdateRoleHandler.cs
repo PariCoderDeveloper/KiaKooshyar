@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KiaKooshar.Application.Caching.Contracts;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Admin.Requests.Command.RolePermissionManagement;
@@ -12,15 +13,18 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.Role
     {
         private readonly IUnitOfWork _unit;
         private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
         private readonly IUserNotificationService _userNotificationService;
         public UpdateRoleHandler (
             IUnitOfWork unit,
             IMapper mapper,
+            ICacheService cacheService,
             IUserNotificationService userNotificationService
             )
         {
             _unit = unit;
             _mapper = mapper;
+            _cacheService = cacheService;
             _userNotificationService = userNotificationService;
         }
 
@@ -44,11 +48,18 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.Role
             {
                 await _userNotificationService.NotifyForceLogoutAsync (
                     userId.ToString (),
-                    "دسترسی شما تغییر کرده، لطفاً دوباره وارد شوید"
+                    "Your access changed. Please enter again. "
                     );
             }
 
             await _unit.CommitAsync (cancellationToken);
+            foreach ( var userId in userIds )
+            {
+                await _cacheService.RemoveAsync (
+                    $"users:{userId}",
+                    cancellationToken);
+            }
+
             return ResultDTO.Success (
                 "Role updated successfully"
                 );

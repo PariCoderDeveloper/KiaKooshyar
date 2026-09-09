@@ -1,6 +1,7 @@
 ﻿using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.DTOs.Common;
 using KiaKooshar.Application.Features.Identities.Admin.Requests.Command.UserManagment;
+using KiaKooshar.Application.Features.Interfaces.SignalR;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +11,14 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
         IRequestHandler<BlockUserCommand, ResultDTO>
     {
         private readonly IUnitOfWork _unit;
+        private readonly IUserNotificationService _userNotificationService;
         public BlockUserHandler (
-            IUnitOfWork unit
+            IUnitOfWork unit,
+            IUserNotificationService userNotificationService
             )
         {
             _unit = unit;
+            _userNotificationService = userNotificationService;
         }
         public async Task<ResultDTO> Handle (
             BlockUserCommand request,
@@ -33,7 +37,7 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
                 );
             await userSessions.ExecuteUpdateAsync (
                 setter => setter
-                .SetProperty (x => x.IsActive, true)
+                .SetProperty (x => x.IsActive, false)
                 .SetProperty (x => x.LogoutTime, DateTime.UtcNow)
                 .SetProperty (x => x.UpdatedAt, DateTime.UtcNow)
             );
@@ -52,6 +56,12 @@ namespace KiaKooshar.Application.Features.Identities.Admin.Handlers.Command.User
             user.UpdatedAt = DateTime.UtcNow;
 
             await _unit.CommitAsync (cancellationToken);
+
+            await _userNotificationService.NotifyForceLogoutAsync (
+              user.Id.ToString (),
+              "Your access changed. Please enter again. "
+              );
+
             return ResultDTO.Success ("User status changed to block");
         }
     }
