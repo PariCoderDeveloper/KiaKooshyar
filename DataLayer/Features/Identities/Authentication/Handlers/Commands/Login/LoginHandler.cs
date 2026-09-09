@@ -14,6 +14,7 @@ using KiaKooshar.Application.Features.Interfaces.Captcha;
 using KiaKooshar.Application.Features.Interfaces.HttpContext;
 using KiaKooshar.Application.Features.Interfaces.Repositories;
 using KiaKooshar.Application.Logging;
+using KiaKooshar.Domain.Enums;
 using MediatR;
 using System.Text.Json;
 
@@ -86,6 +87,16 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                 return ResultDTO<LoginResponseDTO>.Forbid (
                     "Invalid email or password"
                     );
+
+            if ( user.Status == UserStatus.Inactive ||
+                user.Status == UserStatus.Suspended ||
+                user.Status == UserStatus.Pending ||
+                user.Status == UserStatus.Locked
+              )
+                return ResultDTO<LoginResponseDTO>.Forbid (
+                    "User is not active."
+                    );
+
             var userPermission = await _unit.Users.GetUserPermissions
                 (
                     user.Id
