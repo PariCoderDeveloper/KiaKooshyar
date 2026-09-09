@@ -1,0 +1,150 @@
+<main class="dashboard-container">
+  
+  <!-- بنر خوش‌آمدگویی -->
+  <section class="welcome-banner">
+    <div class="welcome-content">
+      <h1>سلام {{ userName }}، خوش آمدید! 👋</h1>
+      <p *ngIf="isAdmin">به پنل مدیریت سیستم خوش آمدید. از اینجا می‌توانید کاربران، نقش‌ها و دسترسی‌ها را مدیریت کنید.</p>
+      <p *ngIf="!isAdmin">امیدواریم روز خوبی داشته باشید. از اینجا می‌توانید به تمام خدمات خود دسترسی داشته باشید.</p>
+      <div class="user-meta">
+        <span class="badge">نقش: {{ getRoleDisplayName(userRole) }}</span>
+      </div>
+    </div>
+    <div class="welcome-illustration">
+      <span class="big-emoji">{{ isAdmin ? '🛡️' : '🚀' }}</span>
+    </div>
+  </section>
+
+  <!-- کارت‌های آماری برای Admin -->
+  <section *ngIf="isAdmin" class="stats-grid">
+    <div class="stat-card" routerLink="/users">
+      <div class="stat-icon" style="background-color: #eff6ff; color: #3b82f6;">👥</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ totalUsers }}</span>
+        <span class="stat-title">کل کاربران</span>
+      </div>
+      <div class="stat-arrow">←</div>
+    </div>
+
+    <div class="stat-card" routerLink="/roles">
+      <div class="stat-icon" style="background-color: #f5f3ff; color: #8b5cf6;">🔒</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ totalRoles }}</span>
+        <span class="stat-title">نقش‌های سیستم</span>
+      </div>
+      <div class="stat-arrow">←</div>
+    </div>
+
+    <div class="stat-card" routerLink="/users">
+      <div class="stat-icon" style="background-color: #ecfdf5; color: #10b981;">✅</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ activeUsers }}</span>
+        <span class="stat-title">کاربران فعال</span>
+      </div>
+      <div class="stat-arrow">←</div>
+    </div>
+  </section>
+
+  <!-- کارت‌های آماری برای User -->
+  <section *ngIf="!isAdmin" class="stats-grid">
+    <div class="stat-card" routerLink="/my-requests">
+      <div class="stat-icon" style="background-color: #eff6ff; color: #3b82f6;">📝</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ myRequests }}</span>
+        <span class="stat-title">درخواست‌های من</span>
+      </div>
+      <div class="stat-arrow">←</div>
+    </div>
+
+    <div class="stat-card" routerLink="/notifications">
+      <div class="stat-icon" style="background-color: #f5f3ff; color: #8b5cf6;">💬</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ myNotifications }}</span>
+        <span class="stat-title">پیام‌های جدید</span>
+      </div>
+      <div class="stat-arrow">←</div>
+    </div>
+
+    <div class="stat-card" routerLink="/support">
+      <div class="stat-icon" style="background-color: #ecfdf5; color: #10b981;">🎧</div>
+      <div class="stat-info">
+        <span class="stat-value">{{ myTickets }}</span>
+        <span class="stat-title">تیکت‌های پشتیبانی</span>
+      </div>
+      <div class="stat-arrow">←</div>
+    </div>
+  </section>
+
+  <!-- بخش اصلی -->
+  <section class="main-grid">
+    
+    <!-- فعالیت‌های اخیر -->
+    <article class="panel activities-panel">
+      <div class="panel-header">
+        <h2>📌 فعالیت‌های اخیر</h2>
+        <a [routerLink]="isAdmin ? '/users' : '/my-requests'" class="link-text">مشاهده همه</a>
+      </div>
+      <div class="activity-list">
+        <div *ngFor="let activity of recentActivities" class="activity-item">
+          <div class="activity-dot" [class]="activity.status"></div>
+          <div class="activity-details">
+            <p class="activity-title">{{ activity.title }}</p>
+            <div class="activity-meta">
+              <span class="activity-time">🕒 {{ activity.time }}</span>
+              <span class="activity-status" [class]="activity.status">
+                {{ getStatusLabel(activity.status) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- دسترسی سریع -->
+    <aside class="panel side-panel">
+      <div class="panel-header">
+        <h2>⚡ دسترسی سریع</h2>
+      </div>
+      
+      <!-- لینک‌های سریع برای Admin -->
+      <div *ngIf="isAdmin" class="quick-actions-grid">
+        <a routerLink="/users" class="action-btn" style="border-color: #3b82f6;">
+          <span class="action-icon">👥</span>
+          <span class="action-title">مدیریت کاربران</span>
+        </a>
+        <a routerLink="/roles" class="action-btn" style="border-color: #8b5cf6;">
+          <span class="action-icon">🔒</span>
+          <span class="action-title">مدیریت نقش‌ها</span>
+        </a>
+        <a routerLink="/reports" class="action-btn" style="border-color: #10b981;">
+          <span class="action-icon">📊</span>
+          <span class="action-title">گزارش‌ها</span>
+        </a>
+      </div>
+
+      <!-- لینک‌های سریع برای User -->
+      <div *ngIf="!isAdmin" class="quick-actions-grid">
+        <a routerLink="/new-request" class="action-btn" style="border-color: #3b82f6;">
+          <span class="action-icon">➕</span>
+          <span class="action-title">ثبت درخواست جدید</span>
+        </a>
+        <a routerLink="/support" class="action-btn" style="border-color: #10b981;">
+          <span class="action-icon">🎧</span>
+          <span class="action-title">ارسال پیام به پشتیبانی</span>
+        </a>
+        <a routerLink="/profile" class="action-btn" style="border-color: #64748b;">
+          <span class="action-icon">⚙️</span>
+          <span class="action-title">ویرایش اطلاعات حساب</span>
+        </a>
+      </div>
+
+      <!-- کارت راهنما -->
+      <div class="help-card">
+        <h3>💡 نیاز به کمک دارید؟</h3>
+        <p>تیم پشتیبانی ما ۲۴ ساعته در کنار شماست.</p>
+        <a routerLink="/support" class="help-btn">تماس با پشتیبانی</a>
+      </div>
+    </aside>
+
+  </section>
+</main>
