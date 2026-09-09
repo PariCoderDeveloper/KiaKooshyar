@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KiaKooshar.Application.Caching.Contracts;
 using KiaKooshar.Application.Construct.DataBases;
 using KiaKooshar.Application.Construct.Security;
 using KiaKooshar.Application.DTOs.Common;
@@ -21,6 +22,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
         private readonly IUserRoleRepository _userRoleRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly ICaptchaService _captchaService;
+        private readonly ICacheService _cacheService;
         public RegisterUserHandler (
             IPasswordHasher passwordHasher,
             IMapper mapper,
@@ -28,7 +30,8 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             IUnitOfWork unit,
             IUserRoleRepository userRoleRepository,
             IRoleRepository roleRepository,
-            ICaptchaService captchaService
+            ICaptchaService captchaService,
+            ICacheService cacheService
             )
         {
             _mapper = mapper;
@@ -38,6 +41,7 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
             _unit = unit;
             _roleRepository = roleRepository;
             _captchaService = captchaService;
+            _cacheService = cacheService;
         }
         public async Task<ResultDTO<ReturnUserDTO>> Handle
             (
@@ -74,6 +78,16 @@ namespace KiaKooshar.Application.Features.Identities.Authentication.Handlers.Com
                  cancellationToken
                  );
             await _unit.CommitAsync (cancellationToken);
+            var cachedUser = await _unit.Users.GetCachedUserAsync (
+                    user.Id,
+                    cancellationToken
+                );
+            await _cacheService.SetAsync (
+                    $"user:{user.Id}",
+                    cachedUser,
+                    null,
+                    cancellationToken
+                );
             return ResultDTO<ReturnUserDTO>.Success (
                 new ReturnUserDTO
                 {
