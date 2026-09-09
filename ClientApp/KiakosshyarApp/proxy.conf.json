@@ -1,0 +1,15 @@
+{
+  "/api": {
+    "target": "https://localhost:44316",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/hubs": {
+    "target": "https://localhost:44316",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "ws": true
+  }
+}
