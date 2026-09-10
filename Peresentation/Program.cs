@@ -98,7 +98,7 @@ builder.Services.AddCors (options =>
 {
     options.AddPolicy ("AngularClient", policy =>
     {
-        policy.WithOrigins ("https://localhost:4200")
+        policy.WithOrigins ("http://localhost:4200")
             .AllowAnyHeader ()
             .AllowAnyMethod ()
             .AllowCredentials ();
@@ -142,6 +142,7 @@ Log.Information (
 var apiVersionProvider =
     app.Services.GetRequiredService<IApiVersionDescriptionProvider> ();
 
+app.UseCors ();
 app.UseRateLimiter ();
 app.UseMiddleware<GlobalExceptionHandler> ();
 app.UseAuthentication ();
@@ -164,7 +165,8 @@ app.UseSwaggerUI (options =>
 app.MapControllers ();
 
 #region MapHubs
-app.MapHub<NotificationHub> ("/hubs/notification");
+app.MapHub<NotificationHub> ("/hubs/notification")
+    .RequireCors ("AngularClient");
 #endregion
 
 app.Run ();
