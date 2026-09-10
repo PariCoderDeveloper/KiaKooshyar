@@ -9,9 +9,7 @@ public sealed class EmailService : IEmailService, IDisposable
 {
     private readonly EmailOptions _options;
 
-    private readonly SemaphoreSlim _semaphore;
-
-    private readonly SemaphoreSlim _lock = new (1, 1);
+    private readonly SemaphoreSlim _semaphore = new (1, 1);
 
     public EmailService ( IOptions<EmailOptions> options )
     {
@@ -28,24 +26,15 @@ public sealed class EmailService : IEmailService, IDisposable
         string body,
         CancellationToken cancellationToken = default )
     {
-        await _semaphore.WaitAsync (cancellationToken);
-
         try
         {
-            await _lock.WaitAsync (cancellationToken);
+            await _semaphore.WaitAsync (cancellationToken);
 
-            try
-            {
-                await SendInternalAsync (
-                    to,
-                    subject,
-                    body,
-                    cancellationToken);
-            }
-            finally
-            {
-                _lock.Release ();
-            }
+            await SendInternalAsync (
+                to,
+                subject,
+                body,
+                cancellationToken);
         }
         finally
         {
@@ -101,6 +90,5 @@ public sealed class EmailService : IEmailService, IDisposable
     public void Dispose ()
     {
         _semaphore.Dispose ();
-        _lock.Dispose ();
     }
 }
