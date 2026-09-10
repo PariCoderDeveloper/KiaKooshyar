@@ -1,52 +1,49 @@
 <mat-sidenav-container class="sidenav-container">
   
-  <mat-sidenav #drawer mode="side" opened class="sidenav" fixedInViewport>
-    <div class="logo-container">
-      <mat-icon>admin_panel_settings</mat-icon>
-      <span>Admin Panel</span>
+  <mat-sidenav #drawer mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <h2>Admin Panel</h2>
     </div>
-
+    
     <mat-nav-list>
-      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Dashboard</span>
       </a>
       
-      <a mat-list-item routerLink="/admin/users" routerLinkActive="active-link" >
+      <a mat-list-item routerLink="/admin/users" routerLinkActive="active">
         <mat-icon matListItemIcon>people</mat-icon>
         <span matListItemTitle>Users</span>
       </a>
-
-      <a mat-list-item routerLink="/admin/settings" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>settings</mat-icon>
-        <span matListItemTitle>Settings</span>
+      
+      <a mat-list-item routerLink="/admin/roles" routerLinkActive="active">
+        <mat-icon matListItemIcon>security</mat-icon>
+        <span matListItemTitle>Roles</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
     
-    <mat-toolbar color="primary" class="header-toolbar">
-      <button mat-icon-button class="menu-toggle" (click)="toggleSidenav()">
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="toggleSidenav()">
         <mat-icon>menu</mat-icon>
       </button>
       
-      <span>Welcome, Administrator</span>
+      <span class="toolbar-title">Admin Dashboard</span>
       
       <span class="spacer"></span>
       
-      <button mat-icon-button>
-        <mat-icon>notifications</mat-icon>
-      </button>
-      <button mat-button color="warn">
+      <button mat-button color="warn" (click)="logout()">
         <mat-icon>logout</mat-icon>
         Logout
       </button>
     </mat-toolbar>
 
-    <main class="main-content">
+    <div class="content">
       <router-outlet></router-outlet>
-    </main>
+    </div>
 
   </mat-sidenav-content>
+
 </mat-sidenav-container>
