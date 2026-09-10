@@ -62,9 +62,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // بارگذاری داشبورد برای Admin (با داده‌های واقعی از API)
   loadAdminDashboard(): void {
-    // گرفتن لیست کاربران برای نمایش آمار
     this.adminService.getAllUsers({
       searchKey: '',
       paginationRequest: {
@@ -79,20 +77,16 @@ export class DashboardComponent implements OnInit {
           this.totalUsers = response.data.totalCount || 0;
         }
       },
-      error: (err) => console.error('خطا در دریافت آمار کاربران', err)
+      error: (err) => console.error('Error in getting all of users', err)
     });
 
-    // گرفتن لیست نقش‌ها
     this.authService.getAllPermissions().subscribe({
       next: (response) => {
-        // فرض می‌کنیم response.data تعداد نقش‌ها را دارد
-        // در واقعیت باید متد جداگانه‌ای برای گرفتن تعداد نقش‌ها داشته باشید
-        this.totalRoles = 5; // مقدار پیش‌فرض
+        this.totalRoles = 5; 
       },
-      error: (err) => console.error('خطا در دریافت آمار نقش‌ها', err)
+      error: (err) => console.error('Error in getting all of permissions', err)
     });
 
-    // فعالیت‌های اخیر برای Admin
     this.recentActivities = [
       { id: 1, title: 'کاربر جدید ثبت‌نام کرد', time: '۵ دقیقه پیش', status: 'info' },
       { id: 2, title: 'نقش "مدیر" به کاربر علی اختصاص یافت', time: '۱ ساعت پیش', status: 'success' },
@@ -100,9 +94,7 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  // بارگذاری داشبورد برای User عادی
   loadUserDashboard(): void {
-    // این مقادیر را می‌توانید از API واقعی بگیرید
     this.myRequests = 3;
     this.myNotifications = 5;
     this.myTickets = 1;

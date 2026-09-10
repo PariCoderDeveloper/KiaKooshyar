@@ -31,7 +31,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.AuthorizationManangement.V1
         [Authorize]
         [HttpGet ("GetAllPermissions")]
         public async Task<IActionResult> GetAllPermissions (
-            GetAllPermissionsQuery getAllPermissionsQuery
+           [FromQuery] GetAllPermissionsQuery getAllPermissionsQuery
             )
         {
 
@@ -54,7 +54,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.AuthorizationManangement.V1
         [Authorize]
         [HttpGet ("GetUserById")]
         public async Task<IActionResult> GetUserById (
-            GetUserByIdQuery getUserByIdQuery
+           [FromQuery] GetUserByIdQuery getUserByIdQuery
         )
         {
             var getUserByIdResult = await _mediator.
@@ -65,7 +65,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.AuthorizationManangement.V1
         [Authorize]
         [HttpGet ("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers (
-            GetAllUserCommand getAllUserCommand
+           [FromQuery] GetAllUserCommand getAllUserCommand
         )
         {
             var getAllUsersResult = await _mediator.
@@ -119,7 +119,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.AuthorizationManangement.V1
         }
         [HasPermission ("User.Create", "Admin")]
         [Authorize]
-        [HttpPost ("AssignRoleToUserHandler")]
+        [HttpPost ("AssignRoleToUser")]
         public async Task<IActionResult> AssignRoleToUser (
             AssignRoleToUserCommand assignRoleToUserCommand
             )
@@ -139,6 +139,19 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.AuthorizationManangement.V1
                  Send (assignPermissionsToRole);
             return ResultExtensions.ToActionResult (
                 assignPermissionsToRoleResult
+                );
+        }
+        [HasPermission ("User.View", "Admin")]
+        [Authorize]
+        [HttpGet ("HasPermission")]
+        public async Task<IActionResult> HasPermission (
+           [FromQuery] HasPermissionQuery hasPermissionQuery
+        )
+        {
+            var hasPermission = await _mediator.
+                 Send (hasPermissionQuery);
+            return ResultExtensions.ToActionResult (
+                hasPermission
                 );
         }
     }

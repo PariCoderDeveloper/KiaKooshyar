@@ -24,7 +24,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
         {
             _mediator = mediator;
         }
-        [HasPermission ("User.Create", "SuperAdmin")]
+        //  [HasPermission ("User.Create", "SuperAdmin")]
         [Authorize]
         [HttpPost ("force-logout")]
         public async Task<IActionResult> ForceLogoutUser (
@@ -37,7 +37,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 forceLogoutResult
                 );
         }
-        [HasPermission ("User.Create", "SuperAdmin")]
+        [HasPermission ("User.Create", "Admin")]
         [Authorize]
         [HttpPost ("reset-user-password")]
         public async Task<IActionResult> ResetUserPassword (
@@ -59,7 +59,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 forceLogoutResult
                 );
         }
-        [HasPermission ("User.Block", "SuperAdmin")]
+        [HasPermission ("User.Block", "Admin")]
         [Authorize]
         [HttpPut ("unblock-user")]
         public async Task<IActionResult> UnblockUser (
@@ -72,7 +72,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 unblockUserResult
                 );
         }
-        [HasPermission ("User.Disable", "SuperAdmin")]
+        [HasPermission ("User.Disable", "Admin")]
         [Authorize]
         [HttpPut ("enable-user")]
         public async Task<IActionResult> EnableUser (
@@ -85,7 +85,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 enableUserResult
                 );
         }
-        [HasPermission ("User.Disable", "SuperAdmin")]
+        [HasPermission ("User.Disable", "Admin")]
         [Authorize]
         [HttpPut ("disable-user")]
         public async Task<IActionResult> DisableUser (
@@ -98,7 +98,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 disableUserResult
                 );
         }
-        [HasPermission ("User.Delete", "SuperAdmin")]
+        [HasPermission ("User.Delete", "Admin")]
         [Authorize]
         [HttpDelete ("delete-user")]
         public async Task<IActionResult> DeleteUser (
@@ -111,7 +111,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 deleteUserResult
                 );
         }
-        [HasPermission ("User.Delete", "SuperAdmin")]
+        [HasPermission ("User.Delete", "Admin")]
         [Authorize]
         [HttpPut ("update-user")]
         public async Task<IActionResult> UpdateUser (
@@ -124,7 +124,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 updateUserResult
                 );
         }
-        [HasPermission ("User.View", "SuperAdmin")]
+        [HasPermission ("User.View", "Admin")]
         [Authorize]
         [HttpPost ("get-user-by-id")]
         public async Task<IActionResult> GetUserById (
@@ -137,11 +137,11 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 getUserByIdResult
                 );
         }
-        [HasPermission ("User.View", "SuperAdmin")]
+        [HasPermission ("User.View", "Admin")]
         [Authorize]
         [HttpGet ("get-all-users")]
         public async Task<IActionResult> GetAllUsers (
-           GetAllUserCommand getAllUserCommand
+          [FromQuery] GetAllUserCommand getAllUserCommand
         )
         {
             var getAllUsersResult = await _mediator.Send
@@ -150,7 +150,7 @@ namespace KiaKooshar.Peresentation.Controllers.Admin.UserManagment.V1
                 getAllUsersResult
                 );
         }
-        [HasPermission ("User.Create", "SuperAdmin")]
+        [HasPermission ("User.Create", "Admin")]
         [Authorize]
         [HttpPost ("create-user")]
         public async Task<IActionResult> CreateUser (

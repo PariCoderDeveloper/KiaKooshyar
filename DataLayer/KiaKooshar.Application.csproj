@@ -32,15 +32,7 @@
   <ItemGroup>
     <Folder Include="DTOs\Identities\Authorization\" />
     <Folder Include="Features\Identities\Authentication\Handlers\Commands\Logout\RevokeUserSessions\" />
-    <Folder Include="Features\Identities\Authorization\Policies\Handlers\Commands\" />
-    <Folder Include="Features\Identities\Authorization\Policies\Handlers\Queries\" />
-    <Folder Include="Features\Identities\Authorization\Policies\" />
-    <Folder Include="Features\Identities\Authorization\Policies\Requests\Commands\" />
-    <Folder Include="Features\Identities\Authorization\Policies\Requests\Queries\" />
-    <Folder Include="Features\Identities\Authorization\Roles\Handlers\Commands\" />
-    <Folder Include="Features\Identities\Authorization\Roles\Handlers\Queries\" />
-    <Folder Include="Features\Identities\Authorization\Roles\Requests\Commands\" />
-    <Folder Include="Features\Identities\Authorization\Roles\Requests\Queries\" />
+    <Folder Include="Features\Identities\Authentication\Handlers\Queries\" />
     <Folder Include="Validation\Authorization\" />
   </ItemGroup>
 

@@ -41,8 +41,9 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict,
-                        Expires = loginResult.Data.AccessTokenExpiration
+                        SameSite = SameSiteMode.None,
+                        Expires = loginResult.Data.AccessTokenExpiration,
+                        Path = "/"
                     }
                     );
                 Response.Cookies.Append (
@@ -52,14 +53,14 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict,
-                        Expires = loginResult.Data.RefreshTokenExpiration
+                        SameSite = SameSiteMode.None,
+                        Expires = loginResult.Data.RefreshTokenExpiration,
+                        Path = "/"
                     }
                     );
             }
             return ResultExtensions.ToActionResult (loginResult);
         }
-        [AllowAnonymous]
         [EnableRateLimiting (RateLimitPolicy.RefreshToken)]
         [HttpPost ("refresh-token")]
         public async Task<IActionResult> RefreshToken ()
@@ -79,8 +80,9 @@ namespace KiaKooshar.Peresentation.Controllers.AuthController.V1
                     {
                         HttpOnly = true,
                         Secure = true,
-                        SameSite = SameSiteMode.Strict,
-                        Expires = result.Data.AccessTokenExpiration
+                        SameSite = SameSiteMode.None,
+                        Expires = result.Data.AccessTokenExpiration,
+                        Path = "/"
                     });
             return ResultExtensions.ToActionResult (result);
         }
