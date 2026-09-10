@@ -8,5 +8,6 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public List<string> Roles { get; set; } = [];
         public List<string> Permissions { get; set; } = [];
+        public List<string> RolePermissions { get; set; } = [];
     }
 }
