@@ -35,7 +35,7 @@ namespace KiaKooshar.Peresentation.Authorization
                 !string.IsNullOrEmpty
                    (requirement.Permission) &&
                 userCache.Permissions
-                  .Contains (requirement.Permission) &&
+                  .Contains (requirement.Permission) ||
                 userCache.RolePermissions
                   .Contains (requirement.Permission);
             var hasRole =

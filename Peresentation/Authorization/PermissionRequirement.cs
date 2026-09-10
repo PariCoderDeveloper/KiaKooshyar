@@ -8,12 +8,12 @@ namespace KiaKooshar.Peresentation.Authorization
         public string? Permission { get; } = null!;
         public string? RequiredRole { get; set; }
         public PermissionRoleRequirement (
-            string? permission,
-            string? requiredRole
+            string? requiredRole,
+            string? permission
             )
         {
-            Permission = permission;
             RequiredRole = requiredRole;
+            Permission = permission;
         }
     }
 }
